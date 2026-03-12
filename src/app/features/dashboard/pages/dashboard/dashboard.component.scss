@@ -1,0 +1,32 @@
+// ==========================================================================
+// Dashboard Page — BEM
+// Block: .dashboard
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+
+.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-xl;
+
+  &__card {
+    background-color: $color-surface;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    padding: $spacing-xl;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+  }
+}

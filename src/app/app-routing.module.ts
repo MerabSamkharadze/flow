@@ -27,6 +27,11 @@ const routes: Routes = [
     children: [
       // Lazy-loaded feature modules
       {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.module').then(m => m.DashboardModule),
+      },
+      {
         path: 'projects',
         loadChildren: () =>
           import('./features/projects/projects.module').then(m => m.ProjectsModule),
@@ -36,14 +41,24 @@ const routes: Routes = [
         loadChildren: () =>
           import('./features/board/board.module').then(m => m.BoardModule),
       },
-      // {
-      //   path: 'dashboard',
-      //   loadChildren: () =>
-      //     import('./features/dashboard/dashboard.module').then(m => m.DashboardModule),
-      // },
+      {
+        path: 'tasks',
+        loadChildren: () =>
+          import('./features/tasks/tasks.module').then(m => m.TasksModule),
+      },
+      {
+        path: 'team',
+        loadChildren: () =>
+          import('./features/team/team.module').then(m => m.TeamModule),
+      },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./features/settings/settings.module').then(m => m.SettingsModule),
+      },
 
-      // Default redirect — points to projects until dashboard is built
-      { path: '', redirectTo: 'projects', pathMatch: 'full' },
+      // Default redirect
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
   // Wildcard — redirect unknown routes to root

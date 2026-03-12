@@ -14,7 +14,7 @@
   border-bottom: 1px solid $color-border;
 
   // --------------------------------------------------
-  // Element: left section (toggle + breadcrumb)
+  // Element: left section
   // --------------------------------------------------
   &__left {
     @include flex(row, center);
@@ -24,11 +24,9 @@
   &__menu-toggle {
     @include button-reset;
     @include flex-center;
-    @include focus-ring;
     width: 36px;
     height: 36px;
-    border-radius: $border-radius-sm;
-    font-size: $font-size-lg;
+    border-radius: $border-radius-md;
     color: $color-text-secondary;
     transition: background-color $transition-fast, color $transition-fast;
 
@@ -38,20 +36,13 @@
     }
   }
 
-  &__breadcrumb {
-    @include flex(row, center);
-    gap: $spacing-xs;
-    font-size: $font-size-sm;
-    color: $color-text-secondary;
-  }
-
-  &__breadcrumb-item {
-    font-weight: $font-weight-medium;
-    color: $color-text-primary;
+  &__menu-icon {
+    font-size: $font-size-xl;
+    line-height: 1;
   }
 
   // --------------------------------------------------
-  // Element: right section (actions + avatar)
+  // Element: right section
   // --------------------------------------------------
   &__right {
     @include flex(row, center);
@@ -61,32 +52,43 @@
   &__action {
     @include button-reset;
     @include flex-center;
-    @include focus-ring;
     width: 36px;
     height: 36px;
-    border-radius: $border-radius-sm;
-    font-size: $font-size-lg;
+    border-radius: $border-radius-md;
     color: $color-text-secondary;
     transition: background-color $transition-fast, color $transition-fast;
+    position: relative;
 
     &:hover {
       background-color: $color-surface-hover;
       color: $color-text-primary;
     }
+  }
 
-    // Modifier: logout button — text style instead of icon
-    &--logout {
-      width: auto;
-      padding: $spacing-xs $spacing-sm;
-      font-size: $font-size-sm;
-      font-weight: $font-weight-medium;
-      color: $color-error;
+  &__action-icon {
+    font-size: $font-size-lg;
+    line-height: 1;
+  }
 
-      &:hover {
-        background-color: rgba($color-error, 0.1);
-        color: $color-error;
-      }
-    }
+  // --------------------------------------------------
+  // Element: divider between actions and profile
+  // --------------------------------------------------
+  &__divider {
+    width: 1px;
+    height: 24px;
+    background-color: $color-border;
+    margin: 0 $spacing-xs;
+  }
+
+  // --------------------------------------------------
+  // Element: profile section
+  // --------------------------------------------------
+  &__profile {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-md;
+    cursor: default;
   }
 
   &__avatar {
@@ -94,14 +96,63 @@
     width: 32px;
     height: 32px;
     border-radius: $border-radius-full;
-    background-color: $color-primary;
-    cursor: pointer;
-    margin-left: $spacing-xs;
+    background: linear-gradient(135deg, $color-primary, $color-primary-light);
+    flex-shrink: 0;
   }
 
   &__avatar-initials {
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
     color: $color-text-inverse;
+  }
+
+  &__user-info {
+    @include flex-column;
+    gap: 0;
+    line-height: 1.2;
+  }
+
+  &__user-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    @include text-truncate;
+    max-width: 140px;
+  }
+
+  &__user-email {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    @include text-truncate;
+    max-width: 140px;
+  }
+
+  // --------------------------------------------------
+  // Element: logout button
+  // --------------------------------------------------
+  &__logout-btn {
+    @include button-reset;
+    padding: 6px $spacing-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    border-radius: $border-radius-md;
+    border: 1px solid $color-border;
+    transition: background-color $transition-fast, color $transition-fast, border-color $transition-fast;
+
+    &:hover {
+      background-color: rgba($color-error, 0.06);
+      color: $color-error;
+      border-color: rgba($color-error, 0.3);
+    }
+  }
+}
+
+// Responsive: hide user info on small screens
+@include respond-below('md') {
+  .header {
+    &__user-info {
+      display: none;
+    }
   }
 }

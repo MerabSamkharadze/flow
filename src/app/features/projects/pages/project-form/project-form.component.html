@@ -69,19 +69,25 @@
           formControlName="deadline" />
       </div>
 
+      <!-- Error message -->
+      <div class="project-form__error" *ngIf="error$ | async as error">
+        {{ error }}
+      </div>
+
       <!-- Actions -->
       <div class="project-form__actions">
         <button
           type="button"
           class="project-form__btn project-form__btn--cancel"
-          (click)="onCancel()">
+          (click)="onCancel()"
+          [disabled]="loading$ | async">
           Cancel
         </button>
         <button
           type="submit"
           class="project-form__btn project-form__btn--submit"
-          [disabled]="isLoading">
-          {{ isLoading ? 'Creating...' : 'Create Project' }}
+          [disabled]="loading$ | async">
+          {{ (loading$ | async) ? 'Creating...' : 'Create Project' }}
         </button>
       </div>
 

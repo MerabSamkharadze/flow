@@ -20,26 +20,27 @@
   &__brand {
     @include flex(row, center);
     gap: $spacing-sm;
-    padding: $spacing-md;
+    padding: $spacing-md $spacing-md;
     height: $header-height;
-    border-bottom: 1px solid $color-gray-700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   &__logo {
     @include flex-center;
     width: 36px;
     height: 36px;
-    background-color: $color-primary;
+    background: linear-gradient(135deg, $color-primary, $color-primary-light);
     border-radius: $border-radius-md;
-    font-size: $font-size-xl;
+    font-size: $font-size-lg;
     font-weight: $font-weight-bold;
     flex-shrink: 0;
+    color: $color-text-inverse;
   }
 
   &__title {
-    font-size: $font-size-xl;
+    font-size: $font-size-lg;
     font-weight: $font-weight-bold;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     white-space: nowrap;
   }
 
@@ -50,6 +51,7 @@
     flex: 1;
     list-style: none;
     padding: $spacing-sm 0;
+    margin: 0;
     @include scrollable(y);
   }
 
@@ -59,36 +61,41 @@
 
   &__nav-link {
     @include flex(row, center);
-    gap: $spacing-sm;
-    padding: $spacing-sm $spacing-md;
-    border-radius: $border-radius-sm;
-    color: $color-gray-300;
+    gap: $spacing-md;
+    padding: 10px $spacing-md;
+    border-radius: $border-radius-md;
+    color: $color-gray-400;
     text-decoration: none;
     transition: background-color $transition-fast, color $transition-fast;
     cursor: pointer;
 
     &:hover {
-      background-color: $color-gray-800;
-      color: $color-text-inverse;
+      background-color: rgba(255, 255, 255, 0.06);
+      color: $color-gray-200;
     }
 
     // Modifier: active route
     &--active {
-      background-color: $color-primary;
-      color: $color-text-inverse;
+      background-color: rgba($color-primary, 0.15);
+      color: $color-primary-light;
+
+      .sidebar__nav-icon {
+        color: $color-primary-light;
+      }
 
       &:hover {
-        background-color: $color-primary-dark;
+        background-color: rgba($color-primary, 0.2);
       }
     }
   }
 
   &__nav-icon {
     @include flex-center;
-    width: 28px;
-    height: 28px;
-    font-size: $font-size-sm;
+    width: 24px;
+    height: 24px;
+    font-size: $font-size-lg;
     flex-shrink: 0;
+    line-height: 1;
   }
 
   &__nav-label {
@@ -103,7 +110,7 @@
   // --------------------------------------------------
   &__footer {
     padding: $spacing-sm;
-    border-top: 1px solid $color-gray-700;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   &__toggle {
@@ -111,13 +118,13 @@
     @include flex-center;
     width: 100%;
     padding: $spacing-sm;
-    border-radius: $border-radius-sm;
-    color: $color-gray-400;
+    border-radius: $border-radius-md;
+    color: $color-gray-500;
     transition: background-color $transition-fast, color $transition-fast;
 
     &:hover {
-      background-color: $color-gray-800;
-      color: $color-text-inverse;
+      background-color: rgba(255, 255, 255, 0.06);
+      color: $color-gray-300;
     }
   }
 
@@ -140,8 +147,8 @@
     }
 
     .sidebar__nav-icon {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
     }
   }
 }

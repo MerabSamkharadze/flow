@@ -1,17 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-/**
- * SidebarComponent — left-side navigation panel.
- *
- * Displays the app logo, main navigation links, and a collapse toggle.
- * Navigation items are defined locally for now; they'll later be driven
- * by user permissions / feature flags.
- */
-
 /** Shape of a navigation item */
 interface NavItem {
   label: string;
-  icon: string;   // placeholder icon name (will be replaced with real icons later)
+  icon: string;
   route: string;
 }
 
@@ -27,13 +19,12 @@ export class SidebarComponent {
   /** Emits when user clicks the collapse/expand toggle */
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  /** Main navigation items */
   navItems: NavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-    { label: 'Projects', icon: 'folder', route: '/projects' },
-    { label: 'My Tasks', icon: 'check_circle', route: '/tasks' },
-    { label: 'Team', icon: 'people', route: '/team' },
-    { label: 'Settings', icon: 'settings', route: '/settings' },
+    { label: 'Dashboard', icon: '\u2302', route: '/dashboard' },
+    { label: 'Projects', icon: '\u{1F4C1}', route: '/projects' },
+    { label: 'My Tasks', icon: '\u2713', route: '/tasks' },
+    { label: 'Team', icon: '\u{1F465}', route: '/team' },
+    { label: 'Settings', icon: '\u2699', route: '/settings' },
   ];
 
   onToggle(): void {

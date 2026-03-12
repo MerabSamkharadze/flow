@@ -1,40 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { PROJECT_COLORS } from '../../../../shared/models/project.model';
 import * as ProjectsActions from '../../store/projects.actions';
+import { selectProjectsLoading, selectProjectsError } from '../../store';
 import { selectUser } from '../../../auth/store';
 
-/**
- * ProjectFormComponent — create a new project.
- *
- * Reactive form with name, description, color picker (5 presets), and deadline.
- * On submit, the project will be saved to Firestore via NgRx (TODO).
- */
 @Component({
   selector: 'app-project-form',
   templateUrl: './project-form.component.html',
   styleUrls: ['./project-form.component.scss']
 })
-export class ProjectFormComponent implements OnInit {
+export class ProjectFormComponent implements OnInit, OnDestroy {
   projectForm!: FormGroup;
   colors = PROJECT_COLORS;
-  isLoading = false;
+  loading$!: Observable<boolean>;
+  error$!: Observable<string | null>;
 
   private currentUserId = '';
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private store: Store
   ) {
-    this.store.select(selectUser).subscribe((user) => {
+    this.store.select(selectUser).pipe(takeUntil(this.destroy$)).subscribe((user) => {
       this.currentUserId = user?.uid || '';
     });
   }
 
   ngOnInit(): void {
+    this.loading$ = this.store.select(selectProjectsLoading);
+    this.error$ = this.store.select(selectProjectsError);
+
     this.projectForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       description: ['', [Validators.maxLength(500)]],
@@ -58,7 +60,6 @@ export class ProjectFormComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
     const formValue = this.projectForm.value;
     const now = Date.now();
 
@@ -77,7 +78,11 @@ export class ProjectFormComponent implements OnInit {
         },
       })
     );
-    // Navigation is handled by createProjectSuccess$ effect
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onCancel(): void {
