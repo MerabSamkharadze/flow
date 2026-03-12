@@ -47,6 +47,44 @@
   }
 
   // --------------------------------------------------
+  // Element: error banner
+  // --------------------------------------------------
+  &__error {
+    padding: $spacing-sm $spacing-md;
+    margin-bottom: $spacing-md;
+    background-color: rgba($color-error, 0.1);
+    border: 1px solid rgba($color-error, 0.3);
+    border-radius: $border-radius-sm;
+    color: $color-error;
+    font-size: $font-size-sm;
+  }
+
+  // --------------------------------------------------
+  // Element: loading state
+  // --------------------------------------------------
+  &__loading {
+    @include flex-center;
+    @include flex-column;
+    gap: $spacing-md;
+    padding: $spacing-3xl $spacing-lg;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+  }
+
+  &__spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid $color-gray-200;
+    border-top-color: $color-primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  // --------------------------------------------------
   // Element: card grid
   // --------------------------------------------------
   &__grid {

@@ -5,30 +5,49 @@
   <div class="project-list__header">
     <div class="project-list__title-group">
       <h1 class="project-list__title">Projects</h1>
-      <span class="project-list__count">{{ projects.length }} projects</span>
+      <span class="project-list__count" *ngIf="projects$ | async as projects">
+        {{ projects.length }} projects
+      </span>
     </div>
     <button class="project-list__new-btn" (click)="onNewProject()">
       + New Project
     </button>
   </div>
 
-  <!-- Project cards grid -->
-  <div class="project-list__grid" *ngIf="projects.length > 0; else emptyState">
-    <app-project-card
-      *ngFor="let project of projects"
-      [project]="project">
-    </app-project-card>
+  <!-- Error state -->
+  <div class="project-list__error" *ngIf="error$ | async as error">
+    {{ error }}
   </div>
 
-  <!-- Empty state when no projects exist -->
-  <ng-template #emptyState>
-    <div class="project-list__empty">
-      <h3 class="project-list__empty-title">No projects yet</h3>
-      <p class="project-list__empty-text">Create your first project to get started.</p>
-      <button class="project-list__new-btn" (click)="onNewProject()">
-        + New Project
-      </button>
-    </div>
-  </ng-template>
+  <!-- Loading spinner -->
+  <div class="project-list__loading" *ngIf="loading$ | async">
+    <div class="project-list__spinner"></div>
+    <span>Loading projects...</span>
+  </div>
+
+  <!-- Project cards grid -->
+  <ng-container *ngIf="!(loading$ | async)">
+    <ng-container *ngIf="projects$ | async as projects">
+
+      <div class="project-list__grid" *ngIf="projects.length > 0; else emptyState">
+        <app-project-card
+          *ngFor="let project of projects"
+          [project]="project">
+        </app-project-card>
+      </div>
+
+      <!-- Empty state when no projects exist -->
+      <ng-template #emptyState>
+        <div class="project-list__empty">
+          <h3 class="project-list__empty-title">No projects yet</h3>
+          <p class="project-list__empty-text">Create your first project to get started.</p>
+          <button class="project-list__new-btn" (click)="onNewProject()">
+            + New Project
+          </button>
+        </div>
+      </ng-template>
+
+    </ng-container>
+  </ng-container>
 
 </div>

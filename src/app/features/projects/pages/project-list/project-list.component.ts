@@ -1,13 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 import { Project } from '../../../../shared/models/project.model';
+import * as ProjectsActions from '../../store/projects.actions';
+import {
+  selectAllProjects,
+  selectProjectsLoading,
+  selectProjectsError,
+} from '../../store/projects.selectors';
 
 /**
  * ProjectListComponent — displays all projects in a responsive card grid.
  *
- * Has a "New Project" button that navigates to the project creation form.
- * Projects will later be loaded from Firestore via NgRx;
- * for now uses mock data for layout development.
+ * Connected to the NgRx store:
+ *   - Dispatches loadProjects on init to fetch from Firestore
+ *   - Uses selectors for projects, loading, and error states
+ *   - Shows a loading spinner while data is being fetched
  */
 @Component({
   selector: 'app-project-list',
@@ -15,62 +25,23 @@ import { Project } from '../../../../shared/models/project.model';
   styleUrls: ['./project-list.component.scss'],
 })
 export class ProjectListComponent implements OnInit {
-  projects: Project[] = [];
+  projects$!: Observable<Project[]>;
+  loading$!: Observable<boolean>;
+  error$!: Observable<string | null>;
 
-  constructor(private router: Router) {}
+  constructor(
+    private store: Store,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    // Mock data — will be replaced with NgRx store selector
-    this.projects = [
-      {
-        id: '1',
-        name: 'Website Redesign',
-        description: 'Complete overhaul of the company website with new branding and improved UX.',
-        color: '#4f46e5',
-        ownerId: 'user1',
-        memberIds: ['user1', 'user2', 'user3', 'user4'],
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        deadline: '2026-05-01',
-        status: 'active',
-      },
-      {
-        id: '2',
-        name: 'Mobile App v2',
-        description: 'Second major release of the mobile application with offline support.',
-        color: '#0ea5e9',
-        ownerId: 'user1',
-        memberIds: ['user1', 'user5'],
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        deadline: '2026-06-15',
-        status: 'active',
-      },
-      {
-        id: '3',
-        name: 'API Migration',
-        description: 'Migrate legacy REST endpoints to GraphQL.',
-        color: '#10b981',
-        ownerId: 'user2',
-        memberIds: ['user2', 'user3'],
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        deadline: null,
-        status: 'on-hold',
-      },
-      {
-        id: '4',
-        name: 'Q1 Marketing Campaign',
-        description: 'Digital marketing campaign for Q1 product launch.',
-        color: '#f59e0b',
-        ownerId: 'user3',
-        memberIds: ['user3'],
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        deadline: '2026-03-31',
-        status: 'completed',
-      },
-    ];
+    // Bind store selectors
+    this.projects$ = this.store.select(selectAllProjects);
+    this.loading$ = this.store.select(selectProjectsLoading);
+    this.error$ = this.store.select(selectProjectsError);
+
+    // Dispatch action to load projects from Firestore
+    this.store.dispatch(ProjectsActions.loadProjects());
   }
 
   onNewProject(): void {
