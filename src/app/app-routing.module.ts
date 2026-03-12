@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
+import { AuthGuard } from './core/auth/guards/auth.guard';
 
 /**
  * AppRoutingModule — top-level routing configuration.
@@ -18,10 +19,11 @@ const routes: Routes = [
       import('./features/auth/auth.module').then(m => m.AuthModule),
   },
 
-  // Authenticated routes — rendered inside the layout shell
+  // Authenticated routes — protected by AuthGuard, rendered inside the layout shell
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       // Lazy-loaded feature modules will be added here:
       //

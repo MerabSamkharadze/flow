@@ -17,6 +17,11 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+// Auth state — registered at root level because guards and interceptors
+// need it before the lazy-loaded AuthModule is loaded
+import { authReducer } from './features/auth/store/auth.reducer';
+import { AuthEffects } from './features/auth/store/auth.effects';
+
 // Environment config
 import { environment } from '../environments/environment';
 
@@ -47,9 +52,10 @@ import { environment } from '../environments/environment';
     AngularFireAuthModule,
     AngularFirestoreModule,
 
-    // NgRx — root store with no root-level reducers (feature modules register their own)
-    StoreModule.forRoot({}),
-    EffectsModule.forRoot([]),
+    // NgRx — auth state registered at root because AuthGuard and interceptors
+    // run before the lazy-loaded AuthModule is loaded
+    StoreModule.forRoot({ auth: authReducer }),
+    EffectsModule.forRoot([AuthEffects]),
     // Dev tools — disabled in production builds
     StoreDevtoolsModule.instrument({
       maxAge: 25,

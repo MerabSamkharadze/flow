@@ -1,18 +1,23 @@
 import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 // Layout components
 import { LayoutComponent } from './layout/layout.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { HeaderComponent } from './layout/header/header.component';
 
+// Interceptors
+import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
+import { ErrorInterceptor } from './auth/interceptors/error.interceptor';
+
 /**
  * CoreModule — singleton services and app-wide layout components.
  *
  * This module should only be imported ONCE in AppModule via CoreModule.forRoot().
- * It contains the main layout shell (sidebar, header, content area) and will
- * later house global services like AuthService, NotificationService, etc.
+ * It contains the main layout shell (sidebar, header, content area),
+ * HTTP interceptors, and will later house global services.
  */
 @NgModule({
   declarations: [
@@ -23,6 +28,7 @@ import { HeaderComponent } from './layout/header/header.component';
   imports: [
     CommonModule,
     RouterModule,
+    HttpClientModule,
   ],
   exports: [
     CommonModule,
@@ -32,8 +38,6 @@ import { HeaderComponent } from './layout/header/header.component';
 export class CoreModule {
   /**
    * Guard against multiple imports — CoreModule must be a singleton.
-   * If it's accidentally imported in a lazy-loaded feature module,
-   * this constructor throws a clear error.
    */
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     if (parentModule) {
@@ -44,15 +48,25 @@ export class CoreModule {
   }
 
   /**
-   * forRoot() pattern — use this in AppModule to register
-   * singleton providers that should exist for the entire app lifetime.
+   * forRoot() pattern — registers singleton providers including HTTP interceptors.
+   * Interceptors run in the order they are listed:
+   *   1. AuthInterceptor — attaches the Firebase token
+   *   2. ErrorInterceptor — catches 401/500 errors
    */
   static forRoot(): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
       providers: [
-        // Register app-wide singleton services here
-        // e.g. AuthService, NotificationService
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AuthInterceptor,
+          multi: true,
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: ErrorInterceptor,
+          multi: true,
+        },
       ],
     };
   }

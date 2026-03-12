@@ -35,3 +35,9 @@ export const selectAuthError = createSelector(
   selectAuthState,
   (state) => state.error
 );
+
+/** The current user's role (or null if not logged in) */
+export const selectUserRole = createSelector(
+  selectUser,
+  (user) => user?.role ?? null
+);

@@ -26,12 +26,13 @@ export class AuthEffects {
    * Helper — converts a Firebase User object to our serializable AuthUser.
    * NgRx store requires plain serializable objects (no class instances).
    */
-  private toAuthUser(fbUser: firebase.default.User): AuthUser {
+  private toAuthUser(fbUser: firebase.default.User, role: string = 'member'): AuthUser {
     return {
       uid: fbUser.uid,
       email: fbUser.email,
       displayName: fbUser.displayName,
       photoURL: fbUser.photoURL,
+      role,
     };
   }
 
@@ -85,6 +86,7 @@ export class AuthEffects {
               email: credential.user!.email,
               displayName: name,
               photoURL: null,
+              role: 'member',
             };
             return AuthActions.registerSuccess({ user });
           })
