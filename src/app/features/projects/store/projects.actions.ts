@@ -154,3 +154,8 @@ export const updateMemberRoleSuccess = createAction(
   '[Projects API] Update Member Role Success',
   props<{ projectId: string; userId: string; newRole: MemberRole }>()
 );
+
+export const updateMemberRoleFailure = createAction(
+  '[Projects API] Update Member Role Failure',
+  props<{ error: string }>()
+);

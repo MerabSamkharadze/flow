@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { PROJECT_COLORS } from '../../../../shared/models/project.model';
+import * as ProjectsActions from '../../store/projects.actions';
+import { selectUser } from '../../../auth/store';
 
 /**
  * ProjectFormComponent — create a new project.
@@ -19,10 +22,17 @@ export class ProjectFormComponent implements OnInit {
   colors = PROJECT_COLORS;
   isLoading = false;
 
+  private currentUserId = '';
+
   constructor(
     private fb: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+    private store: Store
+  ) {
+    this.store.select(selectUser).subscribe((user) => {
+      this.currentUserId = user?.uid || '';
+    });
+  }
 
   ngOnInit(): void {
     this.projectForm = this.fb.group({
@@ -50,12 +60,24 @@ export class ProjectFormComponent implements OnInit {
 
     this.isLoading = true;
     const formValue = this.projectForm.value;
+    const now = Date.now();
 
-    // TODO: dispatch NgRx action to create project in Firestore
-    console.log('Create project:', formValue);
-
-    // Navigate back to project list after creation
-    this.router.navigate(['/projects']);
+    this.store.dispatch(
+      ProjectsActions.createProject({
+        project: {
+          name: formValue.name,
+          description: formValue.description || '',
+          color: formValue.color,
+          ownerId: this.currentUserId,
+          memberIds: [this.currentUserId],
+          createdAt: now,
+          updatedAt: now,
+          deadline: formValue.deadline || null,
+          status: 'active',
+        },
+      })
+    );
+    // Navigation is handled by createProjectSuccess$ effect
   }
 
   onCancel(): void {

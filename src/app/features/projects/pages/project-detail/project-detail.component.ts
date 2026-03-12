@@ -33,6 +33,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   currentUserProjectRole: MemberRole = 'member';
   showInviteModal = false;
   projectId = '';
+  progressPercent = 0;
 
   private destroy$ = new Subject<void>();
 
@@ -77,8 +78,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   }
 
   onOpenBoard(): void {
-    // TODO: navigate to /projects/:id/board
-    console.log('Open board for project:', this.projectId);
+    this.router.navigate(['/projects', this.projectId, 'board']);
   }
 
   onGoToSettings(): void {

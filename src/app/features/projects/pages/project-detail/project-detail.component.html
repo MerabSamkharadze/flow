@@ -44,18 +44,18 @@
           <p class="project-detail__description">{{ project.description }}</p>
         </section>
 
-        <!-- Progress -->
+        <!-- Progress — computed from board tasks once available -->
         <section class="project-detail__section">
           <h2 class="project-detail__section-title">Progress</h2>
           <div class="project-detail__progress">
             <div class="project-detail__progress-bar">
               <div
                 class="project-detail__progress-fill"
-                [style.width.%]="60"
+                [style.width.%]="progressPercent"
                 [style.background-color]="project.color">
               </div>
             </div>
-            <span class="project-detail__progress-label">60%</span>
+            <span class="project-detail__progress-label">{{ progressPercent }}%</span>
           </div>
         </section>
       </div>

@@ -170,5 +170,35 @@ export const projectsReducer = createReducer(
   on(ProjectsActions.setSelectedProject, (state, { projectId }) => ({
     ...state,
     selectedProjectId: projectId,
-  }))
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Members
+  // ---------------------------------------------------------------------------
+
+  on(ProjectsActions.addMemberSuccess, (state, { projectId, member }) => {
+    const project = state.entities[projectId];
+    if (!project) return state;
+    return projectsAdapter.updateOne(
+      {
+        id: projectId,
+        changes: { memberIds: [...project.memberIds, member.userId] },
+      },
+      state
+    );
+  }),
+
+  on(ProjectsActions.removeMemberSuccess, (state, { projectId, userId }) => {
+    const project = state.entities[projectId];
+    if (!project) return state;
+    return projectsAdapter.updateOne(
+      {
+        id: projectId,
+        changes: { memberIds: project.memberIds.filter((id) => id !== userId) },
+      },
+      state
+    );
+  }),
+
+  on(ProjectsActions.updateMemberRoleSuccess, (state) => state)
 );

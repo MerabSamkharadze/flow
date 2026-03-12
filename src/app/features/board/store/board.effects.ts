@@ -5,6 +5,8 @@ import { forkJoin, of } from 'rxjs';
 import { catchError, exhaustMap, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import { BoardService } from '../services/board.service';
+import { Column } from '../../../shared/models/column.model';
+import { Task } from '../../../shared/models/task.model';
 import * as BoardActions from './board.actions';
 import { selectTasksMap } from './board.selectors';
 
@@ -72,7 +74,7 @@ export class BoardEffects {
         this.boardService.updateColumn(projectId, columnId, changes).then(
           () =>
             BoardActions.updateColumnSuccess({
-              column: { id: columnId, projectId, ...changes } as any,
+              column: { id: columnId, projectId, ...changes } as Column,
             }),
           (error) => BoardActions.updateColumnFailure({ error: error.message })
         )
@@ -118,7 +120,7 @@ export class BoardEffects {
         this.boardService.updateTask(projectId, taskId, changes).then(
           () =>
             BoardActions.updateTaskSuccess({
-              task: { id: taskId, projectId, ...changes } as any,
+              task: { id: taskId, projectId, ...changes } as Task,
             }),
           (error) => BoardActions.updateTaskFailure({ error: error.message })
         )

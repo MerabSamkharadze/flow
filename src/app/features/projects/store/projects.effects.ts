@@ -175,7 +175,7 @@ export class ProjectsEffects {
       exhaustMap(({ projectId, userId, newRole }) =>
         this.projectsService.updateMemberRole(projectId, userId, newRole).then(
           () => ProjectsActions.updateMemberRoleSuccess({ projectId, userId, newRole }),
-          (error) => ProjectsActions.removeMemberFailure({ error: error.message })
+          (error) => ProjectsActions.updateMemberRoleFailure({ error: error.message })
         )
       )
     )

@@ -25,7 +25,7 @@
           [alt]="member.displayName"
           class="members-panel__avatar-img" />
         <span *ngIf="!member.avatarUrl" class="members-panel__avatar-initials">
-          {{ (member.displayName || member.email).charAt(0) | uppercase }}
+          {{ (member.displayName || member.email || '?').charAt(0) | uppercase }}
         </span>
       </div>
 
