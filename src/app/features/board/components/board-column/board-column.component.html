@@ -23,12 +23,13 @@
     [id]="column.id"
     (cdkDropListDropped)="onDrop($event)">
 
-    <!-- Individual task card — CDK draggable -->
+    <!-- Individual task card — CDK draggable, with comment count wired up -->
     <app-task-card
       *ngFor="let task of tasks"
       cdkDrag
       [cdkDragData]="task"
       [task]="task"
+      [commentCount]="commentCounts[task.id] || 0"
       (taskClicked)="onTaskClicked($event)">
 
       <!-- Drag placeholder — shown in the list where the item will land -->

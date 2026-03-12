@@ -41,6 +41,7 @@
       *ngFor="let column of columns$ | async"
       [column]="column"
       [tasks]="(filteredTasksMap$ | async)?.[column.id] || []"
+      [commentCounts]="(commentCounts$ | async) || {}"
       (addTask)="onAddTask($event)"
       (taskDropped)="onTaskDropped($event, column.id)"
       (taskClicked)="onTaskClicked($event)">

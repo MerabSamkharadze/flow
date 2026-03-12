@@ -14,6 +14,7 @@ import {
   selectBoardError,
   selectActiveTask,
 } from '../../store/board.selectors';
+import { selectCommentCounts } from '../../../tasks/store/tasks.selectors';
 
 /**
  * KanbanViewComponent — main Kanban board page.
@@ -43,6 +44,9 @@ export class KanbanViewComponent implements OnInit {
   error$!: Observable<string | null>;
   activeTask$!: Observable<Task | null>;
 
+  /** Comment counts keyed by task ID — passed through to board-column → task-card */
+  commentCounts$!: Observable<{ [taskId: string]: number }>;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -59,6 +63,7 @@ export class KanbanViewComponent implements OnInit {
     this.loading$ = this.store.select(selectBoardLoading);
     this.error$ = this.store.select(selectBoardError);
     this.activeTask$ = this.store.select(selectActiveTask);
+    this.commentCounts$ = this.store.select(selectCommentCounts);
 
     // Dispatch loadBoard to fetch columns + tasks from Firestore
     this.store.dispatch(BoardActions.loadBoard({ projectId: this.projectId }));

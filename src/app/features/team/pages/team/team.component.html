@@ -1,6 +1,25 @@
+<!-- Team: empty-state placeholder until team management is built -->
 <div class="team">
-  <div class="team__card">
+  <div class="team__wrapper">
     <h1 class="team__title">Team</h1>
-    <p class="team__subtitle">This feature is coming soon.</p>
+    <p class="team__subtitle">Manage your team members, roles, and project assignments.</p>
+
+    <!-- Empty-state illustration -->
+    <div class="team__empty">
+      <div class="team__icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <p class="team__empty-text">No team members yet</p>
+      <p class="team__empty-hint">
+        Invite collaborators to join your workspace and start assigning tasks together.
+      </p>
+      <a class="team__cta" routerLink="/projects">Go to Projects</a>
+    </div>
   </div>
 </div>

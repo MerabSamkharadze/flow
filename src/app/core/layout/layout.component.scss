@@ -53,7 +53,8 @@
   &__content {
     flex: 1;
     @include scrollable(y);
-    padding: $spacing-lg;
+    padding: $spacing-lg $spacing-xl; // 24px 32px on desktop
+    background-color: $color-bg;
   }
 
   // --------------------------------------------------
@@ -90,7 +91,7 @@
     }
 
     &__content {
-      padding: $spacing-md;
+      padding: $spacing-md; // 16px on mobile
     }
 
     // When sidebar is open on mobile

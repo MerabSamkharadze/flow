@@ -4,29 +4,109 @@
 // ==========================================================================
 
 @use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
 
 .dashboard {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: $spacing-xl;
 
-  &__card {
-    background-color: $color-surface;
-    border-radius: $border-radius-lg;
-    box-shadow: $shadow-sm;
-    padding: $spacing-xl;
-    text-align: center;
+  &__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   &__title {
     font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
     color: $color-text-primary;
-    margin-bottom: $spacing-md;
+    margin: 0 0 $spacing-xs;
   }
 
   &__subtitle {
     font-size: $font-size-base;
     color: $color-text-secondary;
+    margin: 0 0 $spacing-xl;
+  }
+
+  // --------------------------------------------------
+  // Stat cards grid
+  // --------------------------------------------------
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-lg;
+
+    @include respond-below('lg') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-below('sm') {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__stat-card {
+    @include flex(row, center);
+    gap: $spacing-md;
+    padding: $spacing-lg;
+    background-color: $color-surface;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    transition: box-shadow $transition-fast;
+
+    &:hover {
+      box-shadow: $shadow-md;
+    }
+  }
+
+  // --------------------------------------------------
+  // Stat icon — colored circle background
+  // --------------------------------------------------
+  &__stat-icon {
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    border-radius: $border-radius-md;
+    flex-shrink: 0;
+
+    &--projects {
+      background-color: rgba($color-primary, 0.1);
+      color: $color-primary;
+    }
+
+    &--active {
+      background-color: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+
+    &--overdue {
+      background-color: rgba($color-error, 0.1);
+      color: $color-error;
+    }
+
+    &--today {
+      background-color: rgba($color-warning, 0.1);
+      color: $color-warning;
+    }
+  }
+
+  // --------------------------------------------------
+  // Stat info: value + label
+  // --------------------------------------------------
+  &__stat-info {
+    @include flex-column;
+    gap: 2px;
+  }
+
+  &__stat-value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    line-height: $line-height-tight;
+  }
+
+  &__stat-label {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
   }
 }

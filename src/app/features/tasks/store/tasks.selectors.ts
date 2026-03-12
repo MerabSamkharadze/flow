@@ -233,3 +233,15 @@ export const selectCommentsByTask = (taskId: string) =>
 /** Factory selector: comment count for a specific task */
 export const selectCommentCountByTask = (taskId: string) =>
   createSelector(selectCommentsByTask(taskId), (comments) => comments.length);
+
+/** All comment counts as a dictionary keyed by task ID */
+export const selectCommentCounts = createSelector(
+  selectAllComments,
+  (comments): { [taskId: string]: number } => {
+    const counts: { [taskId: string]: number } = {};
+    for (const [taskId, taskComments] of Object.entries(comments)) {
+      counts[taskId] = taskComments.length;
+    }
+    return counts;
+  }
+);

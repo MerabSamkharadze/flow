@@ -57,6 +57,11 @@ const routes: Routes = [
           import('./features/team/team.module').then(m => m.TeamModule),
       },
       {
+        path: 'notifications',
+        loadChildren: () =>
+          import('./features/notifications/notifications.module').then(m => m.NotificationsModule),
+      },
+      {
         path: 'settings',
         loadChildren: () =>
           import('./features/settings/settings.module').then(m => m.SettingsModule),

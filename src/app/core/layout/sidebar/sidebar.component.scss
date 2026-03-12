@@ -53,6 +53,12 @@
     padding: $spacing-sm 0;
     margin: 0;
     @include scrollable(y);
+
+    // Footer nav variant — does not flex-grow, sits above toggle
+    &--footer {
+      flex: 0;
+      padding: $spacing-xs 0;
+    }
   }
 
   &__nav-item {
@@ -74,7 +80,7 @@
       color: $color-gray-200;
     }
 
-    // Modifier: active route
+    // Modifier: active route — visible in both expanded and collapsed states
     &--active {
       background-color: rgba($color-primary, 0.15);
       color: $color-primary-light;
@@ -103,6 +109,15 @@
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     white-space: nowrap;
+  }
+
+  // --------------------------------------------------
+  // Element: visual separator between main nav and footer nav
+  // --------------------------------------------------
+  &__separator {
+    height: 1px;
+    margin: 0 $spacing-md;
+    background-color: rgba(255, 255, 255, 0.08);
   }
 
   // --------------------------------------------------
@@ -149,6 +164,11 @@
     .sidebar__nav-icon {
       width: 28px;
       height: 28px;
+    }
+
+    // Separator shrinks to fit collapsed width
+    .sidebar__separator {
+      margin: 0 $spacing-sm;
     }
   }
 }

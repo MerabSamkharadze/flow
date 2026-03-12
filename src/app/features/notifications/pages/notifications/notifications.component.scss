@@ -1,12 +1,12 @@
 // ==========================================================================
-// Settings Page — BEM
-// Block: .settings
+// Notifications Page — BEM
+// Block: .notifications
 // ==========================================================================
 
 @use '../../../../../styles/abstracts/variables' as *;
 @use '../../../../../styles/abstracts/mixins' as *;
 
-.settings {
+.notifications {
   padding: $spacing-xl;
 
   &__wrapper {
@@ -61,23 +61,7 @@
     font-size: $font-size-sm;
     color: $color-text-secondary;
     max-width: 400px;
-    margin: 0 0 $spacing-lg;
+    margin: 0;
     line-height: $line-height-relaxed;
-  }
-
-  &__cta {
-    display: inline-block;
-    padding: 10px $spacing-xl;
-    background-color: $color-primary;
-    color: $color-text-inverse;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    border-radius: $border-radius-md;
-    text-decoration: none;
-    transition: background-color $transition-fast;
-
-    &:hover {
-      background-color: $color-primary-dark;
-    }
   }
 }

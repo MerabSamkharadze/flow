@@ -1,16 +1,17 @@
 <!-- Header: top navigation bar -->
 <div class="header">
 
-  <!-- Left section: hamburger toggle + page context -->
+  <!-- Left section: hamburger toggle + page title -->
   <div class="header__left">
     <button class="header__menu-toggle" (click)="onMenuToggle()" title="Toggle sidebar">
       <span class="header__menu-icon">&#9776;</span>
     </button>
+    <h2 class="header__page-title">{{ pageTitle }}</h2>
   </div>
 
   <!-- Right section: notifications, profile, logout -->
   <div class="header__right">
-    <button class="header__action" title="Notifications">
+    <button class="header__action" title="Notifications" routerLink="/notifications">
       <svg class="header__action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
         <path d="M13.73 21a2 2 0 0 1-3.46 0"/>

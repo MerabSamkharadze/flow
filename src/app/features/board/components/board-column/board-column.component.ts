@@ -21,6 +21,9 @@ export class BoardColumnComponent {
   @Input() column!: Column;
   @Input() tasks: Task[] = [];
 
+  /** Comment counts keyed by task ID, passed down from kanban-view */
+  @Input() commentCounts: { [taskId: string]: number } = {};
+
   /** Emits partial task data from the inline task form */
   @Output() addTask = new EventEmitter<{ columnId: string; taskData: Partial<Task> }>();
 

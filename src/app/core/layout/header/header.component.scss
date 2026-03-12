@@ -41,6 +41,14 @@
     line-height: 1;
   }
 
+  &__page-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+    white-space: nowrap;
+  }
+
   // --------------------------------------------------
   // Element: right section
   // --------------------------------------------------
