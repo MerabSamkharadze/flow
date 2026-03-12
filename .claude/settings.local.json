@@ -5,7 +5,8 @@
       "Bash(rm -rf node_modules package-lock.json && npm install 2>&1)",
       "Bash(npm install:*)",
       "Bash(npx ng:*)",
-      "Bash(npm ls:*)"
+      "Bash(npm ls:*)",
+      "Bash(git rm:*)"
     ]
   }
 }
