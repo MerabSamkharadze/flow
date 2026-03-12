@@ -10,3 +10,6 @@
 // Base — reset and typography (global element styles)
 @use 'base/reset';
 @use 'base/typography';
+
+// Feature styles — shared BEM blocks used across feature components
+@use '../app/features/auth/styles/auth-shared';

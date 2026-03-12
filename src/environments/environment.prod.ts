@@ -8,11 +8,12 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'YOUR_API_KEY',
-    authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
-    projectId: 'YOUR_PROJECT_ID',
-    storageBucket: 'YOUR_PROJECT_ID.appspot.com',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-    appId: 'YOUR_APP_ID',
+    apiKey: "AIzaSyCsFnHNINZzdk1w7ipP3khaWqnRCQEqxzw",
+    authDomain: "flow-8eacb.firebaseapp.com",
+    projectId: "flow-8eacb",
+    storageBucket: "flow-8eacb.firebasestorage.app",
+    messagingSenderId: "939519247800",
+    appId: "1:939519247800:web:75b62258df9b865330fb4d",
+    measurementId: "G-WEFJZGQSHN"
   },
 };

@@ -11,6 +11,14 @@ import { LayoutComponent } from './core/layout/layout.component';
  * Feature modules will be lazy-loaded as children of the layout route.
  */
 const routes: Routes = [
+  // Auth routes — rendered WITHOUT the layout shell (no sidebar/header)
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then(m => m.AuthModule),
+  },
+
+  // Authenticated routes — rendered inside the layout shell
   {
     path: '',
     component: LayoutComponent,

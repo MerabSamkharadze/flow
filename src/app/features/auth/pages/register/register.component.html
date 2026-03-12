@@ -1,0 +1,104 @@
+<!-- Register page -->
+<div class="auth">
+  <div class="auth__card">
+
+    <!-- Header -->
+    <div class="auth__header">
+      <h1 class="auth__title">Create your account</h1>
+      <p class="auth__subtitle">Get started with FLOW for free</p>
+    </div>
+
+    <!-- Error message from store -->
+    <div class="auth__error" *ngIf="error$ | async as errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Register form -->
+    <form class="auth__form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <!-- Name field -->
+      <div class="auth__field">
+        <label class="auth__label" for="name">Full name</label>
+        <input
+          class="auth__input"
+          [class.auth__input--error]="f['name'].touched && f['name'].invalid"
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="John Doe"
+          autocomplete="name" />
+        <span class="auth__validation" *ngIf="f['name'].touched && f['name'].errors">
+          <span *ngIf="f['name'].errors?.['required']">Name is required</span>
+          <span *ngIf="f['name'].errors?.['minlength']">Name must be at least 2 characters</span>
+        </span>
+      </div>
+
+      <!-- Email field -->
+      <div class="auth__field">
+        <label class="auth__label" for="email">Email</label>
+        <input
+          class="auth__input"
+          [class.auth__input--error]="f['email'].touched && f['email'].invalid"
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="you@company.com"
+          autocomplete="email" />
+        <span class="auth__validation" *ngIf="f['email'].touched && f['email'].errors">
+          <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+          <span *ngIf="f['email'].errors?.['email']">Enter a valid email address</span>
+        </span>
+      </div>
+
+      <!-- Password field -->
+      <div class="auth__field">
+        <label class="auth__label" for="password">Password</label>
+        <input
+          class="auth__input"
+          [class.auth__input--error]="f['password'].touched && f['password'].invalid"
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="At least 6 characters"
+          autocomplete="new-password" />
+        <span class="auth__validation" *ngIf="f['password'].touched && f['password'].errors">
+          <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
+        </span>
+      </div>
+
+      <!-- Confirm password field -->
+      <div class="auth__field">
+        <label class="auth__label" for="confirmPassword">Confirm password</label>
+        <input
+          class="auth__input"
+          [class.auth__input--error]="f['confirmPassword'].touched && f['confirmPassword'].invalid"
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Re-enter your password"
+          autocomplete="new-password" />
+        <span class="auth__validation" *ngIf="f['confirmPassword'].touched && f['confirmPassword'].errors">
+          <span *ngIf="f['confirmPassword'].errors?.['required']">Please confirm your password</span>
+          <span *ngIf="f['confirmPassword'].errors?.['passwordMismatch']">Passwords do not match</span>
+        </span>
+      </div>
+
+      <!-- Submit button -->
+      <button
+        class="auth__button"
+        type="submit"
+        [disabled]="loading$ | async">
+        {{ (loading$ | async) ? 'Creating account...' : 'Create account' }}
+      </button>
+
+    </form>
+
+    <!-- Footer link -->
+    <p class="auth__footer">
+      Already have an account?
+      <a class="auth__link" (click)="goToLogin()">Sign in</a>
+    </p>
+
+  </div>
+</div>

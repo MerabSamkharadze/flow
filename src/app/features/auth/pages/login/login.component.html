@@ -1,0 +1,70 @@
+<!-- Login page -->
+<div class="auth">
+  <div class="auth__card">
+
+    <!-- Header -->
+    <div class="auth__header">
+      <h1 class="auth__title">Welcome back</h1>
+      <p class="auth__subtitle">Sign in to your FLOW account</p>
+    </div>
+
+    <!-- Error message from store -->
+    <div class="auth__error" *ngIf="error$ | async as errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Login form -->
+    <form class="auth__form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- Email field -->
+      <div class="auth__field">
+        <label class="auth__label" for="email">Email</label>
+        <input
+          class="auth__input"
+          [class.auth__input--error]="f['email'].touched && f['email'].invalid"
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="you@company.com"
+          autocomplete="email" />
+        <span class="auth__validation" *ngIf="f['email'].touched && f['email'].errors">
+          <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+          <span *ngIf="f['email'].errors?.['email']">Enter a valid email address</span>
+        </span>
+      </div>
+
+      <!-- Password field -->
+      <div class="auth__field">
+        <label class="auth__label" for="password">Password</label>
+        <input
+          class="auth__input"
+          [class.auth__input--error]="f['password'].touched && f['password'].invalid"
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="current-password" />
+        <span class="auth__validation" *ngIf="f['password'].touched && f['password'].errors">
+          <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
+        </span>
+      </div>
+
+      <!-- Submit button -->
+      <button
+        class="auth__button"
+        type="submit"
+        [disabled]="loading$ | async">
+        {{ (loading$ | async) ? 'Signing in...' : 'Sign in' }}
+      </button>
+
+    </form>
+
+    <!-- Footer link -->
+    <p class="auth__footer">
+      Don't have an account?
+      <a class="auth__link" (click)="goToRegister()">Create one</a>
+    </p>
+
+  </div>
+</div>
