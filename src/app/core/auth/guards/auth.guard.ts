@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
-import { selectAuthState } from '../../../features/auth/store/auth.selectors';
+import { selectAuthState } from '../../../features/auth/store';
 
 /**
  * AuthGuard — prevents unauthenticated users from accessing protected routes.

@@ -28,7 +28,8 @@
       *ngFor="let task of tasks"
       cdkDrag
       [cdkDragData]="task"
-      [task]="task">
+      [task]="task"
+      (taskClicked)="onTaskClicked($event)">
 
       <!-- Drag placeholder — shown in the list where the item will land -->
       <div class="board-column__drag-placeholder" *cdkDragPlaceholder></div>
@@ -37,8 +38,19 @@
 
   </div>
 
-  <!-- Add task button -->
-  <button class="board-column__add-btn" (click)="onAddTask()">
+  <!-- Inline task form (shown when "Add Task" is clicked) -->
+  <app-task-form
+    *ngIf="showTaskForm"
+    [columnId]="column.id"
+    (taskCreated)="onTaskCreated($event)"
+    (cancelled)="onTaskFormCancelled()">
+  </app-task-form>
+
+  <!-- Add task button (hidden when form is visible) -->
+  <button
+    class="board-column__add-btn"
+    *ngIf="!showTaskForm"
+    (click)="onShowTaskForm()">
     + Add Task
   </button>
 

@@ -9,7 +9,7 @@ import {
   selectAllProjects,
   selectProjectsLoading,
   selectProjectsError,
-} from '../../store/projects.selectors';
+} from '../../store';
 
 /**
  * ProjectListComponent — displays all projects in a responsive card grid.

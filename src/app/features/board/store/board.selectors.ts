@@ -1,13 +1,13 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { BoardState } from './board.reducer';
 import { Task } from '../../../shared/models/task.model';
+import { BoardFilters } from '../models/board-filters.model';
 
 /**
  * Board Selectors — memoized selectors for reading board state.
  *
- * The board state uses a column-grouped task dictionary
- * for efficient per-column rendering, with selectors for
- * both grouped and flat access patterns.
+ * Includes selectors for filtered tasks that reactively update
+ * when either the task data or filters change.
  */
 
 // Feature selector — grabs the 'board' slice from the root state
@@ -52,6 +52,12 @@ export const selectActiveTask = createSelector(
   }
 );
 
+/** Current board filters */
+export const selectBoardFilters = createSelector(
+  selectBoardState,
+  (state) => state.filters
+);
+
 /** Whether a board operation is in progress */
 export const selectBoardLoading = createSelector(
   selectBoardState,
@@ -75,3 +81,63 @@ export const selectAllTasks = createSelector(
     return all;
   }
 );
+
+// ---------------------------------------------------------------------------
+// Filtered task selectors
+// ---------------------------------------------------------------------------
+
+/**
+ * Helper — applies BoardFilters to a task array.
+ * Returns only tasks matching ALL active filter criteria.
+ */
+function applyFilters(tasks: Task[], filters: BoardFilters): Task[] {
+  return tasks.filter((task) => {
+    // Search filter — match title (case-insensitive)
+    if (filters.search) {
+      const query = filters.search.toLowerCase();
+      if (!task.title.toLowerCase().includes(query)) {
+        return false;
+      }
+    }
+
+    // Priority filter — match any of the selected priorities
+    if (filters.priority.length > 0) {
+      if (!filters.priority.includes(task.priority)) {
+        return false;
+      }
+    }
+
+    // Assignee filter — match assigneeId (case-insensitive partial match)
+    if (filters.assigneeId) {
+      if (!task.assigneeId) return false;
+      if (!task.assigneeId.toLowerCase().includes(filters.assigneeId.toLowerCase())) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+}
+
+/**
+ * Filtered tasks map — applies active filters to every column.
+ * Re-computes only when tasks or filters change (memoized).
+ */
+export const selectFilteredTasksMap = createSelector(
+  selectTasksMap,
+  selectBoardFilters,
+  (tasksMap, filters): { [columnId: string]: Task[] } => {
+    const filtered: { [columnId: string]: Task[] } = {};
+    for (const [columnId, tasks] of Object.entries(tasksMap)) {
+      filtered[columnId] = applyFilters(tasks, filters);
+    }
+    return filtered;
+  }
+);
+
+/** Filtered tasks for a specific column (factory selector) */
+export const selectFilteredTasksByColumn = (columnId: string) =>
+  createSelector(
+    selectFilteredTasksMap,
+    (filteredMap) => filteredMap[columnId] || []
+  );

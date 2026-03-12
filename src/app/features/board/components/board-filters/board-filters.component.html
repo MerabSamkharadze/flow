@@ -1,0 +1,46 @@
+<!-- Board Filters Bar -->
+<div class="board-filters">
+
+  <!-- Search input -->
+  <div class="board-filters__search">
+    <span class="board-filters__search-icon">&#x1F50D;</span>
+    <input
+      class="board-filters__search-input"
+      type="text"
+      placeholder="Search tasks..."
+      [formControl]="searchControl" />
+  </div>
+
+  <!-- Priority toggle buttons -->
+  <div class="board-filters__group">
+    <span class="board-filters__label">Priority:</span>
+    <div class="board-filters__toggles">
+      <button
+        *ngFor="let p of priorities"
+        class="board-filters__toggle"
+        [class.board-filters__toggle--active]="isPrioritySelected(p)"
+        (click)="togglePriority(p)">
+        {{ p | titlecase }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Assignee filter -->
+  <div class="board-filters__group">
+    <span class="board-filters__label">Assignee:</span>
+    <input
+      class="board-filters__input"
+      type="text"
+      placeholder="Filter by assignee..."
+      [formControl]="assigneeControl" />
+  </div>
+
+  <!-- Clear button -->
+  <button
+    class="board-filters__clear-btn"
+    *ngIf="hasActiveFilters"
+    (click)="clearFilters()">
+    Clear
+  </button>
+
+</div>

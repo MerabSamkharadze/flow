@@ -1,10 +1,10 @@
 <!-- Task Card: individual draggable task within a board column -->
-<div class="task-card">
+<div class="task-card" (click)="onCardClick()">
 
   <!-- Drag handle + labels row -->
   <div class="task-card__top-row">
-    <!-- Drag handle — only this area initiates drag -->
-    <span class="task-card__drag-handle" cdkDragHandle>&#x2807;</span>
+    <!-- Drag handle — only this area initiates drag, click does not propagate -->
+    <span class="task-card__drag-handle" cdkDragHandle (click)="$event.stopPropagation()">&#x2807;</span>
 
     <!-- Labels -->
     <div class="task-card__labels" *ngIf="task.labels.length > 0">

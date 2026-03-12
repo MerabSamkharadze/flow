@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import * as AuthActions from '../../store/auth.actions';
-import { selectAuthLoading, selectAuthError } from '../../store/auth.selectors';
+import { selectAuthLoading, selectAuthError } from '../../store';
 
 /**
  * RegisterComponent — new account sign-up page.
@@ -16,7 +16,7 @@ import { selectAuthLoading, selectAuthError } from '../../store/auth.selectors';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;

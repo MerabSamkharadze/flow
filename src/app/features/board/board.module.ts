@@ -14,6 +14,9 @@ import { ListViewComponent } from './pages/list-view/list-view.component';
 // Components
 import { BoardColumnComponent } from './components/board-column/board-column.component';
 import { TaskCardComponent } from './components/task-card/task-card.component';
+import { BoardFiltersComponent } from './components/board-filters/board-filters.component';
+import { TaskDetailModalComponent } from './components/task-detail-modal/task-detail-modal.component';
+import { TaskFormComponent } from './components/task-form/task-form.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,9 @@ import { TaskCardComponent } from './components/task-card/task-card.component';
     ListViewComponent,
     BoardColumnComponent,
     TaskCardComponent,
+    BoardFiltersComponent,
+    TaskDetailModalComponent,
+    TaskFormComponent,
   ],
   imports: [
     SharedModule,

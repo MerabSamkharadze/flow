@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { Column } from '../../../shared/models/column.model';
 import { Task } from '../../../shared/models/task.model';
+import { BoardFilters, EMPTY_FILTERS } from '../models/board-filters.model';
 import * as BoardActions from './board.actions';
 
 /**
@@ -9,6 +10,7 @@ import * as BoardActions from './board.actions';
  * columns:          array of board columns sorted by order
  * tasks:            dictionary mapping columnId → Task[] for fast column lookups
  * activeTaskId:     currently selected/editing task (for detail panel)
+ * filters:          active board filters (search, priority, assignee)
  * loading:          true while a Firestore operation is in progress
  * error:            error message from the last failed operation
  * previousTasks:    snapshot before optimistic move, used to revert on failure
@@ -17,6 +19,7 @@ export interface BoardState {
   columns: Column[];
   tasks: { [columnId: string]: Task[] };
   activeTaskId: string | null;
+  filters: BoardFilters;
   loading: boolean;
   error: string | null;
   previousTasks: { [columnId: string]: Task[] } | null;
@@ -26,6 +29,7 @@ export const initialBoardState: BoardState = {
   columns: [],
   tasks: {},
   activeTaskId: null,
+  filters: EMPTY_FILTERS,
   loading: false,
   error: null,
   previousTasks: null,
@@ -311,5 +315,14 @@ export const boardReducer = createReducer(
   on(BoardActions.setActiveTask, (state, { taskId }) => ({
     ...state,
     activeTaskId: taskId,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Set filters
+  // ---------------------------------------------------------------------------
+
+  on(BoardActions.setFilters, (state, { filters }) => ({
+    ...state,
+    filters,
   }))
 );

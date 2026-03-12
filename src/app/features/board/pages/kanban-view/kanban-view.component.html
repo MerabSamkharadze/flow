@@ -1,4 +1,4 @@
-<!-- Kanban Board View — connected to NgRx store with CDK drag & drop -->
+<!-- Kanban Board View — filters, drag & drop columns, detail modal -->
 <div class="kanban-view">
 
   <!-- Board header -->
@@ -22,6 +22,9 @@
     </div>
   </div>
 
+  <!-- Board filters bar -->
+  <app-board-filters (filtersChanged)="onFiltersChanged($event)"></app-board-filters>
+
   <!-- Loading spinner -->
   <div *ngIf="loading$ | async" class="kanban-view__loading">
     Loading board...
@@ -37,10 +40,20 @@
     <app-board-column
       *ngFor="let column of columns$ | async"
       [column]="column"
-      [tasks]="(tasksMap$ | async)?.[column.id] || []"
+      [tasks]="(filteredTasksMap$ | async)?.[column.id] || []"
       (addTask)="onAddTask($event)"
-      (taskDropped)="onTaskDropped($event, column.id)">
+      (taskDropped)="onTaskDropped($event, column.id)"
+      (taskClicked)="onTaskClicked($event)">
     </app-board-column>
   </div>
+
+  <!-- Task detail modal — shown when a task is selected -->
+  <app-task-detail-modal
+    *ngIf="activeTask$ | async as activeTask"
+    [task]="activeTask"
+    (closeModal)="onCloseModal()"
+    (taskUpdated)="onTaskUpdated($event)"
+    (taskDeleted)="onTaskDeleted($event)">
+  </app-task-detail-modal>
 
 </div>

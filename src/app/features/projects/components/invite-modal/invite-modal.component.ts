@@ -22,7 +22,7 @@ export interface InvitePayload {
 @Component({
   selector: 'app-invite-modal',
   templateUrl: './invite-modal.component.html',
-  styleUrls: ['./invite-modal.component.scss'],
+  styleUrls: ['./invite-modal.component.scss']
 })
 export class InviteModalComponent {
   /** Emits the invite data when form is submitted */

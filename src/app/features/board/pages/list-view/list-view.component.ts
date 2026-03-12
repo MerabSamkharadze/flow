@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-list-view',
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.scss'],
+  standalone: false
 })
 export class ListViewComponent {
   projectId = '';

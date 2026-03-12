@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
 
 /**
@@ -6,6 +6,9 @@ import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
  *
  * Shows the task title, priority badge, assignee avatar,
  * deadline, label chips, and subtask progress.
+ *
+ * Emits taskClicked when the card body is clicked (not the drag handle)
+ * to open the task detail modal.
  */
 @Component({
   selector: 'app-task-card',
@@ -14,6 +17,9 @@ import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
 })
 export class TaskCardComponent {
   @Input() task!: Task;
+
+  /** Emits the task when the card is clicked (opens detail modal) */
+  @Output() taskClicked = new EventEmitter<Task>();
 
   /** Get display config for the task's priority */
   get priorityConfig() {
@@ -42,5 +48,10 @@ export class TaskCardComponent {
 
   get totalSubtasks(): number {
     return this.task.subtasks.length;
+  }
+
+  /** Handle card click — emit task for detail modal */
+  onCardClick(): void {
+    this.taskClicked.emit(this.task);
   }
 }

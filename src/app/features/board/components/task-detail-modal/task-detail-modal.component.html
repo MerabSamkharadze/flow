@@ -1,0 +1,162 @@
+<!-- Task Detail Modal — overlay + centered modal panel -->
+<div class="task-modal__overlay" (click)="onClose()">
+  <div class="task-modal" (click)="onModalClick($event)">
+
+    <!-- Header -->
+    <div class="task-modal__header">
+      <h2 class="task-modal__title">Task Details</h2>
+      <button class="task-modal__close-btn" (click)="onClose()">&times;</button>
+    </div>
+
+    <!-- Form body -->
+    <form class="task-modal__body" [formGroup]="form" (ngSubmit)="onSave()">
+
+      <!-- Title -->
+      <div class="task-modal__field">
+        <label class="task-modal__label">Title</label>
+        <input
+          class="task-modal__input"
+          type="text"
+          formControlName="title"
+          placeholder="Task title" />
+      </div>
+
+      <!-- Description -->
+      <div class="task-modal__field">
+        <label class="task-modal__label">Description</label>
+        <textarea
+          class="task-modal__textarea"
+          formControlName="description"
+          rows="3"
+          placeholder="Add a description..."></textarea>
+      </div>
+
+      <!-- Row: Priority + Status -->
+      <div class="task-modal__row">
+        <div class="task-modal__field task-modal__field--half">
+          <label class="task-modal__label">Priority</label>
+          <select class="task-modal__select" formControlName="priority">
+            <option *ngFor="let p of priorities" [value]="p">
+              {{ p | titlecase }}
+            </option>
+          </select>
+        </div>
+        <div class="task-modal__field task-modal__field--half">
+          <label class="task-modal__label">Status</label>
+          <select class="task-modal__select" formControlName="status">
+            <option *ngFor="let s of statuses" [value]="s">
+              {{ s }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Row: Assignee + Deadline -->
+      <div class="task-modal__row">
+        <div class="task-modal__field task-modal__field--half">
+          <label class="task-modal__label">Assignee</label>
+          <input
+            class="task-modal__input"
+            type="text"
+            formControlName="assigneeId"
+            placeholder="User ID" />
+        </div>
+        <div class="task-modal__field task-modal__field--half">
+          <label class="task-modal__label">Deadline</label>
+          <input
+            class="task-modal__input"
+            type="date"
+            formControlName="deadline" />
+        </div>
+      </div>
+
+      <!-- Labels -->
+      <div class="task-modal__field">
+        <label class="task-modal__label">Labels (comma-separated)</label>
+        <input
+          class="task-modal__input"
+          type="text"
+          formControlName="labels"
+          placeholder="e.g. bug, frontend, urgent" />
+      </div>
+
+      <!-- Subtasks section -->
+      <div class="task-modal__section">
+        <div class="task-modal__section-header">
+          <span class="task-modal__label">Subtasks</span>
+          <span class="task-modal__subtask-count" *ngIf="subtasks.length > 0">
+            {{ subtaskProgress }}
+          </span>
+        </div>
+
+        <!-- Subtask list -->
+        <ul class="task-modal__subtask-list">
+          <li
+            class="task-modal__subtask"
+            *ngFor="let sub of subtasks; let i = index">
+            <label class="task-modal__subtask-check">
+              <input
+                type="checkbox"
+                [checked]="sub.completed"
+                (change)="toggleSubtask(i)" />
+              <span
+                class="task-modal__subtask-title"
+                [class.task-modal__subtask-title--done]="sub.completed">
+                {{ sub.title }}
+              </span>
+            </label>
+            <button
+              class="task-modal__subtask-remove"
+              type="button"
+              (click)="removeSubtask(i)">
+              &times;
+            </button>
+          </li>
+        </ul>
+
+        <!-- Add subtask input -->
+        <div class="task-modal__subtask-add">
+          <input
+            class="task-modal__input"
+            type="text"
+            placeholder="Add a subtask..."
+            [(ngModel)]="newSubtaskTitle"
+            [ngModelOptions]="{ standalone: true }"
+            (keyup.enter)="addSubtask()" />
+          <button
+            class="task-modal__subtask-add-btn"
+            type="button"
+            (click)="addSubtask()">
+            + Add
+          </button>
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div class="task-modal__footer">
+        <button
+          class="task-modal__delete-btn"
+          type="button"
+          (click)="onDelete()">
+          Delete
+        </button>
+        <div class="task-modal__footer-right">
+          <button
+            class="task-modal__cancel-btn"
+            type="button"
+            (click)="onClose()">
+            Cancel
+          </button>
+          <button
+            class="task-modal__save-btn"
+            type="submit"
+            [disabled]="form.invalid">
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>

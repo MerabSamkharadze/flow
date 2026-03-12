@@ -9,8 +9,8 @@ import { Member, MemberRole } from '../../../../shared/models/member.model';
 import { InvitePayload } from '../../components/invite-modal/invite-modal.component';
 
 import * as ProjectsActions from '../../store/projects.actions';
-import { selectProjectById, selectProjectsLoading } from '../../store/projects.selectors';
-import { selectUser } from '../../../../features/auth/store/auth.selectors';
+import { selectProjectById, selectProjectsLoading } from '../../store';
+import { selectUser } from '../../../auth/store';
 import { ProjectsService } from '../../services/projects.service';
 
 /**

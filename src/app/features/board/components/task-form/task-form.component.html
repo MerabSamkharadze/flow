@@ -1,0 +1,47 @@
+<!-- Task Quick-Create Form — shown inline inside a board column -->
+<div class="task-form">
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- Title input (auto-focused) -->
+    <input
+      class="task-form__title-input"
+      type="text"
+      formControlName="title"
+      placeholder="Task title..."
+      #titleInput />
+
+    <!-- Options row: priority + assignee -->
+    <div class="task-form__options">
+      <select class="task-form__select" formControlName="priority">
+        <option *ngFor="let p of priorities" [value]="p">
+          {{ p | titlecase }}
+        </option>
+      </select>
+
+      <input
+        class="task-form__assignee-input"
+        type="text"
+        formControlName="assigneeId"
+        placeholder="Assignee..." />
+    </div>
+
+    <!-- Action buttons -->
+    <div class="task-form__actions">
+      <button
+        class="task-form__submit-btn"
+        type="submit"
+        [disabled]="form.invalid">
+        Add Task
+      </button>
+      <button
+        class="task-form__cancel-btn"
+        type="button"
+        (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+
+  </form>
+
+</div>

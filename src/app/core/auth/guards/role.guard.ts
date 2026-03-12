@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { selectUserRole, selectUser } from '../../../features/auth/store/auth.selectors';
-import { selectSelectedProject } from '../../../features/projects/store/projects.selectors';
+import { selectUserRole, selectUser } from '../../../features/auth/store';
+import { selectSelectedProject } from '../../../features/projects/store';
 import { Member } from '../../../shared/models/member.model';
 
 /**

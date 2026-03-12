@@ -1,8 +1,8 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { logout } from '../../../features/auth/store/auth.actions';
-import { selectUser } from '../../../features/auth/store/auth.selectors';
+import { logout } from '../../../features/auth/store';
+import { selectUser } from '../../../features/auth/store';
 
 @Component({
   selector: 'app-header',

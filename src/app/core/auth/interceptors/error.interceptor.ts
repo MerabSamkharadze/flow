@@ -10,7 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
-import { logout } from '../../../features/auth/store/auth.actions';
+import { logout } from '../../../features/auth/store';
 
 /**
  * ErrorInterceptor — global HTTP error handler.

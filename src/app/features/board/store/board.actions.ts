@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Column } from '../../../shared/models/column.model';
 import { Task } from '../../../shared/models/task.model';
+import { BoardFilters } from '../models/board-filters.model';
 
 /**
  * Board Actions — all actions for the board state slice.
@@ -164,4 +165,13 @@ export const moveTaskFailure = createAction(
 export const setActiveTask = createAction(
   '[Board Page] Set Active Task',
   props<{ taskId: string | null }>()
+);
+
+// ---------------------------------------------------------------------------
+// Set filters (search, priority, assignee)
+// ---------------------------------------------------------------------------
+
+export const setFilters = createAction(
+  '[Board Page] Set Filters',
+  props<{ filters: BoardFilters }>()
 );

@@ -12,7 +12,7 @@ import { PROJECT_COLORS } from '../../../../shared/models/project.model';
 @Component({
   selector: 'app-project-form',
   templateUrl: './project-form.component.html',
-  styleUrls: ['./project-form.component.scss'],
+  styleUrls: ['./project-form.component.scss']
 })
 export class ProjectFormComponent implements OnInit {
   projectForm!: FormGroup;
