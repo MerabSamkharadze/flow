@@ -25,21 +25,20 @@ const routes: Routes = [
     component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      // Lazy-loaded feature modules will be added here:
-      //
+      // Lazy-loaded feature modules
+      {
+        path: 'projects',
+        loadChildren: () =>
+          import('./features/projects/projects.module').then(m => m.ProjectsModule),
+      },
       // {
       //   path: 'dashboard',
       //   loadChildren: () =>
       //     import('./features/dashboard/dashboard.module').then(m => m.DashboardModule),
       // },
-      // {
-      //   path: 'projects',
-      //   loadChildren: () =>
-      //     import('./features/projects/projects.module').then(m => m.ProjectsModule),
-      // },
 
-      // Default redirect — will point to dashboard once it exists
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      // Default redirect — points to projects until dashboard is built
+      { path: '', redirectTo: 'projects', pathMatch: 'full' },
     ],
   },
   // Wildcard — redirect unknown routes to root

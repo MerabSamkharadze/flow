@@ -1,0 +1,69 @@
+// ==========================================================================
+// Project Settings Page — BEM
+// Block: .project-settings
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.project-settings {
+  max-width: 600px;
+
+  &__top-bar {
+    margin-bottom: $spacing-lg;
+  }
+
+  &__back-btn {
+    @include button-reset;
+    @include focus-ring;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__card {
+    background-color: $color-surface;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    padding: $spacing-xl;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__placeholder {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__section {
+    padding: $spacing-md 0;
+    border-top: 1px solid $color-border;
+
+    &--danger {
+      .project-settings__section-title {
+        color: $color-error;
+      }
+    }
+  }
+
+  &__section-title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__section-text {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: 0;
+  }
+}

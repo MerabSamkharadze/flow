@@ -1,0 +1,33 @@
+<!-- Project Settings Page -->
+<div class="project-settings">
+
+  <div class="project-settings__top-bar">
+    <button class="project-settings__back-btn" (click)="onGoBack()">
+      &larr; Back to Project
+    </button>
+  </div>
+
+  <div class="project-settings__card">
+    <h1 class="project-settings__title">Project Settings</h1>
+    <p class="project-settings__placeholder">
+      Settings for project <strong>{{ projectId }}</strong> will be available here.
+    </p>
+
+    <!-- Placeholder sections -->
+    <div class="project-settings__section">
+      <h2 class="project-settings__section-title">General</h2>
+      <p class="project-settings__section-text">Rename project, change color, update description.</p>
+    </div>
+
+    <div class="project-settings__section">
+      <h2 class="project-settings__section-title">Members</h2>
+      <p class="project-settings__section-text">Add or remove team members, manage roles.</p>
+    </div>
+
+    <div class="project-settings__section project-settings__section--danger">
+      <h2 class="project-settings__section-title">Danger Zone</h2>
+      <p class="project-settings__section-text">Archive or delete this project.</p>
+    </div>
+  </div>
+
+</div>

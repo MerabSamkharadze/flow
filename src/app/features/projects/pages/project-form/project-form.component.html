@@ -1,0 +1,90 @@
+<!-- Project Form Page — Create New Project -->
+<div class="project-form">
+
+  <div class="project-form__card">
+
+    <!-- Header -->
+    <div class="project-form__header">
+      <h1 class="project-form__title">New Project</h1>
+      <p class="project-form__subtitle">Set up a new project for your team</p>
+    </div>
+
+    <!-- Form -->
+    <form class="project-form__form" [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+
+      <!-- Name -->
+      <div class="project-form__field">
+        <label class="project-form__label" for="name">Project name *</label>
+        <input
+          class="project-form__input"
+          [class.project-form__input--error]="f['name'].touched && f['name'].invalid"
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="e.g. Website Redesign" />
+        <span class="project-form__validation" *ngIf="f['name'].touched && f['name'].errors">
+          <span *ngIf="f['name'].errors?.['required']">Project name is required</span>
+          <span *ngIf="f['name'].errors?.['minlength']">Name must be at least 2 characters</span>
+          <span *ngIf="f['name'].errors?.['maxlength']">Name must not exceed 100 characters</span>
+        </span>
+      </div>
+
+      <!-- Description -->
+      <div class="project-form__field">
+        <label class="project-form__label" for="description">Description</label>
+        <textarea
+          class="project-form__textarea"
+          id="description"
+          formControlName="description"
+          rows="4"
+          placeholder="What is this project about?">
+        </textarea>
+        <span class="project-form__validation" *ngIf="f['description'].touched && f['description'].errors">
+          <span *ngIf="f['description'].errors?.['maxlength']">Description must not exceed 500 characters</span>
+        </span>
+      </div>
+
+      <!-- Color picker -->
+      <div class="project-form__field">
+        <label class="project-form__label">Project color</label>
+        <div class="project-form__colors">
+          <button
+            type="button"
+            class="project-form__color-swatch"
+            [class.project-form__color-swatch--selected]="f['color'].value === color"
+            *ngFor="let color of colors"
+            [style.background-color]="color"
+            (click)="selectColor(color)">
+          </button>
+        </div>
+      </div>
+
+      <!-- Deadline -->
+      <div class="project-form__field">
+        <label class="project-form__label" for="deadline">Deadline</label>
+        <input
+          class="project-form__input"
+          id="deadline"
+          type="date"
+          formControlName="deadline" />
+      </div>
+
+      <!-- Actions -->
+      <div class="project-form__actions">
+        <button
+          type="button"
+          class="project-form__btn project-form__btn--cancel"
+          (click)="onCancel()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="project-form__btn project-form__btn--submit"
+          [disabled]="isLoading">
+          {{ isLoading ? 'Creating...' : 'Create Project' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

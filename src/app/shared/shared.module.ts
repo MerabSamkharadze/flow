@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 /**
  * SharedModule — reusable components, directives, and pipes.
@@ -20,12 +21,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
   exports: [
     // Re-export common modules so feature modules get them for free
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
 
     // Export shared declarations here as they're added
   ],

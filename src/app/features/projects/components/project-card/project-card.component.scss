@@ -1,0 +1,163 @@
+// ==========================================================================
+// Project Card Component — BEM
+// Block: .project-card
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.project-card {
+  background-color: $color-surface;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+  cursor: pointer;
+  transition: box-shadow $transition-fast, transform $transition-fast;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+
+  // --------------------------------------------------
+  // Element: color accent bar at top
+  // --------------------------------------------------
+  &__accent {
+    height: 4px;
+    width: 100%;
+  }
+
+  // --------------------------------------------------
+  // Element: card body
+  // --------------------------------------------------
+  &__body {
+    @include flex-column;
+    gap: $spacing-md;
+    padding: $spacing-md;
+  }
+
+  // --------------------------------------------------
+  // Element: header (name + status)
+  // --------------------------------------------------
+  &__header {
+    @include flex-between;
+    align-items: flex-start;
+    gap: $spacing-sm;
+  }
+
+  &__name {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    @include text-truncate;
+    flex: 1;
+  }
+
+  &__status {
+    flex-shrink: 0;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    padding: 2px $spacing-sm;
+    border-radius: $border-radius-full;
+    text-transform: capitalize;
+
+    &--active {
+      background-color: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+
+    &--on-hold {
+      background-color: rgba($color-warning, 0.1);
+      color: $color-warning;
+    }
+
+    &--completed {
+      background-color: rgba($color-info, 0.1);
+      color: $color-info;
+    }
+
+    &--archived {
+      background-color: rgba($color-gray-400, 0.1);
+      color: $color-gray-500;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: description
+  // --------------------------------------------------
+  &__description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    @include text-clamp(2);
+    margin-bottom: 0;
+  }
+
+  // --------------------------------------------------
+  // Element: progress bar
+  // --------------------------------------------------
+  &__progress {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__progress-bar {
+    flex: 1;
+    height: 6px;
+    background-color: $color-gray-200;
+    border-radius: $border-radius-full;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    border-radius: $border-radius-full;
+    transition: width $transition-base;
+  }
+
+  &__progress-label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    min-width: 32px;
+    text-align: right;
+  }
+
+  // --------------------------------------------------
+  // Element: footer (members + deadline)
+  // --------------------------------------------------
+  &__footer {
+    @include flex-between;
+  }
+
+  &__members {
+    @include flex(row, center);
+
+    // Overlapping avatar effect
+    & > *:not(:first-child) {
+      margin-left: -8px;
+    }
+  }
+
+  &__avatar {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: $border-radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    border: 2px solid $color-surface;
+
+    // Modifier: "+N" overflow avatar
+    &--extra {
+      background-color: $color-gray-300;
+      color: $color-text-secondary;
+      font-size: 10px;
+    }
+  }
+
+  &__deadline {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+  }
+}

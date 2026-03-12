@@ -1,0 +1,80 @@
+// ==========================================================================
+// Project List Page — BEM
+// Block: .project-list
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.project-list {
+  // --------------------------------------------------
+  // Element: page header
+  // --------------------------------------------------
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__title-group {
+    @include flex(row, baseline);
+    gap: $spacing-sm;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+  }
+
+  &__count {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &__new-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-sm $spacing-md;
+    background-color: $color-primary;
+    color: $color-text-inverse;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: card grid
+  // --------------------------------------------------
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $spacing-lg;
+  }
+
+  // --------------------------------------------------
+  // Element: empty state
+  // --------------------------------------------------
+  &__empty {
+    @include flex-center;
+    @include flex-column;
+    gap: $spacing-md;
+    padding: $spacing-3xl $spacing-lg;
+    text-align: center;
+  }
+
+  &__empty-title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__empty-text {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: 0;
+  }
+}

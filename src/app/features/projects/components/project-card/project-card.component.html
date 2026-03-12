@@ -1,0 +1,56 @@
+<!-- Project Card: clickable card displaying project summary -->
+<div class="project-card" [routerLink]="['/projects', project.id]">
+
+  <!-- Color accent bar at the top -->
+  <div class="project-card__accent" [style.background-color]="project.color"></div>
+
+  <!-- Card body -->
+  <div class="project-card__body">
+
+    <!-- Header: name + status badge -->
+    <div class="project-card__header">
+      <h3 class="project-card__name">{{ project.name }}</h3>
+      <span class="project-card__status project-card__status--{{ project.status }}">
+        {{ project.status }}
+      </span>
+    </div>
+
+    <!-- Description (clamped to 2 lines) -->
+    <p class="project-card__description">{{ project.description }}</p>
+
+    <!-- Progress bar -->
+    <div class="project-card__progress">
+      <div class="project-card__progress-bar">
+        <div
+          class="project-card__progress-fill"
+          [style.width.%]="progress"
+          [style.background-color]="project.color">
+        </div>
+      </div>
+      <span class="project-card__progress-label">{{ progress }}%</span>
+    </div>
+
+    <!-- Footer: member avatars + deadline -->
+    <div class="project-card__footer">
+
+      <!-- Member avatars -->
+      <div class="project-card__members">
+        <span
+          class="project-card__avatar"
+          *ngFor="let memberId of visibleMembers"
+          [style.background-color]="project.color">
+          {{ memberId.charAt(0) | uppercase }}
+        </span>
+        <span class="project-card__avatar project-card__avatar--extra" *ngIf="remainingMemberCount > 0">
+          +{{ remainingMemberCount }}
+        </span>
+      </div>
+
+      <!-- Deadline -->
+      <span class="project-card__deadline" *ngIf="formattedDeadline">
+        {{ formattedDeadline }}
+      </span>
+
+    </div>
+  </div>
+</div>

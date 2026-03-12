@@ -1,0 +1,237 @@
+// ==========================================================================
+// Project Detail Page — BEM
+// Block: .project-detail
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.project-detail {
+
+  // --------------------------------------------------
+  // Element: top bar (back + actions)
+  // --------------------------------------------------
+  &__top-bar {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__back-btn {
+    @include button-reset;
+    @include focus-ring;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__actions {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &--primary {
+      background-color: $color-primary;
+      color: $color-text-inverse;
+
+      &:hover {
+        background-color: $color-primary-dark;
+      }
+    }
+
+    &--secondary {
+      background-color: $color-gray-100;
+      color: $color-text-primary;
+
+      &:hover {
+        background-color: $color-gray-200;
+      }
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: header
+  // --------------------------------------------------
+  &__header {
+    @include flex(row, center);
+    gap: $spacing-md;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: $border-radius-full;
+    flex-shrink: 0;
+  }
+
+  &__header-info {
+    @include flex(row, center);
+    gap: $spacing-md;
+    flex: 1;
+  }
+
+  &__name {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+  }
+
+  &__status {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    padding: 2px $spacing-sm;
+    border-radius: $border-radius-full;
+    text-transform: capitalize;
+
+    &--active {
+      background-color: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+
+    &--on-hold {
+      background-color: rgba($color-warning, 0.1);
+      color: $color-warning;
+    }
+
+    &--completed {
+      background-color: rgba($color-info, 0.1);
+      color: $color-info;
+    }
+
+    &--archived {
+      background-color: rgba($color-gray-400, 0.1);
+      color: $color-gray-500;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: content layout (main + sidebar)
+  // --------------------------------------------------
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: $spacing-xl;
+
+    @include respond-below('lg') {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__main {
+    @include flex-column;
+    gap: $spacing-lg;
+  }
+
+  // --------------------------------------------------
+  // Element: sections
+  // --------------------------------------------------
+  &__section {
+    @include flex-column;
+    gap: $spacing-sm;
+  }
+
+  &__section-title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__description {
+    font-size: $font-size-base;
+    color: $color-text-primary;
+    line-height: $line-height-relaxed;
+    margin-bottom: 0;
+  }
+
+  // --------------------------------------------------
+  // Element: progress
+  // --------------------------------------------------
+  &__progress {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__progress-bar {
+    flex: 1;
+    height: 8px;
+    background-color: $color-gray-200;
+    border-radius: $border-radius-full;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    border-radius: $border-radius-full;
+    transition: width $transition-base;
+  }
+
+  &__progress-label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  // --------------------------------------------------
+  // Element: sidebar
+  // --------------------------------------------------
+  &__sidebar {
+    @include flex-column;
+    gap: $spacing-lg;
+    padding: $spacing-lg;
+    background-color: $color-surface;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    height: fit-content;
+  }
+
+  &__info-block {
+    @include flex-column;
+    gap: $spacing-xs;
+  }
+
+  &__info-label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__info-value {
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    margin-bottom: 0;
+  }
+
+  &__members {
+    @include flex(row, center);
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+
+  &__avatar {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: $border-radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+  }
+}
