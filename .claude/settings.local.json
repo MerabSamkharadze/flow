@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(find \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\flow\\\\src\\\\app\" -type f -name \"*.ts\" -o -name \"*.html\" 2>/dev/null | head -30)",
-      "Bash(rm -rf node_modules package-lock.json && npm install 2>&1)"
+      "Bash(rm -rf node_modules package-lock.json && npm install 2>&1)",
+      "Bash(npm install:*)",
+      "Bash(npx ng:*)"
     ]
   }
 }

@@ -7,6 +7,14 @@ import { AppComponent } from './app.component';
 // Core module — singleton services and layout components
 import { CoreModule } from './core/core.module';
 
+// Firebase — AngularFire compat modules for Angular 15
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+
+// Environment config
+import { environment } from '../environments/environment';
+
 /**
  * AppModule — root module of the FLOW application.
  *
@@ -14,6 +22,9 @@ import { CoreModule } from './core/core.module';
  *   - BrowserModule: required for browser-based apps
  *   - AppRoutingModule: top-level routing configuration
  *   - CoreModule.forRoot(): layout shell + singleton services
+ *   - AngularFireModule: Firebase initialization with project config
+ *   - AngularFireAuthModule: Firebase Authentication
+ *   - AngularFirestoreModule: Cloud Firestore database
  *
  * Feature modules are lazy-loaded via the router, not imported here.
  */
@@ -25,6 +36,11 @@ import { CoreModule } from './core/core.module';
     BrowserModule,
     AppRoutingModule,
     CoreModule.forRoot(),
+
+    // Firebase
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
