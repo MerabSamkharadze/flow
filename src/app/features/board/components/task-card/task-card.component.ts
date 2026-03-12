@@ -17,6 +17,7 @@ import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
 })
 export class TaskCardComponent {
   @Input() task!: Task;
+  @Input() commentCount: number = 0;
 
   /** Emits the task when the card is clicked (opens detail modal) */
   @Output() taskClicked = new EventEmitter<Task>();

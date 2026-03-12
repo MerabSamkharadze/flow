@@ -89,6 +89,17 @@
           </span>
         </div>
 
+        <!-- Subtask progress bar -->
+        <div class="task-modal__progress" *ngIf="subtasks.length > 0">
+          <div class="task-modal__progress-bar">
+            <div
+              class="task-modal__progress-fill"
+              [style.width.%]="subtaskPercent">
+            </div>
+          </div>
+          <span class="task-modal__progress-text">{{ subtaskPercent }}%</span>
+        </div>
+
         <!-- Subtask list -->
         <ul class="task-modal__subtask-list">
           <li
@@ -130,6 +141,24 @@
             + Add
           </button>
         </div>
+      </div>
+
+      <!-- Comments section -->
+      <div class="task-modal__section">
+        <div class="task-modal__section-header">
+          <span class="task-modal__label">Comments</span>
+        </div>
+
+        <app-comment-thread
+          [comments]="(comments$ | async) || []"
+          [currentUserId]="currentUserId"
+          (editComment)="onEditComment($event)"
+          (deleteComment)="onDeleteComment($event)">
+        </app-comment-thread>
+
+        <app-comment-input
+          (commentSubmitted)="onCommentSubmitted($event)">
+        </app-comment-input>
       </div>
 
       <!-- Footer actions -->

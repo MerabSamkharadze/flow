@@ -1,0 +1,62 @@
+<!-- Comment Thread: list of comments with edit/delete -->
+<div class="comment-thread">
+
+  <!-- Empty state -->
+  <p class="comment-thread__empty" *ngIf="comments.length === 0">
+    No comments yet. Be the first to comment.
+  </p>
+
+  <!-- Comment items -->
+  <div class="comment-thread__item" *ngFor="let comment of comments">
+
+    <!-- Avatar -->
+    <div class="comment-thread__avatar">
+      {{ comment.authorName.charAt(0) | uppercase }}
+    </div>
+
+    <!-- Content area -->
+    <div class="comment-thread__content">
+
+      <!-- Header: author + time -->
+      <div class="comment-thread__header">
+        <span class="comment-thread__author">{{ comment.authorName }}</span>
+        <span class="comment-thread__time">{{ formatTime(comment.createdAt) }}</span>
+        <span class="comment-thread__edited" *ngIf="comment.updatedAt">(edited)</span>
+      </div>
+
+      <!-- Body: either editing or display mode -->
+      <ng-container *ngIf="editingId !== comment.id; else editMode">
+        <p class="comment-thread__body">{{ comment.content }}</p>
+      </ng-container>
+
+      <ng-template #editMode>
+        <textarea
+          class="comment-thread__edit-textarea"
+          [(ngModel)]="editContent"
+          rows="2">
+        </textarea>
+        <div class="comment-thread__edit-actions">
+          <button class="comment-thread__edit-save" type="button" (click)="saveEdit()">Save</button>
+          <button class="comment-thread__edit-cancel" type="button" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </ng-template>
+
+      <!-- Actions: edit / delete (only for own comments) -->
+      <div class="comment-thread__actions" *ngIf="comment.authorId === currentUserId && editingId !== comment.id">
+        <button class="comment-thread__action-btn" type="button" (click)="startEdit(comment)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+        <button class="comment-thread__action-btn comment-thread__action-btn--delete" type="button" (click)="onDelete(comment.id)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

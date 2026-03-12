@@ -215,3 +215,21 @@ export const selectTaskCompletionPercent = (taskId: string) =>
     const completed = subtasks.filter((s) => s.completed).length;
     return Math.round((completed / subtasks.length) * 100);
   });
+
+// ---------------------------------------------------------------------------
+// Comment selectors
+// ---------------------------------------------------------------------------
+
+/** All comments dictionary */
+export const selectAllComments = createSelector(
+  selectTasksState,
+  (state) => state.comments
+);
+
+/** Factory selector: comments for a specific task */
+export const selectCommentsByTask = (taskId: string) =>
+  createSelector(selectAllComments, (comments) => comments[taskId] || []);
+
+/** Factory selector: comment count for a specific task */
+export const selectCommentCountByTask = (taskId: string) =>
+  createSelector(selectCommentsByTask(taskId), (comments) => comments.length);

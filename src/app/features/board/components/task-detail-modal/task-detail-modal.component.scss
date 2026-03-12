@@ -216,6 +216,36 @@
     gap: $spacing-sm;
   }
 
+  // --------------------------------------------------
+  // Element: subtask progress bar
+  // --------------------------------------------------
+  &__progress {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__progress-bar {
+    flex: 1;
+    height: 6px;
+    background-color: $color-border;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background-color: $color-primary;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  &__progress-text {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    min-width: 32px;
+    text-align: right;
+  }
+
   &__subtask-add-btn {
     @include button-reset;
     @include focus-ring;

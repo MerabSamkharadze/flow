@@ -6,6 +6,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { BoardRoutingModule } from './board-routing.module';
 import { boardReducer } from './store/board.reducer';
 import { BoardEffects } from './store/board.effects';
+import { TasksModule } from '../tasks/tasks.module';
 
 // Pages
 import { KanbanViewComponent } from './pages/kanban-view/kanban-view.component';
@@ -32,6 +33,7 @@ import { TaskFormComponent } from './components/task-form/task-form.component';
     SharedModule,
     BoardRoutingModule,
     DragDropModule,
+    TasksModule,
     StoreModule.forFeature('board', boardReducer),
     EffectsModule.forFeature([BoardEffects]),
   ],

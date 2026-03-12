@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Task } from '../../../shared/models/task.model';
 import { Subtask } from '../../../shared/models/subtask.model';
+import { Comment } from '../../../shared/models/comment.model';
 import { Project } from '../../../shared/models/project.model';
 import { TaskFilters, EMPTY_TASK_FILTERS } from '../models/task-filters.model';
 import * as TasksActions from './tasks.actions';
@@ -15,6 +16,7 @@ import * as TasksActions from './tasks.actions';
  */
 export interface TasksState extends EntityState<Task> {
   subtasks: { [taskId: string]: Subtask[] };
+  comments: { [taskId: string]: Comment[] };
   projects: Project[];
   filters: TaskFilters;
   loading: boolean;
@@ -32,6 +34,7 @@ export const tasksAdapter: EntityAdapter<Task> = createEntityAdapter<Task>({
 
 export const initialTasksState: TasksState = tasksAdapter.getInitialState({
   subtasks: {},
+  comments: {},
   projects: [],
   filters: { ...EMPTY_TASK_FILTERS },
   loading: false,
@@ -159,5 +162,72 @@ export const tasksReducer = createReducer(
   on(TasksActions.setTaskFilters, (state, { filters }) => ({
     ...state,
     filters,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Load comments
+  // ---------------------------------------------------------------------------
+
+  on(TasksActions.loadCommentsSuccess, (state, { taskId, comments }) => ({
+    ...state,
+    comments: { ...state.comments, [taskId]: comments },
+  })),
+
+  on(TasksActions.loadCommentsFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Add comment
+  // ---------------------------------------------------------------------------
+
+  on(TasksActions.addCommentSuccess, (state, { taskId, comment }) => ({
+    ...state,
+    comments: {
+      ...state.comments,
+      [taskId]: [...(state.comments[taskId] || []), comment],
+    },
+  })),
+
+  on(TasksActions.addCommentFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Edit comment
+  // ---------------------------------------------------------------------------
+
+  on(TasksActions.editCommentSuccess, (state, { taskId, commentId, content, updatedAt }) => ({
+    ...state,
+    comments: {
+      ...state.comments,
+      [taskId]: (state.comments[taskId] || []).map((c) =>
+        c.id === commentId ? { ...c, content, updatedAt } : c
+      ),
+    },
+  })),
+
+  on(TasksActions.editCommentFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Delete comment
+  // ---------------------------------------------------------------------------
+
+  on(TasksActions.deleteCommentSuccess, (state, { taskId, commentId }) => ({
+    ...state,
+    comments: {
+      ...state.comments,
+      [taskId]: (state.comments[taskId] || []).filter((c) => c.id !== commentId),
+    },
+  })),
+
+  on(TasksActions.deleteCommentFailure, (state, { error }) => ({
+    ...state,
+    error,
   }))
 );

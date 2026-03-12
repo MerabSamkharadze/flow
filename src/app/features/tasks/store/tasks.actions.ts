@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { Task, TaskStatus } from '../../../shared/models/task.model';
 import { Subtask } from '../../../shared/models/subtask.model';
 import { Project } from '../../../shared/models/project.model';
+import { Comment } from '../../../shared/models/comment.model';
 import { TaskFilters } from '../models/task-filters.model';
 
 /**
@@ -142,4 +143,87 @@ export const deleteSubtaskSuccess = createAction(
 export const setTaskFilters = createAction(
   '[My Tasks Page] Set Task Filters',
   props<{ filters: TaskFilters }>()
+);
+
+// ---------------------------------------------------------------------------
+// Load comments for a specific task
+// ---------------------------------------------------------------------------
+
+export const loadComments = createAction(
+  '[Task Detail] Load Comments',
+  props<{ projectId: string; taskId: string }>()
+);
+
+export const loadCommentsSuccess = createAction(
+  '[Tasks API] Load Comments Success',
+  props<{ taskId: string; comments: Comment[] }>()
+);
+
+export const loadCommentsFailure = createAction(
+  '[Tasks API] Load Comments Failure',
+  props<{ error: string }>()
+);
+
+// ---------------------------------------------------------------------------
+// Add a comment
+// ---------------------------------------------------------------------------
+
+export const addComment = createAction(
+  '[Task Detail] Add Comment',
+  props<{
+    projectId: string;
+    taskId: string;
+    authorId: string;
+    authorName: string;
+    authorAvatar: string | null;
+    content: string;
+  }>()
+);
+
+export const addCommentSuccess = createAction(
+  '[Tasks API] Add Comment Success',
+  props<{ taskId: string; comment: Comment }>()
+);
+
+export const addCommentFailure = createAction(
+  '[Tasks API] Add Comment Failure',
+  props<{ error: string }>()
+);
+
+// ---------------------------------------------------------------------------
+// Edit a comment
+// ---------------------------------------------------------------------------
+
+export const editComment = createAction(
+  '[Task Detail] Edit Comment',
+  props<{ projectId: string; taskId: string; commentId: string; content: string }>()
+);
+
+export const editCommentSuccess = createAction(
+  '[Tasks API] Edit Comment Success',
+  props<{ taskId: string; commentId: string; content: string; updatedAt: number }>()
+);
+
+export const editCommentFailure = createAction(
+  '[Tasks API] Edit Comment Failure',
+  props<{ error: string }>()
+);
+
+// ---------------------------------------------------------------------------
+// Delete a comment
+// ---------------------------------------------------------------------------
+
+export const deleteComment = createAction(
+  '[Task Detail] Delete Comment',
+  props<{ projectId: string; taskId: string; commentId: string }>()
+);
+
+export const deleteCommentSuccess = createAction(
+  '[Tasks API] Delete Comment Success',
+  props<{ taskId: string; commentId: string }>()
+);
+
+export const deleteCommentFailure = createAction(
+  '[Tasks API] Delete Comment Failure',
+  props<{ error: string }>()
 );

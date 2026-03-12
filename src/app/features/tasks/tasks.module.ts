@@ -13,6 +13,8 @@ import { MyTasksComponent } from './pages/my-tasks/my-tasks.component';
 // Components
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { TaskFiltersComponent } from './components/task-filters/task-filters.component';
+import { CommentThreadComponent } from './components/comment-thread/comment-thread.component';
+import { CommentInputComponent } from './components/comment-input/comment-input.component';
 
 /**
  * TasksModule — personal task management feature module.
@@ -28,6 +30,12 @@ import { TaskFiltersComponent } from './components/task-filters/task-filters.com
     MyTasksComponent,
     TaskListComponent,
     TaskFiltersComponent,
+    CommentThreadComponent,
+    CommentInputComponent,
+  ],
+  exports: [
+    CommentThreadComponent,
+    CommentInputComponent,
   ],
   imports: [
     SharedModule,

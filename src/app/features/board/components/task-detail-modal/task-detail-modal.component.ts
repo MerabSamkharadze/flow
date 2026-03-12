@@ -5,10 +5,18 @@ import {
   EventEmitter,
   OnInit,
   OnChanges,
+  OnDestroy,
   SimpleChanges,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Task, Subtask, TaskPriority, TaskStatus, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
+import { Comment } from '../../../../shared/models/comment.model';
+import * as TasksActions from '../../../tasks/store/tasks.actions';
+import { selectCommentsByTask } from '../../../tasks/store/tasks.selectors';
+import { selectUser } from '../../../auth/store';
 
 /**
  * TaskDetailModalComponent — full-screen modal for viewing/editing a task.
@@ -24,7 +32,7 @@ import { Task, Subtask, TaskPriority, TaskStatus, PRIORITY_CONFIG } from '../../
   templateUrl: './task-detail-modal.component.html',
   styleUrls: ['./task-detail-modal.component.scss'],
 })
-export class TaskDetailModalComponent implements OnInit, OnChanges {
+export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
   @Input() task!: Task;
 
   @Output() closeModal = new EventEmitter<void>();
@@ -42,16 +50,42 @@ export class TaskDetailModalComponent implements OnInit, OnChanges {
   /** Local copy of subtasks for manipulation before save */
   subtasks: Subtask[] = [];
 
-  constructor(private fb: FormBuilder) {}
+  /** Comments */
+  comments$!: Observable<Comment[]>;
+  currentUserId = '';
+  currentUserName = '';
+  currentUserAvatar: string | null = null;
+
+  private destroy$ = new Subject<void>();
+
+  constructor(private fb: FormBuilder, private store: Store) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.loadComments();
+
+    this.store
+      .select(selectUser)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        if (user) {
+          this.currentUserId = user.uid;
+          this.currentUserName = user.displayName || user.email || 'User';
+          this.currentUserAvatar = user.photoURL || null;
+        }
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['task'] && !changes['task'].firstChange) {
       this.initForm();
+      this.loadComments();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /** Initialize the reactive form from the current task */
@@ -96,10 +130,29 @@ export class TaskDetailModalComponent implements OnInit, OnChanges {
     this.newSubtaskTitle = '';
   }
 
+  /** Load comments from the store */
+  private loadComments(): void {
+    this.comments$ = this.store.select(selectCommentsByTask(this.task.id));
+    this.store.dispatch(
+      TasksActions.loadComments({
+        projectId: this.task.projectId,
+        taskId: this.task.id,
+      })
+    );
+  }
+
   /** Subtask completion progress (e.g., "2 / 5") */
   get subtaskProgress(): string {
     const done = this.subtasks.filter((s) => s.completed).length;
     return `${done} / ${this.subtasks.length}`;
+  }
+
+  /** Subtask completion percentage for progress bar */
+  get subtaskPercent(): number {
+    if (this.subtasks.length === 0) return 0;
+    return Math.round(
+      (this.subtasks.filter((s) => s.completed).length / this.subtasks.length) * 100
+    );
   }
 
   /** Save changes — build the updated Task object and emit */
@@ -143,5 +196,42 @@ export class TaskDetailModalComponent implements OnInit, OnChanges {
   /** Prevent clicks inside the modal from closing it */
   onModalClick(event: Event): void {
     event.stopPropagation();
+  }
+
+  /** Handle new comment from comment-input */
+  onCommentSubmitted(content: string): void {
+    this.store.dispatch(
+      TasksActions.addComment({
+        projectId: this.task.projectId,
+        taskId: this.task.id,
+        authorId: this.currentUserId,
+        authorName: this.currentUserName,
+        authorAvatar: this.currentUserAvatar,
+        content,
+      })
+    );
+  }
+
+  /** Handle comment edit */
+  onEditComment(event: { commentId: string; content: string }): void {
+    this.store.dispatch(
+      TasksActions.editComment({
+        projectId: this.task.projectId,
+        taskId: this.task.id,
+        commentId: event.commentId,
+        content: event.content,
+      })
+    );
+  }
+
+  /** Handle comment delete */
+  onDeleteComment(commentId: string): void {
+    this.store.dispatch(
+      TasksActions.deleteComment({
+        projectId: this.task.projectId,
+        taskId: this.task.id,
+        commentId,
+      })
+    );
   }
 }
