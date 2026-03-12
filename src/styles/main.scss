@@ -1,0 +1,12 @@
+// ==========================================================================
+// FLOW — Main Stylesheet Entry Point
+// Imports all partials in the correct order
+// ==========================================================================
+
+// Abstracts — variables and mixins (no CSS output, only definitions)
+@use 'abstracts/variables';
+@use 'abstracts/mixins';
+
+// Base — reset and typography (global element styles)
+@use 'base/reset';
+@use 'base/typography';

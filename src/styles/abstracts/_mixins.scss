@@ -1,0 +1,134 @@
+// ==========================================================================
+// FLOW Design System — Mixins
+// Reusable SCSS mixins for responsive design and layout helpers
+// ==========================================================================
+
+@use 'variables' as *;
+
+// --------------------------------------------------------------------------
+// Responsive Breakpoints
+// Usage: @include respond-to('md') { ... }
+// --------------------------------------------------------------------------
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-xl) { @content; }
+  } @else if $breakpoint == '2xl' {
+    @media (min-width: $breakpoint-2xl) { @content; }
+  }
+}
+
+// Max-width (mobile-first "below" breakpoint)
+@mixin respond-below($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (max-width: $breakpoint-sm - 1px) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (max-width: $breakpoint-md - 1px) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (max-width: $breakpoint-lg - 1px) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (max-width: $breakpoint-xl - 1px) { @content; }
+  }
+}
+
+// --------------------------------------------------------------------------
+// Flexbox Helpers
+// --------------------------------------------------------------------------
+
+// Flex container with common patterns
+@mixin flex($direction: row, $align: stretch, $justify: flex-start) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+// Shorthand: centered flex
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Shorthand: flex column
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Shorthand: space-between row
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// --------------------------------------------------------------------------
+// Typography Helpers
+// --------------------------------------------------------------------------
+
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// --------------------------------------------------------------------------
+// Layout Helpers
+// --------------------------------------------------------------------------
+
+// Full-bleed container
+@mixin full-height {
+  height: 100vh;
+  height: 100dvh; // dynamic viewport height for mobile
+}
+
+// Scrollable area
+@mixin scrollable($direction: y) {
+  @if $direction == 'y' {
+    overflow-y: auto;
+    overflow-x: hidden;
+  } @else if $direction == 'x' {
+    overflow-x: auto;
+    overflow-y: hidden;
+  } @else {
+    overflow: auto;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Interactive Element Helpers
+// --------------------------------------------------------------------------
+
+// Focus-visible outline for accessibility
+@mixin focus-ring($color: $color-primary) {
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: 2px;
+  }
+}
+
+// Button reset — strips default browser button styling
+@mixin button-reset {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}

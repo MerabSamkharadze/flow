@@ -1,0 +1,24 @@
+<!-- Layout: main application shell with sidebar + content area -->
+<div class="layout" [class.layout--collapsed]="isSidebarCollapsed">
+
+  <!-- Left: Sidebar navigation -->
+  <aside class="layout__sidebar">
+    <app-sidebar
+      [isCollapsed]="isSidebarCollapsed"
+      (toggleSidebar)="onToggleSidebar()">
+    </app-sidebar>
+  </aside>
+
+  <!-- Right: Header + routed content -->
+  <div class="layout__main">
+    <header class="layout__header">
+      <app-header (toggleSidebar)="onToggleSidebar()"></app-header>
+    </header>
+
+    <main class="layout__content">
+      <!-- Feature modules render here via lazy-loaded routes -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+</div>

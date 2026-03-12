@@ -1,0 +1,80 @@
+// ==========================================================================
+// Layout Component — BEM
+// Block: .layout
+// ==========================================================================
+
+@use '../../../styles/abstracts/variables' as *;
+@use '../../../styles/abstracts/mixins' as *;
+
+.layout {
+  @include flex(row);
+  @include full-height;
+  overflow: hidden;
+  background-color: $color-bg;
+
+  // --------------------------------------------------
+  // Element: sidebar panel
+  // --------------------------------------------------
+  &__sidebar {
+    width: $sidebar-width;
+    flex-shrink: 0;
+    transition: width $transition-base;
+    z-index: $z-sidebar;
+  }
+
+  // --------------------------------------------------
+  // Element: main content area (header + content)
+  // --------------------------------------------------
+  &__main {
+    @include flex-column;
+    flex: 1;
+    min-width: 0; // prevent flex overflow
+    overflow: hidden;
+  }
+
+  // --------------------------------------------------
+  // Element: top header bar
+  // --------------------------------------------------
+  &__header {
+    flex-shrink: 0;
+    z-index: $z-header;
+  }
+
+  // --------------------------------------------------
+  // Element: scrollable content area with router-outlet
+  // --------------------------------------------------
+  &__content {
+    flex: 1;
+    @include scrollable(y);
+    padding: $spacing-lg;
+  }
+
+  // --------------------------------------------------
+  // Modifier: sidebar collapsed
+  // --------------------------------------------------
+  &--collapsed {
+    .layout__sidebar {
+      width: $sidebar-collapsed-width;
+    }
+  }
+}
+
+// Responsive: hide sidebar on small screens
+@include respond-below('md') {
+  .layout {
+    &__sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      transform: translateX(-100%);
+      transition: transform $transition-base;
+    }
+
+    &--sidebar-open {
+      .layout__sidebar {
+        transform: translateX(0);
+      }
+    }
+  }
+}

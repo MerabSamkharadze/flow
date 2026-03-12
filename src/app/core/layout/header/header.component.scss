@@ -1,0 +1,93 @@
+// ==========================================================================
+// Header Component — BEM
+// Block: .header
+// ==========================================================================
+
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+.header {
+  @include flex-between;
+  height: $header-height;
+  padding: 0 $spacing-lg;
+  background-color: $color-surface;
+  border-bottom: 1px solid $color-border;
+
+  // --------------------------------------------------
+  // Element: left section (toggle + breadcrumb)
+  // --------------------------------------------------
+  &__left {
+    @include flex(row, center);
+    gap: $spacing-md;
+  }
+
+  &__menu-toggle {
+    @include button-reset;
+    @include flex-center;
+    @include focus-ring;
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-lg;
+    color: $color-text-secondary;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: $color-surface-hover;
+      color: $color-text-primary;
+    }
+  }
+
+  &__breadcrumb {
+    @include flex(row, center);
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &__breadcrumb-item {
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  // --------------------------------------------------
+  // Element: right section (actions + avatar)
+  // --------------------------------------------------
+  &__right {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__action {
+    @include button-reset;
+    @include flex-center;
+    @include focus-ring;
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-lg;
+    color: $color-text-secondary;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: $color-surface-hover;
+      color: $color-text-primary;
+    }
+  }
+
+  &__avatar {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: $border-radius-full;
+    background-color: $color-primary;
+    cursor: pointer;
+    margin-left: $spacing-xs;
+  }
+
+  &__avatar-initials {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+  }
+}

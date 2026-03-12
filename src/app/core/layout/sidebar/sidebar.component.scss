@@ -1,0 +1,147 @@
+// ==========================================================================
+// Sidebar Component — BEM
+// Block: .sidebar
+// ==========================================================================
+
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+.sidebar {
+  @include flex-column;
+  height: 100%;
+  background-color: $color-gray-900;
+  color: $color-text-inverse;
+  transition: width $transition-base;
+  overflow: hidden;
+
+  // --------------------------------------------------
+  // Element: brand / logo area
+  // --------------------------------------------------
+  &__brand {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    height: $header-height;
+    border-bottom: 1px solid $color-gray-700;
+  }
+
+  &__logo {
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  // --------------------------------------------------
+  // Element: navigation list
+  // --------------------------------------------------
+  &__nav {
+    flex: 1;
+    list-style: none;
+    padding: $spacing-sm 0;
+    @include scrollable(y);
+  }
+
+  &__nav-item {
+    margin: 2px $spacing-sm;
+  }
+
+  &__nav-link {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-sm;
+    color: $color-gray-300;
+    text-decoration: none;
+    transition: background-color $transition-fast, color $transition-fast;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-gray-800;
+      color: $color-text-inverse;
+    }
+
+    // Modifier: active route
+    &--active {
+      background-color: $color-primary;
+      color: $color-text-inverse;
+
+      &:hover {
+        background-color: $color-primary-dark;
+      }
+    }
+  }
+
+  &__nav-icon {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    font-size: $font-size-sm;
+    flex-shrink: 0;
+  }
+
+  &__nav-label {
+    @include text-truncate;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    white-space: nowrap;
+  }
+
+  // --------------------------------------------------
+  // Element: footer with collapse toggle
+  // --------------------------------------------------
+  &__footer {
+    padding: $spacing-sm;
+    border-top: 1px solid $color-gray-700;
+  }
+
+  &__toggle {
+    @include button-reset;
+    @include flex-center;
+    width: 100%;
+    padding: $spacing-sm;
+    border-radius: $border-radius-sm;
+    color: $color-gray-400;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: $color-gray-800;
+      color: $color-text-inverse;
+    }
+  }
+
+  &__toggle-icon {
+    font-size: $font-size-sm;
+  }
+
+  // --------------------------------------------------
+  // Modifier: collapsed state
+  // --------------------------------------------------
+  &--collapsed {
+    .sidebar__brand {
+      justify-content: center;
+      padding: $spacing-md $spacing-xs;
+    }
+
+    .sidebar__nav-link {
+      justify-content: center;
+      padding: $spacing-sm;
+    }
+
+    .sidebar__nav-icon {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

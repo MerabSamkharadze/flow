@@ -1,0 +1,32 @@
+<!-- Sidebar: left navigation panel -->
+<nav class="sidebar" [class.sidebar--collapsed]="isCollapsed">
+
+  <!-- Logo / brand area -->
+  <div class="sidebar__brand">
+    <span class="sidebar__logo">F</span>
+    <span class="sidebar__title" *ngIf="!isCollapsed">FLOW</span>
+  </div>
+
+  <!-- Navigation links -->
+  <ul class="sidebar__nav">
+    <li class="sidebar__nav-item" *ngFor="let item of navItems">
+      <a class="sidebar__nav-link"
+         [routerLink]="item.route"
+         routerLinkActive="sidebar__nav-link--active">
+        <!-- Icon placeholder — replace with icon library (e.g. Material Icons) -->
+        <span class="sidebar__nav-icon">{{ item.icon }}</span>
+        <span class="sidebar__nav-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Collapse toggle button at the bottom -->
+  <div class="sidebar__footer">
+    <button class="sidebar__toggle" (click)="onToggle()">
+      <span class="sidebar__toggle-icon">
+        {{ isCollapsed ? '&#9654;' : '&#9664;' }}
+      </span>
+    </button>
+  </div>
+
+</nav>
