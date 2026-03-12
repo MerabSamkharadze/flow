@@ -73,6 +73,20 @@
       background-color: $color-surface-hover;
       color: $color-text-primary;
     }
+
+    // Modifier: logout button — text style instead of icon
+    &--logout {
+      width: auto;
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: $color-error;
+
+      &:hover {
+        background-color: rgba($color-error, 0.1);
+        color: $color-error;
+      }
+    }
   }
 
   &__avatar {

@@ -20,10 +20,14 @@
     <button class="header__action" title="Notifications">
       &#128276; <!-- bell icon placeholder -->
     </button>
-    <div class="header__avatar">
-      <!-- User avatar placeholder -->
-      <span class="header__avatar-initials">U</span>
+    <div class="header__avatar" *ngIf="user$ | async as user">
+      <span class="header__avatar-initials">
+        {{ (user.displayName || user.email || 'U').charAt(0) | uppercase }}
+      </span>
     </div>
+    <button class="header__action header__action--logout" title="Logout" (click)="onLogout()">
+      Logout
+    </button>
   </div>
 
 </div>

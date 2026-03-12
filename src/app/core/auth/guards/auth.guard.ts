@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 
-import { selectIsLoggedIn } from '../../../features/auth/store/auth.selectors';
+import { selectAuthState } from '../../../features/auth/store/auth.selectors';
 
 /**
  * AuthGuard — prevents unauthenticated users from accessing protected routes.
  *
- * Checks the NgRx store for the current login state.
- * If the user is not logged in, redirects to /auth/login.
+ * Waits for the auth state to finish loading (e.g. loadUser on app start),
+ * then checks if the user is logged in. If not, redirects to /auth/login.
  */
 @Injectable({
   providedIn: 'root',
@@ -22,13 +22,14 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   canActivate(): Observable<boolean | UrlTree> {
-    return this.store.select(selectIsLoggedIn).pipe(
+    return this.store.select(selectAuthState).pipe(
+      // Wait until loading is complete (loadUser has finished)
+      filter((authState) => !authState.loading),
       take(1),
-      map((isLoggedIn) => {
-        if (isLoggedIn) {
+      map((authState) => {
+        if (authState.user) {
           return true;
         }
-        // Redirect unauthenticated users to the login page
         return this.router.createUrlTree(['/auth/login']);
       })
     );

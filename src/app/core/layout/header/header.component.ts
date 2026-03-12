@@ -1,21 +1,26 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { Store } from '@ngrx/store';
 
-/**
- * HeaderComponent — top navigation bar.
- *
- * Contains the sidebar toggle (hamburger), page breadcrumbs placeholder,
- * and user actions area (search, notifications, profile).
- */
+import { logout } from '../../../features/auth/store/auth.actions';
+import { selectUser } from '../../../features/auth/store/auth.selectors';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  /** Emits when user clicks the sidebar toggle (hamburger icon) */
   @Output() toggleSidebar = new EventEmitter<void>();
+
+  user$ = this.store.select(selectUser);
+
+  constructor(private store: Store) {}
 
   onMenuToggle(): void {
     this.toggleSidebar.emit();
+  }
+
+  onLogout(): void {
+    this.store.dispatch(logout());
   }
 }
