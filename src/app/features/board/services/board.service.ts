@@ -138,25 +138,34 @@ export class BoardService {
 
   /**
    * Moves a task to a new column and/or order position.
-   * Uses a Firestore batch to atomically update the moved task
-   * and reorder affected tasks in the target column.
+   * Uses a Firestore batch to atomically update:
+   *   1. The moved task's columnId and order
+   *   2. The order of all affected tasks in both source and target columns
    */
   async moveTask(
     projectId: string,
     taskId: string,
     toColumnId: string,
-    newOrder: number
+    newOrder: number,
+    affectedTasks: { id: string; order: number; columnId: string }[]
   ): Promise<void> {
     const batch = this.firestore.firestore.batch();
+    const tasksPath = `projects/${projectId}/tasks`;
 
     // Update the moved task's columnId and order
-    const taskRef = this.firestore.firestore
-      .doc(`projects/${projectId}/tasks/${taskId}`);
+    const taskRef = this.firestore.firestore.doc(`${tasksPath}/${taskId}`);
     batch.update(taskRef, {
       columnId: toColumnId,
       order: newOrder,
       updatedAt: Date.now(),
     });
+
+    // Update order for all other affected tasks in both columns
+    for (const affected of affectedTasks) {
+      if (affected.id === taskId) continue; // already handled above
+      const ref = this.firestore.firestore.doc(`${tasksPath}/${affected.id}`);
+      batch.update(ref, { order: affected.order });
+    }
 
     await batch.commit();
   }

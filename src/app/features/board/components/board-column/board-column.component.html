@@ -1,4 +1,4 @@
-<!-- Board Column: vertical column with header and task cards -->
+<!-- Board Column: vertical column with header, CDK drop zone, and task cards -->
 <div class="board-column" [class.board-column--over-limit]="isOverLimit">
 
   <!-- Column header -->
@@ -15,12 +15,26 @@
     </div>
   </div>
 
-  <!-- Task cards list -->
-  <div class="board-column__tasks">
+  <!-- Task cards list — CDK drop zone -->
+  <div
+    class="board-column__tasks"
+    cdkDropList
+    [cdkDropListData]="tasks"
+    [id]="column.id"
+    (cdkDropListDropped)="onDrop($event)">
+
+    <!-- Individual task card — CDK draggable -->
     <app-task-card
       *ngFor="let task of tasks"
+      cdkDrag
+      [cdkDragData]="task"
       [task]="task">
+
+      <!-- Drag placeholder — shown in the list where the item will land -->
+      <div class="board-column__drag-placeholder" *cdkDragPlaceholder></div>
+
     </app-task-card>
+
   </div>
 
   <!-- Add task button -->

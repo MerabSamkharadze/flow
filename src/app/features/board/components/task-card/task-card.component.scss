@@ -1,5 +1,5 @@
 // ==========================================================================
-// Task Card Component — BEM
+// Task Card Component — BEM + CDK Drag & Drop styles
 // Block: .task-card
 // ==========================================================================
 
@@ -20,13 +20,43 @@
   }
 
   // --------------------------------------------------
+  // Element: top row (drag handle + labels)
+  // --------------------------------------------------
+  &__top-row {
+    @include flex(row, center);
+    gap: $spacing-xs;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__drag-handle {
+    @include flex-center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    font-size: $font-size-base;
+    color: $color-gray-400;
+    cursor: grab;
+    border-radius: $border-radius-sm;
+    transition: color $transition-fast, background-color $transition-fast;
+    user-select: none;
+
+    &:hover {
+      color: $color-text-primary;
+      background-color: $color-gray-200;
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  // --------------------------------------------------
   // Element: labels
   // --------------------------------------------------
   &__labels {
     @include flex(row, center);
     flex-wrap: wrap;
     gap: $spacing-xs;
-    margin-bottom: $spacing-sm;
   }
 
   &__label {
@@ -98,4 +128,25 @@
     font-weight: $font-weight-semibold;
     color: $color-text-inverse;
   }
+}
+
+// ==========================================================================
+// CDK Drag & Drop — styles applied by CDK during drag operations
+// These use CDK's own classes applied to the host element (app-task-card)
+// ==========================================================================
+
+// The drag preview — the floating card that follows the cursor
+// (CDK clones the element and appends it to the body)
+.cdk-drag-preview {
+  .task-card {
+    box-shadow: $shadow-lg;
+    transform: rotate(2deg);
+    opacity: 0.95;
+    border: 1px solid rgba($color-primary, 0.2);
+  }
+}
+
+// The original element while being dragged (left behind in the list)
+.cdk-drag-placeholder {
+  opacity: 0;
 }

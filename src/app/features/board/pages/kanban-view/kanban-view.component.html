@@ -1,4 +1,4 @@
-<!-- Kanban Board View — connected to NgRx store -->
+<!-- Kanban Board View — connected to NgRx store with CDK drag & drop -->
 <div class="kanban-view">
 
   <!-- Board header -->
@@ -32,13 +32,14 @@
     {{ error }}
   </div>
 
-  <!-- Columns row (horizontally scrollable) -->
-  <div class="kanban-view__board" *ngIf="!(loading$ | async)">
+  <!-- Columns row — cdkDropListGroup connects all column drop zones -->
+  <div class="kanban-view__board" cdkDropListGroup *ngIf="!(loading$ | async)">
     <app-board-column
       *ngFor="let column of columns$ | async"
       [column]="column"
       [tasks]="(tasksMap$ | async)?.[column.id] || []"
-      (addTask)="onAddTask($event)">
+      (addTask)="onAddTask($event)"
+      (taskDropped)="onTaskDropped($event, column.id)">
     </app-board-column>
   </div>
 

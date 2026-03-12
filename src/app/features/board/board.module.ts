@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../../shared/shared.module';
@@ -24,6 +25,7 @@ import { TaskCardComponent } from './components/task-card/task-card.component';
   imports: [
     SharedModule,
     BoardRoutingModule,
+    DragDropModule,
     StoreModule.forFeature('board', boardReducer),
     EffectsModule.forFeature([BoardEffects]),
   ],

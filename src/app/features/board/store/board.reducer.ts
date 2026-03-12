@@ -6,11 +6,12 @@ import * as BoardActions from './board.actions';
 /**
  * BoardState — shape of the 'board' feature state slice.
  *
- * columns:       array of board columns sorted by order
- * tasks:         dictionary mapping columnId → Task[] for fast column lookups
- * activeTaskId:  currently selected/editing task (for detail panel)
- * loading:       true while a Firestore operation is in progress
- * error:         error message from the last failed operation
+ * columns:          array of board columns sorted by order
+ * tasks:            dictionary mapping columnId → Task[] for fast column lookups
+ * activeTaskId:     currently selected/editing task (for detail panel)
+ * loading:          true while a Firestore operation is in progress
+ * error:            error message from the last failed operation
+ * previousTasks:    snapshot before optimistic move, used to revert on failure
  */
 export interface BoardState {
   columns: Column[];
@@ -18,6 +19,7 @@ export interface BoardState {
   activeTaskId: string | null;
   loading: boolean;
   error: string | null;
+  previousTasks: { [columnId: string]: Task[] } | null;
 }
 
 export const initialBoardState: BoardState = {
@@ -26,6 +28,7 @@ export const initialBoardState: BoardState = {
   activeTaskId: null,
   loading: false,
   error: null,
+  previousTasks: null,
 };
 
 /**
@@ -239,39 +242,65 @@ export const boardReducer = createReducer(
   })),
 
   // ---------------------------------------------------------------------------
-  // Move task (drag & drop)
+  // Move task (drag & drop) — optimistic update with rollback on failure
   // ---------------------------------------------------------------------------
 
   on(BoardActions.moveTask, (state, { taskId, fromColumnId, toColumnId, newOrder }) => {
-    // Optimistic update — move the task immediately in the UI
-    const task = (state.tasks[fromColumnId] || []).find((t) => t.id === taskId);
-    if (!task) return state;
+    // Save current state for rollback
+    const previousTasks: { [columnId: string]: Task[] } = {};
+    for (const colId of Object.keys(state.tasks)) {
+      previousTasks[colId] = [...state.tasks[colId]];
+    }
 
-    const movedTask: Task = { ...task, columnId: toColumnId, order: newOrder };
+    // Find the task being moved
+    const task = (state.tasks[fromColumnId] || []).find((t) => t.id === taskId);
+    if (!task) return { ...state, previousTasks };
+
+    const movedTask: Task = { ...task, columnId: toColumnId, order: newOrder, updatedAt: Date.now() };
 
     // Remove from source column
     const fromTasks = (state.tasks[fromColumnId] || []).filter((t) => t.id !== taskId);
 
-    // Insert into target column at the correct position
-    const toTasks = fromColumnId === toColumnId
-      ? fromTasks // same column — already removed
-      : [...(state.tasks[toColumnId] || [])];
+    // Build target column: insert at the correct position
+    let toTasks: Task[];
+    if (fromColumnId === toColumnId) {
+      // Same column reorder — insert moved task into filtered list
+      toTasks = [...fromTasks];
+    } else {
+      toTasks = [...(state.tasks[toColumnId] || [])];
+    }
 
-    toTasks.push(movedTask);
-    toTasks.sort((a, b) => a.order - b.order);
+    // Insert the moved task and re-assign sequential order values
+    toTasks.splice(newOrder, 0, movedTask);
+    toTasks = toTasks.map((t, i) => (t.order !== i ? { ...t, order: i } : t));
+
+    // Re-assign order values in source column too (if cross-column)
+    const finalFromTasks = fromColumnId === toColumnId
+      ? toTasks
+      : fromTasks.map((t, i) => (t.order !== i ? { ...t, order: i } : t));
 
     return {
       ...state,
+      previousTasks,
       tasks: {
         ...state.tasks,
-        [fromColumnId]: fromTasks,
+        [fromColumnId]: fromColumnId === toColumnId ? toTasks : finalFromTasks,
         [toColumnId]: toTasks,
       },
     };
   }),
 
+  // On success, clear the rollback snapshot
+  on(BoardActions.moveTaskSuccess, (state) => ({
+    ...state,
+    previousTasks: null,
+  })),
+
+  // On failure, revert to the snapshot saved before the optimistic update
   on(BoardActions.moveTaskFailure, (state, { error }) => ({
     ...state,
+    tasks: state.previousTasks || state.tasks,
+    previousTasks: null,
     error,
   })),
 

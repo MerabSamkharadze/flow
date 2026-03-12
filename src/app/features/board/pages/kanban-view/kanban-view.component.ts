@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Column } from '../../../../shared/models/column.model';
 import { Task } from '../../../../shared/models/task.model';
 import * as BoardActions from '../../store/board.actions';
@@ -13,12 +14,13 @@ import {
 } from '../../store/board.selectors';
 
 /**
- * KanbanViewComponent — main Kanban board page.
+ * KanbanViewComponent — main Kanban board page with drag & drop.
  *
- * Connected to NgRx store:
- *   - Dispatches loadBoard on init to fetch columns + tasks from Firestore
- *   - Selects columns and tasks using board selectors
- *   - Passes data to board-column components via @Input()
+ * Uses Angular CDK DragDrop:
+ *   - cdkDropListGroup on the board container connects all columns
+ *   - Each board-column is a cdkDropList
+ *   - Each task-card is a cdkDrag item
+ *   - On drop: dispatches moveTask action for optimistic update + Firestore sync
  */
 @Component({
   selector: 'app-kanban-view',
@@ -52,6 +54,33 @@ export class KanbanViewComponent implements OnInit {
 
     // Dispatch loadBoard to fetch columns + tasks from Firestore
     this.store.dispatch(BoardActions.loadBoard({ projectId: this.projectId }));
+  }
+
+  /**
+   * Handles CDK drop event — fired when a task card is dropped
+   * into a column (same or different).
+   * Dispatches moveTask with the source/target column and new index.
+   */
+  onTaskDropped(event: CdkDragDrop<Task[]>, targetColumnId: string): void {
+    const task: Task = event.item.data;
+    const fromColumnId = task.columnId;
+    const toColumnId = targetColumnId;
+    const newOrder = event.currentIndex;
+
+    // Skip if nothing changed (same column, same position)
+    if (fromColumnId === toColumnId && event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    this.store.dispatch(
+      BoardActions.moveTask({
+        projectId: this.projectId,
+        taskId: task.id,
+        fromColumnId,
+        toColumnId,
+        newOrder,
+      })
+    );
   }
 
   onAddColumn(): void {

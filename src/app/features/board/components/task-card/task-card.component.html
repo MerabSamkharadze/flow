@@ -1,11 +1,17 @@
-<!-- Task Card: individual task within a board column -->
+<!-- Task Card: individual draggable task within a board column -->
 <div class="task-card">
 
-  <!-- Labels row -->
-  <div class="task-card__labels" *ngIf="task.labels.length > 0">
-    <span class="task-card__label" *ngFor="let label of task.labels">
-      {{ label }}
-    </span>
+  <!-- Drag handle + labels row -->
+  <div class="task-card__top-row">
+    <!-- Drag handle — only this area initiates drag -->
+    <span class="task-card__drag-handle" cdkDragHandle>&#x2807;</span>
+
+    <!-- Labels -->
+    <div class="task-card__labels" *ngIf="task.labels.length > 0">
+      <span class="task-card__label" *ngFor="let label of task.labels">
+        {{ label }}
+      </span>
+    </div>
   </div>
 
   <!-- Title -->

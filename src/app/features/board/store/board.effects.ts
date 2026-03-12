@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { forkJoin, of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap, take } from 'rxjs/operators';
+import { catchError, exhaustMap, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import { BoardService } from '../services/board.service';
 import * as BoardActions from './board.actions';
+import { selectTasksMap } from './board.selectors';
 
 /**
  * BoardEffects — side effects for board actions.
  *
  * - loadBoard$ uses forkJoin to load columns AND tasks in parallel
  * - Mutations use exhaustMap to prevent duplicate requests
- * - Read operations use switchMap to cancel stale requests
+ * - moveTask$ reads the optimistically-updated state to batch-write all affected orders
  */
 @Injectable()
 export class BoardEffects {
   constructor(
     private actions$: Actions,
-    private boardService: BoardService
+    private boardService: BoardService,
+    private store: Store
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -137,25 +140,49 @@ export class BoardEffects {
   );
 
   // ---------------------------------------------------------------------------
-  // Move task (drag & drop)
+  // Move task (drag & drop) — batch update with optimistic state
   // ---------------------------------------------------------------------------
 
-  /** Batch-updates task position in Firestore after drag & drop */
+  /**
+   * After the reducer has optimistically updated the local state,
+   * this effect reads the new task order from the store and
+   * batch-writes all affected task orders to Firestore.
+   */
   moveTask$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BoardActions.moveTask),
-      exhaustMap(({ projectId, taskId, fromColumnId, toColumnId, newOrder }) =>
-        this.boardService.moveTask(projectId, taskId, toColumnId, newOrder).then(
-          () =>
-            BoardActions.moveTaskSuccess({
-              taskId,
-              fromColumnId,
-              toColumnId,
-              newOrder,
-            }),
-          (error) => BoardActions.moveTaskFailure({ error: error.message })
-        )
-      )
+      withLatestFrom(this.store.select(selectTasksMap)),
+      exhaustMap(([{ projectId, taskId, fromColumnId, toColumnId, newOrder }, tasksMap]) => {
+        // Collect all tasks in both affected columns (after optimistic update)
+        const affectedTasks: { id: string; order: number; columnId: string }[] = [];
+
+        // Add tasks from target column
+        const toTasks = tasksMap[toColumnId] || [];
+        for (const t of toTasks) {
+          affectedTasks.push({ id: t.id, order: t.order, columnId: t.columnId });
+        }
+
+        // Add tasks from source column (if cross-column move)
+        if (fromColumnId !== toColumnId) {
+          const fromTasks = tasksMap[fromColumnId] || [];
+          for (const t of fromTasks) {
+            affectedTasks.push({ id: t.id, order: t.order, columnId: t.columnId });
+          }
+        }
+
+        return this.boardService
+          .moveTask(projectId, taskId, toColumnId, newOrder, affectedTasks)
+          .then(
+            () =>
+              BoardActions.moveTaskSuccess({
+                taskId,
+                fromColumnId,
+                toColumnId,
+                newOrder,
+              }),
+            (error) => BoardActions.moveTaskFailure({ error: error.message })
+          );
+      })
     )
   );
 }
