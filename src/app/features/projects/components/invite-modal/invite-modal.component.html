@@ -1,0 +1,60 @@
+<!-- Invite Modal: overlay + centered modal card -->
+<div class="invite-modal" (click)="onBackdropClick($event)">
+  <div class="invite-modal__card">
+
+    <!-- Header -->
+    <div class="invite-modal__header">
+      <h2 class="invite-modal__title">Invite Member</h2>
+      <button class="invite-modal__close" (click)="onClose()">&times;</button>
+    </div>
+
+    <!-- Form -->
+    <form class="invite-modal__form" [formGroup]="inviteForm" (ngSubmit)="onSubmit()">
+
+      <!-- Email -->
+      <div class="invite-modal__field">
+        <label class="invite-modal__label" for="invite-email">Email address</label>
+        <input
+          class="invite-modal__input"
+          [class.invite-modal__input--error]="f['email'].touched && f['email'].invalid"
+          id="invite-email"
+          type="email"
+          formControlName="email"
+          placeholder="colleague@company.com" />
+        <span class="invite-modal__validation" *ngIf="f['email'].touched && f['email'].errors">
+          <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+          <span *ngIf="f['email'].errors?.['email']">Enter a valid email</span>
+        </span>
+      </div>
+
+      <!-- Role selector -->
+      <div class="invite-modal__field">
+        <label class="invite-modal__label" for="invite-role">Role</label>
+        <select
+          class="invite-modal__select"
+          id="invite-role"
+          formControlName="role">
+          <option value="manager">Manager — can manage members and tasks</option>
+          <option value="member">Member — can view and work on tasks</option>
+        </select>
+      </div>
+
+      <!-- Actions -->
+      <div class="invite-modal__actions">
+        <button
+          type="button"
+          class="invite-modal__btn invite-modal__btn--cancel"
+          (click)="onClose()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="invite-modal__btn invite-modal__btn--submit"
+          [disabled]="isLoading">
+          {{ isLoading ? 'Sending...' : 'Send Invite' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

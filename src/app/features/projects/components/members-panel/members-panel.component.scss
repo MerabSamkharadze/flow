@@ -1,0 +1,181 @@
+// ==========================================================================
+// Members Panel Component — BEM
+// Block: .members-panel
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.members-panel {
+  // --------------------------------------------------
+  // Element: header
+  // --------------------------------------------------
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__invite-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    background-color: $color-primary-bg;
+    border-radius: $border-radius-sm;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: rgba($color-primary, 0.2);
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: list
+  // --------------------------------------------------
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    @include flex-column;
+    gap: 2px;
+  }
+
+  &__item {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+    border-radius: $border-radius-sm;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-gray-50;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: avatar
+  // --------------------------------------------------
+  &__avatar {
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-full;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__avatar-initials {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+  }
+
+  // --------------------------------------------------
+  // Element: info (name + email)
+  // --------------------------------------------------
+  &__info {
+    @include flex-column;
+    flex: 1;
+    min-width: 0; // prevent overflow
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    @include text-truncate;
+  }
+
+  &__you {
+    font-weight: $font-weight-regular;
+    color: $color-text-secondary;
+    font-size: $font-size-xs;
+  }
+
+  &__email {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    @include text-truncate;
+  }
+
+  // --------------------------------------------------
+  // Element: role area (badge or dropdown)
+  // --------------------------------------------------
+  &__role-area {
+    flex-shrink: 0;
+  }
+
+  &__role-badge {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    padding: 2px $spacing-sm;
+    border-radius: $border-radius-full;
+    text-transform: capitalize;
+
+    &--admin {
+      background-color: rgba($color-primary, 0.1);
+      color: $color-primary;
+    }
+
+    &--manager {
+      background-color: rgba($color-secondary, 0.1);
+      color: $color-secondary-dark;
+    }
+
+    &--member {
+      background-color: $color-gray-100;
+      color: $color-text-secondary;
+    }
+  }
+
+  &__role-select {
+    font-size: $font-size-xs;
+    padding: 2px $spacing-xs;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    background-color: $color-surface;
+    color: $color-text-primary;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: remove button
+  // --------------------------------------------------
+  &__remove-btn {
+    @include button-reset;
+    @include flex-center;
+    width: 24px;
+    height: 24px;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-lg;
+    color: $color-text-disabled;
+    flex-shrink: 0;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: rgba($color-error, 0.1);
+      color: $color-error;
+    }
+  }
+}

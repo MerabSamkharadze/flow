@@ -1,0 +1,75 @@
+<!-- Members Panel: list of project members with role-based actions -->
+<div class="members-panel">
+
+  <!-- Header with count and invite button -->
+  <div class="members-panel__header">
+    <h3 class="members-panel__title">Members ({{ members.length }})</h3>
+    <button
+      class="members-panel__invite-btn"
+      *ngIf="canInvite"
+      (click)="onInvite()">
+      + Invite
+    </button>
+  </div>
+
+  <!-- Members list -->
+  <ul class="members-panel__list">
+    <li class="members-panel__item" *ngFor="let member of members">
+
+      <!-- Avatar -->
+      <div class="members-panel__avatar"
+           [style.background-color]="member.avatarUrl ? 'transparent' : '#4f46e5'">
+        <img
+          *ngIf="member.avatarUrl"
+          [src]="member.avatarUrl"
+          [alt]="member.displayName"
+          class="members-panel__avatar-img" />
+        <span *ngIf="!member.avatarUrl" class="members-panel__avatar-initials">
+          {{ (member.displayName || member.email).charAt(0) | uppercase }}
+        </span>
+      </div>
+
+      <!-- Info: name, email, role badge -->
+      <div class="members-panel__info">
+        <span class="members-panel__name">
+          {{ member.displayName || member.email }}
+          <!-- Show "You" label for current user -->
+          <span class="members-panel__you" *ngIf="member.userId === currentUserId">(You)</span>
+        </span>
+        <span class="members-panel__email">{{ member.email }}</span>
+      </div>
+
+      <!-- Role badge / role changer -->
+      <div class="members-panel__role-area">
+        <!-- Admin can change roles via dropdown -->
+        <select
+          *ngIf="canChangeRole && member.userId !== currentUserId; else roleBadge"
+          class="members-panel__role-select"
+          [value]="member.role"
+          (change)="onRoleChange(member.userId, $any($event.target).value)">
+          <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
+          <option value="member">Member</option>
+        </select>
+
+        <!-- Non-admin users see a static badge -->
+        <ng-template #roleBadge>
+          <span class="members-panel__role-badge members-panel__role-badge--{{ member.role }}">
+            {{ member.role }}
+          </span>
+        </ng-template>
+      </div>
+
+      <!-- Remove button (admin/manager, cannot remove self) -->
+      <button
+        class="members-panel__remove-btn"
+        *ngIf="canRemove && member.userId !== currentUserId"
+        title="Remove member"
+        (click)="onRemove(member.userId)">
+        &times;
+      </button>
+
+    </li>
+  </ul>
+
+</div>
