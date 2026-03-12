@@ -1,0 +1,31 @@
+<!-- Board Column: vertical column with header and task cards -->
+<div class="board-column" [class.board-column--over-limit]="isOverLimit">
+
+  <!-- Column header -->
+  <div class="board-column__header">
+    <div class="board-column__header-left">
+      <!-- Color dot -->
+      <span class="board-column__dot" [style.background-color]="column.color"></span>
+      <!-- Column name -->
+      <h3 class="board-column__name">{{ column.name }}</h3>
+      <!-- Task count (with optional WIP limit) -->
+      <span class="board-column__count" [class.board-column__count--over]="isOverLimit">
+        {{ tasks.length }} {{ limitText }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Task cards list -->
+  <div class="board-column__tasks">
+    <app-task-card
+      *ngFor="let task of tasks"
+      [task]="task">
+    </app-task-card>
+  </div>
+
+  <!-- Add task button -->
+  <button class="board-column__add-btn" (click)="onAddTask()">
+    + Add Task
+  </button>
+
+</div>

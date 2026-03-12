@@ -1,0 +1,83 @@
+// ==========================================================================
+// List View Page — BEM
+// Block: .list-view
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.list-view {
+  @include flex-column;
+  height: 100%;
+
+  // --------------------------------------------------
+  // Element: header
+  // --------------------------------------------------
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+    flex-shrink: 0;
+  }
+
+  &__header-left {
+    @include flex(row, center);
+    gap: $spacing-md;
+  }
+
+  &__back-btn {
+    @include button-reset;
+    @include focus-ring;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+  }
+
+  &__header-right {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__view-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    border-radius: $border-radius-sm;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: $color-surface-hover;
+      color: $color-text-primary;
+    }
+
+    &--active {
+      background-color: $color-primary-bg;
+      color: $color-primary;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: placeholder
+  // --------------------------------------------------
+  &__placeholder {
+    flex: 1;
+    @include flex-center;
+  }
+
+  &__placeholder-text {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    text-align: center;
+  }
+}

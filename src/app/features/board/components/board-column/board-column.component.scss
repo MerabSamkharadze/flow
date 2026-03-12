@@ -1,0 +1,100 @@
+// ==========================================================================
+// Board Column Component — BEM
+// Block: .board-column
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.board-column {
+  @include flex-column;
+  width: 300px;
+  min-width: 300px;
+  max-height: 100%;
+  background-color: $color-gray-100;
+  border-radius: $border-radius-lg;
+  padding: $spacing-sm;
+
+  // --------------------------------------------------
+  // Element: header
+  // --------------------------------------------------
+  &__header {
+    @include flex-between;
+    padding: $spacing-sm;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__header-left {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: $border-radius-full;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__count {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    background-color: $color-gray-200;
+    padding: 0 $spacing-xs;
+    border-radius: $border-radius-full;
+    min-width: 20px;
+    text-align: center;
+
+    // Modifier: over WIP limit
+    &--over {
+      background-color: rgba($color-error, 0.1);
+      color: $color-error;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: task cards container (scrollable)
+  // --------------------------------------------------
+  &__tasks {
+    flex: 1;
+    @include flex-column;
+    gap: $spacing-sm;
+    @include scrollable(y);
+    padding: 2px; // room for card shadow
+  }
+
+  // --------------------------------------------------
+  // Element: add task button
+  // --------------------------------------------------
+  &__add-btn {
+    @include button-reset;
+    @include focus-ring;
+    width: 100%;
+    padding: $spacing-sm;
+    margin-top: $spacing-sm;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: $color-gray-200;
+      color: $color-text-primary;
+    }
+  }
+
+  // --------------------------------------------------
+  // Modifier: over WIP limit — subtle warning border
+  // --------------------------------------------------
+  &--over-limit {
+    border: 1px dashed rgba($color-error, 0.4);
+  }
+}

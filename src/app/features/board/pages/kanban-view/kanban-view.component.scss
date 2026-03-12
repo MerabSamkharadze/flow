@@ -1,0 +1,102 @@
+// ==========================================================================
+// Kanban View Page — BEM
+// Block: .kanban-view
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.kanban-view {
+  @include flex-column;
+  height: 100%;
+
+  // --------------------------------------------------
+  // Element: header
+  // --------------------------------------------------
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+    flex-shrink: 0;
+  }
+
+  &__header-left {
+    @include flex(row, center);
+    gap: $spacing-md;
+  }
+
+  &__back-btn {
+    @include button-reset;
+    @include focus-ring;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+  }
+
+  &__header-right {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  // View toggle buttons (Board / List)
+  &__view-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    border-radius: $border-radius-sm;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: $color-surface-hover;
+      color: $color-text-primary;
+    }
+
+    // Modifier: active view
+    &--active {
+      background-color: $color-primary-bg;
+      color: $color-primary;
+    }
+  }
+
+  &__add-col-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: board (horizontal scroll container)
+  // --------------------------------------------------
+  &__board {
+    display: flex;
+    gap: $spacing-md;
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: $spacing-sm; // space for scrollbar
+
+    // Smooth scrolling on touch devices
+    -webkit-overflow-scrolling: touch;
+  }
+}

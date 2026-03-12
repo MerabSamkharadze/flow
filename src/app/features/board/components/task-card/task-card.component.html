@@ -1,0 +1,47 @@
+<!-- Task Card: individual task within a board column -->
+<div class="task-card">
+
+  <!-- Labels row -->
+  <div class="task-card__labels" *ngIf="task.labels.length > 0">
+    <span class="task-card__label" *ngFor="let label of task.labels">
+      {{ label }}
+    </span>
+  </div>
+
+  <!-- Title -->
+  <h4 class="task-card__title">{{ task.title }}</h4>
+
+  <!-- Footer: priority, assignee, deadline, subtasks -->
+  <div class="task-card__footer">
+
+    <!-- Priority badge -->
+    <span
+      class="task-card__priority"
+      [style.background-color]="priorityConfig.color + '1a'"
+      [style.color]="priorityConfig.color">
+      {{ priorityConfig.label }}
+    </span>
+
+    <!-- Spacer -->
+    <div class="task-card__spacer"></div>
+
+    <!-- Subtask indicator -->
+    <span class="task-card__subtasks" *ngIf="totalSubtasks > 0">
+      {{ completedSubtasks }}/{{ totalSubtasks }}
+    </span>
+
+    <!-- Deadline -->
+    <span
+      class="task-card__deadline"
+      *ngIf="formattedDeadline"
+      [class.task-card__deadline--overdue]="isOverdue">
+      {{ formattedDeadline }}
+    </span>
+
+    <!-- Assignee avatar -->
+    <span class="task-card__assignee" *ngIf="task.assigneeId">
+      {{ task.assigneeId.charAt(0) | uppercase }}
+    </span>
+
+  </div>
+</div>

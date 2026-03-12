@@ -1,0 +1,35 @@
+<!-- Kanban Board View -->
+<div class="kanban-view">
+
+  <!-- Board header -->
+  <div class="kanban-view__header">
+    <div class="kanban-view__header-left">
+      <button class="kanban-view__back-btn" (click)="onGoBack()">
+        &larr; Back
+      </button>
+      <h1 class="kanban-view__title">Board</h1>
+    </div>
+    <div class="kanban-view__header-right">
+      <button class="kanban-view__view-btn kanban-view__view-btn--active">
+        Board
+      </button>
+      <button class="kanban-view__view-btn" (click)="onSwitchToList()">
+        List
+      </button>
+      <button class="kanban-view__add-col-btn" (click)="onAddColumn()">
+        + Add Column
+      </button>
+    </div>
+  </div>
+
+  <!-- Columns row (horizontally scrollable) -->
+  <div class="kanban-view__board">
+    <app-board-column
+      *ngFor="let column of columns"
+      [column]="column"
+      [tasks]="getColumnTasks(column.id)"
+      (addTask)="onAddTask($event)">
+    </app-board-column>
+  </div>
+
+</div>

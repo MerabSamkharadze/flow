@@ -31,6 +31,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./features/projects/projects.module').then(m => m.ProjectsModule),
       },
+      {
+        path: 'projects/:id/board',
+        loadChildren: () =>
+          import('./features/board/board.module').then(m => m.BoardModule),
+      },
       // {
       //   path: 'dashboard',
       //   loadChildren: () =>

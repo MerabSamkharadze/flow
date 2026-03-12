@@ -1,0 +1,101 @@
+// ==========================================================================
+// Task Card Component — BEM
+// Block: .task-card
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.task-card {
+  background-color: $color-surface;
+  border-radius: $border-radius-md;
+  padding: $spacing-sm $spacing-md;
+  box-shadow: $shadow-sm;
+  cursor: pointer;
+  transition: box-shadow $transition-fast, transform $transition-fast;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
+  }
+
+  // --------------------------------------------------
+  // Element: labels
+  // --------------------------------------------------
+  &__labels {
+    @include flex(row, center);
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__label {
+    font-size: 10px;
+    font-weight: $font-weight-medium;
+    padding: 1px $spacing-xs;
+    border-radius: $border-radius-sm;
+    background-color: $color-primary-bg;
+    color: $color-primary;
+  }
+
+  // --------------------------------------------------
+  // Element: title
+  // --------------------------------------------------
+  &__title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    line-height: $line-height-base;
+    margin-bottom: $spacing-sm;
+    @include text-clamp(2);
+  }
+
+  // --------------------------------------------------
+  // Element: footer
+  // --------------------------------------------------
+  &__footer {
+    @include flex(row, center);
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+  }
+
+  &__priority {
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    padding: 1px $spacing-xs;
+    border-radius: $border-radius-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  &__spacer {
+    flex: 1;
+  }
+
+  &__subtasks {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+  }
+
+  &__deadline {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+
+    // Modifier: overdue deadline
+    &--overdue {
+      color: $color-error;
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  &__assignee {
+    @include flex-center;
+    width: 22px;
+    height: 22px;
+    border-radius: $border-radius-full;
+    background-color: $color-primary;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+  }
+}
