@@ -1,0 +1,85 @@
+<!-- Task List: sortable table of tasks -->
+<div class="task-list">
+
+  <!-- Empty state -->
+  <div class="task-list__empty" *ngIf="tasks.length === 0">
+    <p class="task-list__empty-text">No tasks found.</p>
+  </div>
+
+  <!-- Table -->
+  <table class="task-list__table" *ngIf="tasks.length > 0">
+    <thead class="task-list__thead">
+      <tr>
+        <th class="task-list__th task-list__th--title">Title</th>
+        <th class="task-list__th task-list__th--project">Project</th>
+        <th class="task-list__th task-list__th--priority">Priority</th>
+        <th class="task-list__th task-list__th--deadline">Deadline</th>
+        <th class="task-list__th task-list__th--status">Status</th>
+        <th class="task-list__th task-list__th--actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="task-list__tbody">
+      <tr
+        *ngFor="let task of tasks"
+        class="task-list__row"
+        [class.task-list__row--done]="task.status === 'done'"
+        [class.task-list__row--overdue]="isOverdue(task)"
+        (click)="onRowClick(task)">
+
+        <!-- Title -->
+        <td class="task-list__td task-list__td--title">
+          <span class="task-list__task-title">{{ task.title }}</span>
+          <span class="task-list__subtask-count" *ngIf="task.subtasks.length > 0">
+            {{ task.subtasks.length }} subtasks
+          </span>
+        </td>
+
+        <!-- Project -->
+        <td class="task-list__td task-list__td--project">
+          <span class="task-list__project-badge" [style.background-color]="getProjectColor(task)">
+          </span>
+          <span class="task-list__project-name">{{ getProjectName(task) }}</span>
+        </td>
+
+        <!-- Priority -->
+        <td class="task-list__td task-list__td--priority">
+          <span
+            class="task-list__priority-badge"
+            [style.background-color]="getPriorityConfig(task.priority).color">
+            {{ getPriorityConfig(task.priority).label }}
+          </span>
+        </td>
+
+        <!-- Deadline -->
+        <td class="task-list__td task-list__td--deadline"
+            [class.task-list__td--overdue]="isOverdue(task)">
+          {{ formatDeadline(task.deadline) }}
+        </td>
+
+        <!-- Status -->
+        <td class="task-list__td task-list__td--status">
+          <span class="task-list__status-badge task-list__status-badge--{{ task.status }}">
+            {{ task.status }}
+          </span>
+        </td>
+
+        <!-- Actions -->
+        <td class="task-list__td task-list__td--actions">
+          <button
+            *ngIf="task.status !== 'done'"
+            class="task-list__done-btn"
+            title="Mark as Done"
+            (click)="onMarkDone($event, task)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </button>
+          <span *ngIf="task.status === 'done'" class="task-list__done-label">Done</span>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+</div>

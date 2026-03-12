@@ -1,5 +1,10 @@
 <!-- Layout: main application shell with sidebar + content area -->
-<div class="layout" [class.layout--collapsed]="isSidebarCollapsed">
+<div class="layout"
+     [class.layout--collapsed]="isSidebarCollapsed"
+     [class.layout--sidebar-open]="isSidebarOpen">
+
+  <!-- Mobile overlay -->
+  <div class="layout__overlay" *ngIf="isSidebarOpen" (click)="onOverlayClick()"></div>
 
   <!-- Left: Sidebar navigation -->
   <aside class="layout__sidebar">
@@ -16,7 +21,6 @@
     </header>
 
     <main class="layout__content">
-      <!-- Feature modules render here via lazy-loaded routes -->
       <router-outlet></router-outlet>
     </main>
   </div>

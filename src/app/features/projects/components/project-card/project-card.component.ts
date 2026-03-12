@@ -25,7 +25,7 @@ export class ProjectCardComponent {
       case 'on-hold':
         return 35;
       default:
-        return 60; // placeholder — will be calculated from tasks later
+        return 60; //TODO placeholder — will be calculated from tasks later
     }
   }
 

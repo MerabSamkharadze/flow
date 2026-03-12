@@ -1,0 +1,239 @@
+// ==========================================================================
+// Task List Component — BEM
+// Block: .task-list
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.task-list {
+  width: 100%;
+
+  // --------------------------------------------------
+  // Element: empty state
+  // --------------------------------------------------
+  &__empty {
+    @include flex-center;
+    padding: $spacing-2xl;
+  }
+
+  &__empty-text {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  // --------------------------------------------------
+  // Element: table
+  // --------------------------------------------------
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  // --------------------------------------------------
+  // Element: table header
+  // --------------------------------------------------
+  &__thead {
+    border-bottom: 2px solid $color-border;
+  }
+
+  &__th {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+
+    &--actions {
+      width: 80px;
+      text-align: center;
+    }
+
+    &--priority,
+    &--status {
+      width: 100px;
+    }
+
+    &--deadline {
+      width: 100px;
+    }
+
+    &--project {
+      width: 140px;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: table row
+  // --------------------------------------------------
+  &__row {
+    border-bottom: 1px solid $color-border;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-surface-hover;
+    }
+
+    // Modifier: done task — dim it
+    &--done {
+      opacity: 0.55;
+    }
+
+    // Modifier: overdue task — subtle red left accent
+    &--overdue {
+      box-shadow: inset 3px 0 0 $color-error;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: table cell
+  // --------------------------------------------------
+  &__td {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    vertical-align: middle;
+
+    &--title {
+      @include flex-column;
+      gap: 2px;
+    }
+
+    &--project {
+      @include flex(row, center);
+      gap: $spacing-xs;
+    }
+
+    &--actions {
+      text-align: center;
+    }
+
+    &--overdue {
+      color: $color-error;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: task title + subtask count
+  // --------------------------------------------------
+  &__task-title {
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  &__subtask-count {
+    font-size: $font-size-xs;
+    color: $color-text-disabled;
+  }
+
+  // --------------------------------------------------
+  // Element: project badge (colored dot + name)
+  // --------------------------------------------------
+  &__project-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: $border-radius-full;
+    flex-shrink: 0;
+  }
+
+  &__project-name {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    @include text-truncate;
+    max-width: 120px;
+  }
+
+  // --------------------------------------------------
+  // Element: priority badge (colored pill)
+  // --------------------------------------------------
+  &__priority-badge {
+    display: inline-block;
+    padding: 2px $spacing-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    border-radius: $border-radius-full;
+    text-transform: capitalize;
+  }
+
+  // --------------------------------------------------
+  // Element: status badge
+  // --------------------------------------------------
+  &__status-badge {
+    display: inline-block;
+    padding: 2px $spacing-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    border-radius: $border-radius-full;
+    text-transform: capitalize;
+    white-space: nowrap;
+
+    &--todo {
+      background-color: $color-gray-100;
+      color: $color-gray-600;
+    }
+
+    &--in-progress {
+      background-color: rgba($color-info, 0.1);
+      color: $color-info;
+    }
+
+    &--in-review {
+      background-color: rgba($color-warning, 0.1);
+      color: $color-warning;
+    }
+
+    &--done {
+      background-color: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: mark-as-done button
+  // --------------------------------------------------
+  &__done-btn {
+    @include button-reset;
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: $border-radius-md;
+    color: $color-text-disabled;
+    border: 1px solid $color-border;
+    margin: 0 auto;
+    transition: all $transition-fast;
+
+    &:hover {
+      color: $color-success;
+      border-color: $color-success;
+      background-color: rgba($color-success, 0.06);
+    }
+  }
+
+  &__done-label {
+    font-size: $font-size-xs;
+    color: $color-success;
+    font-weight: $font-weight-medium;
+  }
+}
+
+// Responsive: hide some columns on small screens
+@include respond-below('md') {
+  .task-list {
+    &__th--project,
+    &__td--project {
+      display: none;
+    }
+
+    &__th--deadline,
+    &__td--deadline {
+      display: none;
+    }
+  }
+}

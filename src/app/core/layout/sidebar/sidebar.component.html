@@ -9,22 +9,77 @@
 
   <!-- Navigation links -->
   <ul class="sidebar__nav">
-    <li class="sidebar__nav-item" *ngFor="let item of navItems">
-      <a class="sidebar__nav-link"
-         [routerLink]="item.route"
-         routerLinkActive="sidebar__nav-link--active">
-        <!-- Icon placeholder — replace with icon library (e.g. Material Icons) -->
-        <span class="sidebar__nav-icon">{{ item.icon }}</span>
-        <span class="sidebar__nav-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+
+    <!-- Dashboard -->
+    <li class="sidebar__nav-item">
+      <a class="sidebar__nav-link" routerLink="/dashboard" routerLinkActive="sidebar__nav-link--active">
+        <span class="sidebar__nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+        </span>
+        <span class="sidebar__nav-label" *ngIf="!isCollapsed">Dashboard</span>
       </a>
     </li>
+
+    <!-- Projects -->
+    <li class="sidebar__nav-item">
+      <a class="sidebar__nav-link" routerLink="/projects" routerLinkActive="sidebar__nav-link--active">
+        <span class="sidebar__nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+        </span>
+        <span class="sidebar__nav-label" *ngIf="!isCollapsed">Projects</span>
+      </a>
+    </li>
+
+    <!-- My Tasks -->
+    <li class="sidebar__nav-item">
+      <a class="sidebar__nav-link" routerLink="/my-tasks" routerLinkActive="sidebar__nav-link--active">
+        <span class="sidebar__nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </span>
+        <span class="sidebar__nav-label" *ngIf="!isCollapsed">My Tasks</span>
+      </a>
+    </li>
+
+    <!-- Team -->
+    <li class="sidebar__nav-item">
+      <a class="sidebar__nav-link" routerLink="/team" routerLinkActive="sidebar__nav-link--active">
+        <span class="sidebar__nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </span>
+        <span class="sidebar__nav-label" *ngIf="!isCollapsed">Team</span>
+      </a>
+    </li>
+
+    <!-- Settings -->
+    <li class="sidebar__nav-item">
+      <a class="sidebar__nav-link" routerLink="/settings" routerLinkActive="sidebar__nav-link--active">
+        <span class="sidebar__nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </span>
+        <span class="sidebar__nav-label" *ngIf="!isCollapsed">Settings</span>
+      </a>
+    </li>
+
   </ul>
 
   <!-- Collapse toggle button at the bottom -->
   <div class="sidebar__footer">
     <button class="sidebar__toggle" (click)="onToggle()">
       <span class="sidebar__toggle-icon">
-        {{ isCollapsed ? '&#9654;' : '&#9664;' }}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline *ngIf="isCollapsed" points="9 18 15 12 9 6"/>
+          <polyline *ngIf="!isCollapsed" points="15 18 9 12 15 6"/>
+        </svg>
       </span>
     </button>
   </div>

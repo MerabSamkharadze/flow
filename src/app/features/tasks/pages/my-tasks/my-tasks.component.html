@@ -1,6 +1,159 @@
+<!-- My Tasks Page: all tasks assigned to the current user -->
 <div class="my-tasks">
-  <div class="my-tasks__card">
-    <h1 class="my-tasks__title">My Tasks</h1>
-    <p class="my-tasks__subtitle">This feature is coming soon.</p>
+
+  <!-- Page header -->
+  <div class="my-tasks__header">
+    <div class="my-tasks__header-left">
+      <h1 class="my-tasks__title">My Tasks</h1>
+      <span class="my-tasks__count" *ngIf="!loading">
+        {{ activeTasks }} active
+      </span>
+    </div>
+    <div class="my-tasks__header-right">
+      <!-- View toggle -->
+      <div class="my-tasks__view-toggle">
+        <button
+          class="my-tasks__view-btn"
+          [class.my-tasks__view-btn--active]="viewMode === 'grouped'"
+          (click)="setViewMode('grouped')">
+          Grouped
+        </button>
+        <button
+          class="my-tasks__view-btn"
+          [class.my-tasks__view-btn--active]="viewMode === 'list'"
+          (click)="setViewMode('list')">
+          List
+        </button>
+      </div>
+    </div>
   </div>
+
+  <!-- Filters bar -->
+  <app-task-filters
+    [projects]="projects"
+    (filtersChanged)="onFiltersChanged($event)">
+  </app-task-filters>
+
+  <!-- Loading state -->
+  <div class="my-tasks__loading" *ngIf="loading">
+    <div class="my-tasks__spinner"></div>
+    <span>Loading tasks...</span>
+  </div>
+
+  <!-- Content: grouped view -->
+  <ng-container *ngIf="!loading && viewMode === 'grouped'">
+
+    <!-- Overdue group -->
+    <section class="my-tasks__group" *ngIf="taskGroups.overdue.length > 0">
+      <h2 class="my-tasks__group-title my-tasks__group-title--overdue">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        Overdue
+        <span class="my-tasks__group-count">{{ taskGroups.overdue.length }}</span>
+      </h2>
+      <app-task-list
+        [tasks]="taskGroups.overdue"
+        [projectMap]="projectMap"
+        (markDone)="onMarkDone($event)">
+      </app-task-list>
+    </section>
+
+    <!-- Today group -->
+    <section class="my-tasks__group" *ngIf="taskGroups.today.length > 0">
+      <h2 class="my-tasks__group-title my-tasks__group-title--today">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Today
+        <span class="my-tasks__group-count">{{ taskGroups.today.length }}</span>
+      </h2>
+      <app-task-list
+        [tasks]="taskGroups.today"
+        [projectMap]="projectMap"
+        (markDone)="onMarkDone($event)">
+      </app-task-list>
+    </section>
+
+    <!-- This Week group -->
+    <section class="my-tasks__group" *ngIf="taskGroups.thisWeek.length > 0">
+      <h2 class="my-tasks__group-title my-tasks__group-title--week">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        This Week
+        <span class="my-tasks__group-count">{{ taskGroups.thisWeek.length }}</span>
+      </h2>
+      <app-task-list
+        [tasks]="taskGroups.thisWeek"
+        [projectMap]="projectMap"
+        (markDone)="onMarkDone($event)">
+      </app-task-list>
+    </section>
+
+    <!-- Upcoming group -->
+    <section class="my-tasks__group" *ngIf="taskGroups.upcoming.length > 0">
+      <h2 class="my-tasks__group-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+        </svg>
+        Upcoming
+        <span class="my-tasks__group-count">{{ taskGroups.upcoming.length }}</span>
+      </h2>
+      <app-task-list
+        [tasks]="taskGroups.upcoming"
+        [projectMap]="projectMap"
+        (markDone)="onMarkDone($event)">
+      </app-task-list>
+    </section>
+
+    <!-- No Due Date group -->
+    <section class="my-tasks__group" *ngIf="taskGroups.noDueDate.length > 0">
+      <h2 class="my-tasks__group-title my-tasks__group-title--no-date">
+        No Due Date
+        <span class="my-tasks__group-count">{{ taskGroups.noDueDate.length }}</span>
+      </h2>
+      <app-task-list
+        [tasks]="taskGroups.noDueDate"
+        [projectMap]="projectMap"
+        (markDone)="onMarkDone($event)">
+      </app-task-list>
+    </section>
+
+    <!-- Empty state -->
+    <div class="my-tasks__empty" *ngIf="filteredTasks.length === 0">
+      <h3 class="my-tasks__empty-title">No tasks found</h3>
+      <p class="my-tasks__empty-text" *ngIf="allTasks.length > 0">
+        Try adjusting your filters.
+      </p>
+      <p class="my-tasks__empty-text" *ngIf="allTasks.length === 0">
+        You don't have any assigned tasks yet.
+      </p>
+    </div>
+
+  </ng-container>
+
+  <!-- Content: flat list view -->
+  <ng-container *ngIf="!loading && viewMode === 'list'">
+    <div class="my-tasks__list-card">
+      <app-task-list
+        [tasks]="filteredTasks"
+        [projectMap]="projectMap"
+        (markDone)="onMarkDone($event)">
+      </app-task-list>
+    </div>
+
+    <!-- Empty state -->
+    <div class="my-tasks__empty" *ngIf="filteredTasks.length === 0">
+      <h3 class="my-tasks__empty-title">No tasks found</h3>
+      <p class="my-tasks__empty-text">
+        {{ allTasks.length > 0 ? 'Try adjusting your filters.' : "You don't have any assigned tasks yet." }}
+      </p>
+    </div>
+  </ng-container>
+
 </div>

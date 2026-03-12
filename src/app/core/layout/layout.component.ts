@@ -1,25 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
-/**
- * LayoutComponent — main application shell.
- *
- * Provides the two-column layout structure:
- *   - Left: Sidebar navigation (app-sidebar)
- *   - Right: Header bar (app-header) + routed content area (router-outlet)
- *
- * All authenticated pages render inside this layout.
- */
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent {
-  /** Controls sidebar collapsed/expanded state */
+export class LayoutComponent implements OnDestroy {
   isSidebarCollapsed = false;
+  isSidebarOpen = false;
 
-  /** Toggle sidebar between collapsed and expanded */
+  private destroy$ = new Subject<void>();
+
+  constructor(private router: Router) {
+    this.router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.isSidebarOpen = false;
+      });
+  }
+
   onToggleSidebar(): void {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    if (window.innerWidth < 768) {
+      this.isSidebarOpen = !this.isSidebarOpen;
+    } else {
+      this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    }
+  }
+
+  onOverlayClick(): void {
+    this.isSidebarOpen = false;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -23,12 +23,19 @@
   }
 
   // --------------------------------------------------
+  // Element: mobile overlay
+  // --------------------------------------------------
+  &__overlay {
+    display: none;
+  }
+
+  // --------------------------------------------------
   // Element: main content area (header + content)
   // --------------------------------------------------
   &__main {
     @include flex-column;
     flex: 1;
-    min-width: 0; // prevent flex overflow
+    min-width: 0;
     overflow: hidden;
   }
 
@@ -50,7 +57,7 @@
   }
 
   // --------------------------------------------------
-  // Modifier: sidebar collapsed
+  // Modifier: sidebar collapsed (desktop)
   // --------------------------------------------------
   &--collapsed {
     .layout__sidebar {
@@ -59,7 +66,9 @@
   }
 }
 
-// Responsive: hide sidebar on small screens
+// --------------------------------------------------
+// Responsive: mobile sidebar as drawer
+// --------------------------------------------------
 @include respond-below('md') {
   .layout {
     &__sidebar {
@@ -67,13 +76,34 @@
       left: 0;
       top: 0;
       height: 100%;
+      width: $sidebar-width;
       transform: translateX(-100%);
       transition: transform $transition-base;
     }
 
+    &__overlay {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: $z-sidebar - 1;
+    }
+
+    &__content {
+      padding: $spacing-md;
+    }
+
+    // When sidebar is open on mobile
     &--sidebar-open {
       .layout__sidebar {
         transform: translateX(0);
+      }
+    }
+
+    // Override collapsed on mobile — always full width drawer
+    &--collapsed {
+      .layout__sidebar {
+        width: $sidebar-width;
       }
     }
   }
