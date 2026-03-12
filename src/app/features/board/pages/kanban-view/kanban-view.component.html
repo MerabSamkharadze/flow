@@ -1,4 +1,4 @@
-<!-- Kanban Board View -->
+<!-- Kanban Board View — connected to NgRx store -->
 <div class="kanban-view">
 
   <!-- Board header -->
@@ -22,12 +22,22 @@
     </div>
   </div>
 
+  <!-- Loading spinner -->
+  <div *ngIf="loading$ | async" class="kanban-view__loading">
+    Loading board...
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error$ | async as error" class="kanban-view__error">
+    {{ error }}
+  </div>
+
   <!-- Columns row (horizontally scrollable) -->
-  <div class="kanban-view__board">
+  <div class="kanban-view__board" *ngIf="!(loading$ | async)">
     <app-board-column
-      *ngFor="let column of columns"
+      *ngFor="let column of columns$ | async"
       [column]="column"
-      [tasks]="getColumnTasks(column.id)"
+      [tasks]="(tasksMap$ | async)?.[column.id] || []"
       (addTask)="onAddTask($event)">
     </app-board-column>
   </div>

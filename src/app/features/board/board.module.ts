@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../../shared/shared.module';
 import { BoardRoutingModule } from './board-routing.module';
+import { boardReducer } from './store/board.reducer';
+import { BoardEffects } from './store/board.effects';
 
 // Pages
 import { KanbanViewComponent } from './pages/kanban-view/kanban-view.component';
@@ -20,6 +24,8 @@ import { TaskCardComponent } from './components/task-card/task-card.component';
   imports: [
     SharedModule,
     BoardRoutingModule,
+    StoreModule.forFeature('board', boardReducer),
+    EffectsModule.forFeature([BoardEffects]),
   ],
 })
 export class BoardModule {}

@@ -9,6 +9,8 @@
  */
 
 import { AuthState } from '../features/auth/store/auth.reducer';
+import { ProjectsState } from '../features/projects/store/projects.reducer';
+import { BoardState } from '../features/board/store/board.reducer';
 
 /**
  * AppState — the complete shape of the NgRx store.
@@ -19,6 +21,6 @@ import { AuthState } from '../features/auth/store/auth.reducer';
  */
 export interface AppState {
   auth?: AuthState;
-  // projects?: ProjectsState;
-  // tasks?: TasksState;
+  projects?: ProjectsState;
+  board?: BoardState;
 }
