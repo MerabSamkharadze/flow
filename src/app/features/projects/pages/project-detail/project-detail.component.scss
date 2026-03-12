@@ -33,6 +33,37 @@
     gap: $spacing-sm;
   }
 
+  // Current user's project role badge in the top bar
+  &__role-badge {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    padding: 2px $spacing-sm;
+    border-radius: $border-radius-full;
+    text-transform: capitalize;
+
+    &--admin {
+      background-color: rgba($color-primary, 0.1);
+      color: $color-primary;
+    }
+
+    &--manager {
+      background-color: rgba($color-secondary, 0.1);
+      color: $color-secondary-dark;
+    }
+
+    &--member {
+      background-color: $color-gray-100;
+      color: $color-text-secondary;
+    }
+  }
+
+  &__loading {
+    @include flex-center;
+    padding: $spacing-3xl;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+  }
+
   &__btn {
     @include button-reset;
     @include focus-ring;

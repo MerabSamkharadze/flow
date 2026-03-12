@@ -1,92 +1,108 @@
 <!-- Project Detail Page -->
-<div class="project-detail" *ngIf="project">
+<ng-container *ngIf="project$ | async as project">
+  <div class="project-detail">
 
-  <!-- Top bar: back button + actions -->
-  <div class="project-detail__top-bar">
-    <button class="project-detail__back-btn" (click)="onGoBack()">
-      &larr; Back to Projects
-    </button>
-    <div class="project-detail__actions">
-      <button class="project-detail__btn project-detail__btn--primary" (click)="onOpenBoard()">
-        Open Board
+    <!-- Top bar: back button + actions -->
+    <div class="project-detail__top-bar">
+      <button class="project-detail__back-btn" (click)="onGoBack()">
+        &larr; Back to Projects
       </button>
-      <button class="project-detail__btn project-detail__btn--secondary" (click)="onGoToSettings()">
-        Settings
-      </button>
+      <div class="project-detail__actions">
+        <!-- Show current user's project role -->
+        <span class="project-detail__role-badge project-detail__role-badge--{{ currentUserProjectRole }}">
+          {{ currentUserProjectRole }}
+        </span>
+        <button class="project-detail__btn project-detail__btn--primary" (click)="onOpenBoard()">
+          Open Board
+        </button>
+        <button class="project-detail__btn project-detail__btn--secondary" (click)="onGoToSettings()">
+          Settings
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Project header: color accent + name + status -->
-  <div class="project-detail__header">
-    <div class="project-detail__color-dot" [style.background-color]="project.color"></div>
-    <div class="project-detail__header-info">
-      <h1 class="project-detail__name">{{ project.name }}</h1>
-      <span class="project-detail__status project-detail__status--{{ project.status }}">
-        {{ project.status }}
-      </span>
+    <!-- Project header: color accent + name + status -->
+    <div class="project-detail__header">
+      <div class="project-detail__color-dot" [style.background-color]="project.color"></div>
+      <div class="project-detail__header-info">
+        <h1 class="project-detail__name">{{ project.name }}</h1>
+        <span class="project-detail__status project-detail__status--{{ project.status }}">
+          {{ project.status }}
+        </span>
+      </div>
     </div>
-  </div>
 
-  <!-- Content grid -->
-  <div class="project-detail__content">
+    <!-- Content grid -->
+    <div class="project-detail__content">
 
-    <!-- Left: description + progress -->
-    <div class="project-detail__main">
+      <!-- Left: description + progress -->
+      <div class="project-detail__main">
 
-      <!-- Description -->
-      <section class="project-detail__section">
-        <h2 class="project-detail__section-title">Description</h2>
-        <p class="project-detail__description">{{ project.description }}</p>
-      </section>
+        <!-- Description -->
+        <section class="project-detail__section">
+          <h2 class="project-detail__section-title">Description</h2>
+          <p class="project-detail__description">{{ project.description }}</p>
+        </section>
 
-      <!-- Progress -->
-      <section class="project-detail__section">
-        <h2 class="project-detail__section-title">Progress</h2>
-        <div class="project-detail__progress">
-          <div class="project-detail__progress-bar">
-            <div
-              class="project-detail__progress-fill"
-              [style.width.%]="60"
-              [style.background-color]="project.color">
+        <!-- Progress -->
+        <section class="project-detail__section">
+          <h2 class="project-detail__section-title">Progress</h2>
+          <div class="project-detail__progress">
+            <div class="project-detail__progress-bar">
+              <div
+                class="project-detail__progress-fill"
+                [style.width.%]="60"
+                [style.background-color]="project.color">
+              </div>
             </div>
+            <span class="project-detail__progress-label">60%</span>
           </div>
-          <span class="project-detail__progress-label">60%</span>
+        </section>
+      </div>
+
+      <!-- Right: sidebar info -->
+      <aside class="project-detail__sidebar">
+
+        <!-- Deadline -->
+        <div class="project-detail__info-block">
+          <h3 class="project-detail__info-label">Deadline</h3>
+          <p class="project-detail__info-value">
+            {{ project.deadline ? project.deadline : 'No deadline set' }}
+          </p>
         </div>
-      </section>
+
+        <!-- Members Panel -->
+        <app-members-panel
+          [members]="members"
+          [currentUserRole]="currentUserProjectRole"
+          [currentUserId]="currentUserId"
+          (openInviteModal)="onOpenInviteModal()"
+          (removeMember)="onRemoveMember($event)"
+          (changeRole)="onChangeRole($event)">
+        </app-members-panel>
+
+        <!-- Created -->
+        <div class="project-detail__info-block">
+          <h3 class="project-detail__info-label">Created</h3>
+          <p class="project-detail__info-value">
+            {{ project.createdAt | date:'mediumDate' }}
+          </p>
+        </div>
+
+      </aside>
     </div>
 
-    <!-- Right: sidebar info -->
-    <aside class="project-detail__sidebar">
-
-      <!-- Deadline -->
-      <div class="project-detail__info-block">
-        <h3 class="project-detail__info-label">Deadline</h3>
-        <p class="project-detail__info-value">
-          {{ project.deadline ? project.deadline : 'No deadline set' }}
-        </p>
-      </div>
-
-      <!-- Members -->
-      <div class="project-detail__info-block">
-        <h3 class="project-detail__info-label">Members ({{ project.memberIds.length }})</h3>
-        <div class="project-detail__members">
-          <span
-            class="project-detail__avatar"
-            *ngFor="let memberId of project.memberIds"
-            [style.background-color]="project.color">
-            {{ memberId.charAt(0) | uppercase }}
-          </span>
-        </div>
-      </div>
-
-      <!-- Created -->
-      <div class="project-detail__info-block">
-        <h3 class="project-detail__info-label">Created</h3>
-        <p class="project-detail__info-value">
-          {{ project.createdAt | date:'mediumDate' }}
-        </p>
-      </div>
-
-    </aside>
   </div>
+</ng-container>
+
+<!-- Loading state -->
+<div class="project-detail__loading" *ngIf="loading$ | async">
+  Loading project...
 </div>
+
+<!-- Invite modal (rendered conditionally) -->
+<app-invite-modal
+  *ngIf="showInviteModal"
+  (inviteMember)="onInviteMember($event)"
+  (closeModal)="onCloseInviteModal()">
+</app-invite-modal>

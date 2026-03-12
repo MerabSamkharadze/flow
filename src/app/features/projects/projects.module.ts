@@ -15,6 +15,8 @@ import { ProjectSettingsComponent } from './pages/project-settings/project-setti
 
 // Shared components within this feature
 import { ProjectCardComponent } from './components/project-card/project-card.component';
+import { MembersPanelComponent } from './components/members-panel/members-panel.component';
+import { InviteModalComponent } from './components/invite-modal/invite-modal.component';
 
 // NgRx projects state
 import { projectsReducer } from './store/projects.reducer';
@@ -24,7 +26,7 @@ import { ProjectsEffects } from './store/projects.effects';
  * ProjectsModule — project management feature module.
  *
  * Lazy-loaded under /projects. Contains project list, detail,
- * creation form, and settings pages.
+ * creation form, settings pages, and member management components.
  * Registers the 'projects' NgRx feature state slice and effects.
  */
 @NgModule({
@@ -34,6 +36,8 @@ import { ProjectsEffects } from './store/projects.effects';
     ProjectFormComponent,
     ProjectSettingsComponent,
     ProjectCardComponent,
+    MembersPanelComponent,
+    InviteModalComponent,
   ],
   imports: [
     SharedModule,

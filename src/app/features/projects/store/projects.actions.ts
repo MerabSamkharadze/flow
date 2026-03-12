@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Project } from '../../../shared/models/project.model';
+import { Member, MemberRole } from '../../../shared/models/member.model';
 
 /**
  * Projects Actions — all actions for the projects state slice.
@@ -108,4 +109,48 @@ export const deleteProjectFailure = createAction(
 export const setSelectedProject = createAction(
   '[Projects Page] Set Selected Project',
   props<{ projectId: string | null }>()
+);
+
+// ---------------------------------------------------------------------------
+// Members — add, remove, change role
+// ---------------------------------------------------------------------------
+
+export const addMember = createAction(
+  '[Projects Page] Add Member',
+  props<{ projectId: string; member: Member }>()
+);
+
+export const addMemberSuccess = createAction(
+  '[Projects API] Add Member Success',
+  props<{ projectId: string; member: Member }>()
+);
+
+export const addMemberFailure = createAction(
+  '[Projects API] Add Member Failure',
+  props<{ error: string }>()
+);
+
+export const removeMember = createAction(
+  '[Projects Page] Remove Member',
+  props<{ projectId: string; userId: string }>()
+);
+
+export const removeMemberSuccess = createAction(
+  '[Projects API] Remove Member Success',
+  props<{ projectId: string; userId: string }>()
+);
+
+export const removeMemberFailure = createAction(
+  '[Projects API] Remove Member Failure',
+  props<{ error: string }>()
+);
+
+export const updateMemberRole = createAction(
+  '[Projects Page] Update Member Role',
+  props<{ projectId: string; userId: string; newRole: MemberRole }>()
+);
+
+export const updateMemberRoleSuccess = createAction(
+  '[Projects API] Update Member Role Success',
+  props<{ projectId: string; userId: string; newRole: MemberRole }>()
 );

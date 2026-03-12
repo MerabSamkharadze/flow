@@ -137,4 +137,47 @@ export class ProjectsEffects {
       ),
     { dispatch: false }
   );
+
+  // ---------------------------------------------------------------------------
+  // Members
+  // ---------------------------------------------------------------------------
+
+  /** Adds a member document to Firestore + updates project memberIds array */
+  addMember$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProjectsActions.addMember),
+      exhaustMap(({ projectId, member }) =>
+        this.projectsService.addMember(projectId, member).then(
+          () => ProjectsActions.addMemberSuccess({ projectId, member }),
+          (error) => ProjectsActions.addMemberFailure({ error: error.message })
+        )
+      )
+    )
+  );
+
+  /** Removes a member document from Firestore + updates project memberIds array */
+  removeMember$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProjectsActions.removeMember),
+      exhaustMap(({ projectId, userId }) =>
+        this.projectsService.removeMember(projectId, userId).then(
+          () => ProjectsActions.removeMemberSuccess({ projectId, userId }),
+          (error) => ProjectsActions.removeMemberFailure({ error: error.message })
+        )
+      )
+    )
+  );
+
+  /** Updates a member's role in the Firestore subcollection */
+  updateMemberRole$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProjectsActions.updateMemberRole),
+      exhaustMap(({ projectId, userId, newRole }) =>
+        this.projectsService.updateMemberRole(projectId, userId, newRole).then(
+          () => ProjectsActions.updateMemberRoleSuccess({ projectId, userId, newRole }),
+          (error) => ProjectsActions.removeMemberFailure({ error: error.message })
+        )
+      )
+    )
+  );
 }
