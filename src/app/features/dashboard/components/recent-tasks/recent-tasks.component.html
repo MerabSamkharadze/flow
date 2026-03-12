@@ -1,0 +1,70 @@
+<!-- Recent Tasks: compact table of last 5 updated tasks -->
+<div class="recent-tasks">
+
+  <!-- Section header -->
+  <div class="recent-tasks__header">
+    <h2 class="recent-tasks__title">Recent Tasks</h2>
+    <a class="recent-tasks__link" routerLink="/my-tasks">View all &rarr;</a>
+  </div>
+
+  <!-- Task table -->
+  <div class="recent-tasks__table-wrap" *ngIf="tasks.length > 0; else emptyState">
+    <table class="recent-tasks__table">
+      <thead>
+        <tr>
+          <th class="recent-tasks__th">Title</th>
+          <th class="recent-tasks__th">Project</th>
+          <th class="recent-tasks__th">Priority</th>
+          <th class="recent-tasks__th">Status</th>
+          <th class="recent-tasks__th">Deadline</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks"
+            class="recent-tasks__row"
+            (click)="onClick(task)">
+          <td class="recent-tasks__td recent-tasks__td--title">{{ task.title }}</td>
+          <td class="recent-tasks__td">{{ getProjectName(task) }}</td>
+          <td class="recent-tasks__td">
+            <span class="recent-tasks__badge"
+                  [style.background-color]="getPriorityConfig(task.priority).color + '1a'"
+                  [style.color]="getPriorityConfig(task.priority).color">
+              {{ getPriorityConfig(task.priority).label }}
+            </span>
+          </td>
+          <td class="recent-tasks__td">
+            <span class="recent-tasks__status"
+                  [class.recent-tasks__status--todo]="task.status === 'todo'"
+                  [class.recent-tasks__status--in-progress]="task.status === 'in-progress'"
+                  [class.recent-tasks__status--in-review]="task.status === 'in-review'"
+                  [class.recent-tasks__status--done]="task.status === 'done'">
+              {{ formatStatus(task.status) }}
+            </span>
+          </td>
+          <td class="recent-tasks__td">
+            <span [class.recent-tasks__deadline--overdue]="isOverdue(task)"
+                  [class.recent-tasks__deadline--today]="isToday(task)">
+              {{ formatDeadline(task.deadline) }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty state -->
+  <ng-template #emptyState>
+    <div class="recent-tasks__empty">
+      <div class="recent-tasks__empty-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+      </div>
+      <p class="recent-tasks__empty-text">No tasks yet</p>
+      <p class="recent-tasks__empty-hint">Tasks assigned to you will appear here.</p>
+    </div>
+  </ng-template>
+
+</div>

@@ -1,0 +1,81 @@
+// ==========================================================================
+// Stats Card Component — BEM
+// Block: .stats-card
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.stats-card {
+  @include flex(row, center);
+  gap: $spacing-md;
+  padding: 20px 24px;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+  cursor: default;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: $shadow-md;
+  }
+
+  // --------------------------------------------------
+  // Icon circle — colored background based on variant
+  // --------------------------------------------------
+  &__icon {
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $border-radius-md;
+    flex-shrink: 0;
+    background-color: rgba($color-primary, 0.1);
+    color: $color-primary;
+  }
+
+  // --------------------------------------------------
+  // Content area: value + label stacked
+  // --------------------------------------------------
+  &__content {
+    @include flex-column;
+    gap: 2px;
+  }
+
+  &__value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    line-height: $line-height-tight;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+  }
+
+  // --------------------------------------------------
+  // Variant modifiers — icon background + color overrides
+  // --------------------------------------------------
+  &--success {
+    .stats-card__icon {
+      background-color: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+  }
+
+  &--warning {
+    .stats-card__icon {
+      background-color: rgba($color-warning, 0.1);
+      color: $color-warning;
+    }
+  }
+
+  &--danger {
+    .stats-card__icon {
+      background-color: rgba($color-error, 0.1);
+      color: $color-error;
+    }
+  }
+}

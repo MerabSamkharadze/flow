@@ -14,26 +14,24 @@
     margin: 0 auto;
   }
 
-  &__title {
+  // --------------------------------------------------
+  // Greeting
+  // --------------------------------------------------
+  &__greeting {
     font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
     color: $color-text-primary;
-    margin: 0 0 $spacing-xs;
-  }
-
-  &__subtitle {
-    font-size: $font-size-base;
-    color: $color-text-secondary;
-    margin: 0 0 $spacing-xl;
+    margin: 0 0 $spacing-lg;
   }
 
   // --------------------------------------------------
-  // Stat cards grid
+  // Stats row — 4-column grid
   // --------------------------------------------------
-  &__stats {
+  &__stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: $spacing-lg;
+    gap: $spacing-md;
+    margin-bottom: $spacing-xl;
 
     @include respond-below('lg') {
       grid-template-columns: repeat(2, 1fr);
@@ -44,69 +42,29 @@
     }
   }
 
-  &__stat-card {
-    @include flex(row, center);
-    gap: $spacing-md;
-    padding: $spacing-lg;
-    background-color: $color-surface;
-    border-radius: $border-radius-lg;
-    box-shadow: $shadow-sm;
-    transition: box-shadow $transition-fast;
+  // --------------------------------------------------
+  // Two-column body: main (2/3) + sidebar (1/3)
+  // --------------------------------------------------
+  &__body {
+    display: flex;
+    gap: $spacing-lg;
 
-    &:hover {
-      box-shadow: $shadow-md;
+    @include respond-below('lg') {
+      flex-direction: column;
     }
   }
 
-  // --------------------------------------------------
-  // Stat icon — colored circle background
-  // --------------------------------------------------
-  &__stat-icon {
-    @include flex-center;
-    width: 48px;
-    height: 48px;
-    border-radius: $border-radius-md;
-    flex-shrink: 0;
-
-    &--projects {
-      background-color: rgba($color-primary, 0.1);
-      color: $color-primary;
-    }
-
-    &--active {
-      background-color: rgba($color-success, 0.1);
-      color: $color-success;
-    }
-
-    &--overdue {
-      background-color: rgba($color-error, 0.1);
-      color: $color-error;
-    }
-
-    &--today {
-      background-color: rgba($color-warning, 0.1);
-      color: $color-warning;
-    }
+  &__main {
+    flex: 2;
+    min-width: 0; // prevents flex overflow
   }
 
-  // --------------------------------------------------
-  // Stat info: value + label
-  // --------------------------------------------------
-  &__stat-info {
-    @include flex-column;
-    gap: 2px;
-  }
+  &__sidebar-col {
+    flex: 1;
+    min-width: 280px;
 
-  &__stat-value {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $color-text-primary;
-    line-height: $line-height-tight;
-  }
-
-  &__stat-label {
-    font-size: $font-size-sm;
-    color: $color-text-secondary;
-    font-weight: $font-weight-medium;
+    @include respond-below('lg') {
+      min-width: 0;
+    }
   }
 }
