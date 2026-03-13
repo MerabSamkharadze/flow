@@ -20,11 +20,14 @@ export interface Project {
 /** Possible project lifecycle statuses */
 export type ProjectStatus = 'active' | 'on-hold' | 'completed' | 'archived';
 
-/** Preset color palette for project creation */
+/** Preset color palette for project creation / settings */
 export const PROJECT_COLORS: string[] = [
   '#4f46e5', // indigo
   '#0ea5e9', // sky blue
   '#10b981', // emerald
   '#f59e0b', // amber
   '#ef4444', // red
+  '#8b5cf6', // violet
+  '#ec4899', // pink
+  '#14b8a6', // teal
 ];

@@ -1,35 +1,234 @@
-<!-- Project Settings Page -->
+<!-- Project Settings Page — sidebar tabs + content area -->
 <div class="project-settings">
 
+  <!-- Back link -->
   <div class="project-settings__top-bar">
     <button class="project-settings__back-btn" (click)="onGoBack()">
-      &larr; Back to Project
+      &#8592; Back to Project
     </button>
   </div>
 
-  <div class="project-settings__card">
-    <h1 class="project-settings__title">Project Settings</h1>
-    <p class="project-settings__placeholder">
-      Settings for project <strong>{{ projectId }}</strong> will be available here.
-    </p>
+  <div class="project-settings__layout">
 
-    <!-- Placeholder sections -->
-    <div class="project-settings__section">
-      <h2 class="project-settings__section-title">General</h2>
-      <p class="project-settings__section-text">Rename project, change color, update description.</p>
-    </div>
-
-    <div class="project-settings__section">
-      <h2 class="project-settings__section-title">Members</h2>
-      <p class="project-settings__section-text">Add or remove team members, manage roles.</p>
-    </div>
-
-    <div class="project-settings__section project-settings__section--danger">
-      <h2 class="project-settings__section-title">Danger Zone</h2>
-      <p class="project-settings__section-text">Archive or delete this project.</p>
-      <button class="project-settings__delete-btn" (click)="onDeleteProject()">
-        Delete Project
+    <!-- ── Left sidebar navigation ── -->
+    <nav class="project-settings__nav">
+      <button
+        class="project-settings__tab"
+        [class.project-settings__tab--active]="activeTab === 'general'"
+        (click)="setTab('general')">
+        <span class="project-settings__tab-icon">&#9881;</span>
+        General
       </button>
+      <button
+        class="project-settings__tab"
+        [class.project-settings__tab--active]="activeTab === 'members'"
+        (click)="setTab('members')">
+        <span class="project-settings__tab-icon">&#128101;</span>
+        Members
+      </button>
+      <button
+        class="project-settings__tab project-settings__tab--danger"
+        [class.project-settings__tab--active]="activeTab === 'danger'"
+        (click)="setTab('danger')">
+        <span class="project-settings__tab-icon">&#9888;</span>
+        Danger Zone
+      </button>
+    </nav>
+
+    <!-- ── Right content area ── -->
+    <div class="project-settings__content">
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- GENERAL TAB                                             -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <div class="project-settings__panel" *ngIf="activeTab === 'general'">
+        <h2 class="project-settings__panel-title">General Settings</h2>
+
+        <form [formGroup]="form" (ngSubmit)="onSaveGeneral()">
+
+          <!-- Project Name -->
+          <div class="project-settings__field">
+            <label class="project-settings__label">Project Name</label>
+            <input
+              class="project-settings__input"
+              type="text"
+              formControlName="name"
+              placeholder="Project name" />
+          </div>
+
+          <!-- Description -->
+          <div class="project-settings__field">
+            <label class="project-settings__label">Description</label>
+            <textarea
+              class="project-settings__textarea"
+              formControlName="description"
+              rows="3"
+              placeholder="A brief description of the project..."></textarea>
+          </div>
+
+          <!-- Status -->
+          <div class="project-settings__field">
+            <label class="project-settings__label">Status</label>
+            <select class="project-settings__select" formControlName="status">
+              <option *ngFor="let s of statuses" [value]="s">
+                {{ s === 'on-hold' ? 'On Hold' : (s | titlecase) }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Color picker -->
+          <div class="project-settings__field">
+            <label class="project-settings__label">Color</label>
+            <div class="project-settings__colors">
+              <button
+                *ngFor="let c of colors"
+                type="button"
+                class="project-settings__color-circle"
+                [style.background-color]="c"
+                [class.project-settings__color-circle--selected]="selectedColor === c"
+                (click)="selectColor(c)">
+                <span *ngIf="selectedColor === c" class="project-settings__color-check">&#10003;</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Deadline -->
+          <div class="project-settings__field">
+            <label class="project-settings__label">Deadline</label>
+            <input
+              class="project-settings__input"
+              type="date"
+              formControlName="deadline" />
+          </div>
+
+          <!-- Save button + inline message -->
+          <div class="project-settings__actions">
+            <button
+              class="project-settings__save-btn"
+              type="submit"
+              [disabled]="form.invalid || saveLoading">
+              <span *ngIf="!saveLoading">Save Changes</span>
+              <span *ngIf="saveLoading">Saving...</span>
+            </button>
+            <span
+              *ngIf="saveMessage"
+              class="project-settings__msg"
+              [class.project-settings__msg--success]="saveMessage.type === 'success'"
+              [class.project-settings__msg--error]="saveMessage.type === 'error'">
+              {{ saveMessage.text }}
+            </span>
+          </div>
+        </form>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- MEMBERS TAB                                             -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <div class="project-settings__panel" *ngIf="activeTab === 'members'">
+        <h2 class="project-settings__panel-title">Members</h2>
+
+        <!-- Invite member section -->
+        <div class="project-settings__invite">
+          <label class="project-settings__label">Invite Member</label>
+          <div class="project-settings__invite-row">
+            <input
+              class="project-settings__input project-settings__invite-input"
+              type="email"
+              placeholder="Email address"
+              [(ngModel)]="inviteEmail"
+              (keyup.enter)="onInviteMember()" />
+            <button
+              class="project-settings__invite-btn"
+              type="button"
+              [disabled]="inviteLoading || !inviteEmail.trim()"
+              (click)="onInviteMember()">
+              Send Invite
+            </button>
+          </div>
+          <span *ngIf="inviteError" class="project-settings__msg project-settings__msg--error">
+            {{ inviteError }}
+          </span>
+        </div>
+
+        <!-- Members list -->
+        <div class="project-settings__members-list">
+          <div
+            class="project-settings__member"
+            *ngFor="let member of members; trackBy: trackMember">
+
+            <!-- Avatar -->
+            <span class="project-settings__member-avatar" *ngIf="!member.avatarUrl">
+              {{ getInitials(member.displayName || member.email) }}
+            </span>
+            <img
+              class="project-settings__member-avatar project-settings__member-avatar--img"
+              *ngIf="member.avatarUrl"
+              [src]="member.avatarUrl"
+              [alt]="member.displayName" />
+
+            <!-- Info -->
+            <div class="project-settings__member-info">
+              <span class="project-settings__member-name">
+                {{ member.displayName || member.email }}
+                <span
+                  *ngIf="member.userId === currentUserId"
+                  class="project-settings__member-you">
+                  You
+                </span>
+              </span>
+              <span class="project-settings__member-email">{{ member.email }}</span>
+            </div>
+
+            <!-- Role badge or dropdown -->
+            <select
+              class="project-settings__role-select"
+              [ngClass]="'project-settings__role-select--' + member.role"
+              [value]="member.role"
+              (change)="onRoleChange(member.userId, $event)">
+              <option value="admin">Admin</option>
+              <option value="manager">Manager</option>
+              <option value="member">Member</option>
+            </select>
+
+            <!-- Remove button (not for current user) -->
+            <button
+              *ngIf="member.userId !== currentUserId"
+              class="project-settings__member-remove"
+              type="button"
+              (click)="onRemoveMember(member.userId)">
+              &times;
+            </button>
+          </div>
+
+          <!-- Empty state -->
+          <div *ngIf="members.length === 0" class="project-settings__members-empty">
+            No members yet. Invite someone to get started.
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- DANGER ZONE TAB                                         -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <div class="project-settings__panel" *ngIf="activeTab === 'danger'">
+        <h2 class="project-settings__panel-title project-settings__panel-title--danger">
+          Danger Zone
+        </h2>
+
+        <div class="project-settings__danger-card">
+          <h3 class="project-settings__danger-heading">Delete Project</h3>
+          <p class="project-settings__danger-text">
+            This action cannot be undone. All tasks and data will be permanently deleted.
+          </p>
+          <button
+            class="project-settings__danger-btn"
+            type="button"
+            (click)="onDeleteProject()">
+            Delete Project
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -42,6 +241,17 @@
     variant="danger"
     (confirmed)="onConfirmDelete()"
     (cancelled)="onCancelDelete()">
+  </app-confirm-dialog>
+
+  <!-- Confirm remove member dialog -->
+  <app-confirm-dialog
+    *ngIf="confirmRemoveUserId"
+    title="Remove Member"
+    message="Are you sure you want to remove this member from the project?"
+    confirmLabel="Remove"
+    variant="danger"
+    (confirmed)="onConfirmRemove()"
+    (cancelled)="onCancelRemove()">
   </app-confirm-dialog>
 
 </div>

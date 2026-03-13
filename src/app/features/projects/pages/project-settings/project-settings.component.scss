@@ -7,8 +7,11 @@
 @use '../../../../../styles/abstracts/mixins' as *;
 
 .project-settings {
-  max-width: 600px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacing-lg;
 
+  // ── Top bar ──────────────────────────────────────────────────────
   &__top-bar {
     margin-bottom: $spacing-lg;
   }
@@ -25,52 +28,423 @@
     }
   }
 
-  &__card {
+  // ── Layout: sidebar + content ────────────────────────────────────
+  &__layout {
+    display: flex;
+    gap: $spacing-lg;
+    align-items: flex-start;
+  }
+
+  // ── Sidebar navigation ───────────────────────────────────────────
+  &__nav {
+    @include flex-column;
+    gap: $spacing-xs;
+    width: 200px;
+    flex-shrink: 0;
     background-color: $color-surface;
     border-radius: $border-radius-lg;
     box-shadow: $shadow-sm;
-    padding: $spacing-xl;
+    padding: $spacing-sm;
   }
 
-  &__title {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    margin-bottom: $spacing-sm;
-  }
-
-  &__placeholder {
+  &__tab {
+    @include button-reset;
+    @include focus-ring;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
     color: $color-text-secondary;
-    margin-bottom: $spacing-lg;
-  }
+    border-radius: $border-radius-md;
+    border-left: 3px solid transparent;
+    transition: background-color $transition-fast, color $transition-fast,
+      border-color $transition-fast;
+    text-align: left;
+    width: 100%;
 
-  &__section {
-    padding: $spacing-md 0;
-    border-top: 1px solid $color-border;
+    &:hover {
+      background-color: $color-surface-hover;
+      color: $color-text-primary;
+    }
+
+    &--active {
+      border-left-color: $color-primary;
+      color: $color-text-primary;
+      font-weight: $font-weight-semibold;
+      background-color: $color-primary-bg;
+    }
 
     &--danger {
-      .project-settings__section-title {
+      color: $color-error;
+
+      &:hover {
+        background-color: rgba($color-error, 0.06);
+      }
+
+      &.project-settings__tab--active {
+        border-left-color: $color-error;
+        background-color: rgba($color-error, 0.06);
         color: $color-error;
       }
     }
   }
 
-  &__section-title {
+  &__tab-icon {
     font-size: $font-size-base;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  // ── Content area ─────────────────────────────────────────────────
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__panel {
+    background-color: $color-surface;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    padding: $spacing-lg;
+  }
+
+  &__panel-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-sm;
+    border-bottom: 1px solid $color-border;
+
+    &--danger {
+      color: $color-error;
+    }
+  }
+
+  // ── Form fields (General tab) ────────────────────────────────────
+  &__field {
+    @include flex-column;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-md;
+  }
+
+  &__label {
+    font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
-    margin-bottom: $spacing-xs;
-  }
-
-  &__section-text {
-    font-size: $font-size-sm;
     color: $color-text-secondary;
-    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  &__delete-btn {
+  &__input,
+  &__select,
+  &__textarea {
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    font-family: $font-family-base;
+    color: $color-text-primary;
+    outline: none;
+    transition: border-color $transition-fast;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: $color-primary;
+    }
+
+    &::placeholder {
+      color: $color-text-disabled;
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  &__select {
+    cursor: pointer;
+    background-color: $color-surface;
+  }
+
+  // ── Color picker ─────────────────────────────────────────────────
+  &__colors {
+    display: flex;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+  }
+
+  &__color-circle {
+    @include button-reset;
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: $border-radius-full;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform $transition-fast, border-color $transition-fast;
+    position: relative;
+
+    &:hover {
+      transform: scale(1.15);
+    }
+
+    &--selected {
+      border-color: $color-text-primary;
+      transform: scale(1.15);
+    }
+  }
+
+  &__color-check {
+    color: $color-text-inverse;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+  }
+
+  // ── Save actions ─────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-top: $spacing-lg;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-border;
+  }
+
+  &__save-btn {
     @include button-reset;
     @include focus-ring;
-    margin-top: $spacing-md;
+    padding: $spacing-sm $spacing-xl;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+    min-width: 130px;
+    text-align: center;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__msg {
+    font-size: $font-size-sm;
+
+    &--success {
+      color: $color-success;
+    }
+
+    &--error {
+      color: $color-error;
+    }
+  }
+
+  // ── Invite section (Members tab) ─────────────────────────────────
+  &__invite {
+    @include flex-column;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__invite-row {
+    display: flex;
+    gap: $spacing-sm;
+  }
+
+  &__invite-input {
+    flex: 1;
+  }
+
+  &__invite-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    white-space: nowrap;
+    transition: background-color $transition-fast;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // ── Members list ─────────────────────────────────────────────────
+  &__members-list {
+    @include flex-column;
+    gap: 0;
+  }
+
+  &__member {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-sm;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-surface-hover;
+    }
+  }
+
+  &__member-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-full;
+    background-color: $color-primary;
+    color: $color-text-inverse;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    @include flex-center;
+    flex-shrink: 0;
+
+    &--img {
+      background-color: transparent;
+      object-fit: cover;
+    }
+  }
+
+  &__member-info {
+    @include flex-column;
+    flex: 1;
+    min-width: 0;
+    gap: 1px;
+  }
+
+  &__member-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    @include text-truncate;
+  }
+
+  &__member-email {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    @include text-truncate;
+  }
+
+  &__member-you {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    background-color: $color-primary-bg;
+    padding: 1px 6px;
+    border-radius: $border-radius-full;
+    margin-left: $spacing-xs;
+    vertical-align: middle;
+  }
+
+  // ── Role badge / select ──────────────────────────────────────────
+  &__role-select {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    padding: 2px $spacing-sm;
+    border-radius: $border-radius-full;
+    border: 1px solid $color-border;
+    background-color: $color-gray-100;
+    color: $color-text-secondary;
+    cursor: pointer;
+    outline: none;
+    transition: border-color $transition-fast;
+
+    &:focus {
+      border-color: $color-primary;
+    }
+
+    &--admin {
+      background-color: #f3e8ff;
+      color: #7c3aed;
+      border-color: #ddd6fe;
+    }
+
+    &--manager {
+      background-color: #dbeafe;
+      color: #2563eb;
+      border-color: #bfdbfe;
+    }
+
+    &--member {
+      background-color: $color-gray-100;
+      color: $color-text-secondary;
+      border-color: $color-gray-200;
+    }
+  }
+
+  &__member-remove {
+    @include button-reset;
+    @include focus-ring;
+    width: 28px;
+    height: 28px;
+    @include flex-center;
+    font-size: $font-size-lg;
+    color: $color-text-disabled;
+    border-radius: $border-radius-sm;
+    transition: color $transition-fast, background-color $transition-fast;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $color-error;
+      background-color: rgba($color-error, 0.08);
+    }
+  }
+
+  &__members-empty {
+    padding: $spacing-lg;
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-disabled;
+  }
+
+  // ── Danger zone ──────────────────────────────────────────────────
+  &__danger-card {
+    border: 1px solid $color-error;
+    border-radius: $border-radius-md;
+    padding: $spacing-lg;
+    background-color: rgba($color-error, 0.02);
+  }
+
+  &__danger-heading {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-error;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__danger-text {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-md;
+    line-height: $line-height-relaxed;
+  }
+
+  &__danger-btn {
+    @include button-reset;
+    @include focus-ring;
     padding: $spacing-sm $spacing-lg;
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
@@ -81,6 +455,44 @@
 
     &:hover {
       background-color: darken(#ef4444, 10%);
+    }
+  }
+}
+
+// ── Responsive: tabs go horizontal on mobile ─────────────────────────
+@media (max-width: $breakpoint-md - 1px) {
+  .project-settings {
+    padding: $spacing-md;
+
+    &__layout {
+      flex-direction: column;
+    }
+
+    &__nav {
+      width: 100%;
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 0;
+    }
+
+    &__tab {
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      flex: 1;
+      justify-content: center;
+      padding: $spacing-sm $spacing-sm;
+      font-size: $font-size-xs;
+
+      &--active {
+        border-bottom-color: $color-primary;
+        border-left-color: transparent;
+      }
+
+      &--danger.project-settings__tab--active {
+        border-bottom-color: $color-error;
+        border-left-color: transparent;
+      }
     }
   }
 }
