@@ -4,6 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+// Eagerly declared pages (not in a feature module)
+import { NotFoundComponent } from './features/not-found/not-found.component';
+
 // Core module — singleton services and layout components
 import { CoreModule } from './core/core.module';
 
@@ -41,6 +44,7 @@ import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

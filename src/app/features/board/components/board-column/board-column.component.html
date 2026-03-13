@@ -25,7 +25,7 @@
 
     <!-- Individual task card — CDK draggable, with comment count wired up -->
     <app-task-card
-      *ngFor="let task of tasks"
+      *ngFor="let task of tasks; trackBy: trackByTaskId"
       cdkDrag
       [cdkDragData]="task"
       [task]="task"

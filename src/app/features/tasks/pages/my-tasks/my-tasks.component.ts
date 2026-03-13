@@ -116,6 +116,11 @@ export class MyTasksComponent implements OnInit, OnDestroy {
     this.store.dispatch(TasksActions.setTaskFilters({ filters }));
   }
 
+  /** TrackBy for task lists — improves ngFor performance */
+  trackByTaskId(_index: number, task: Task): string {
+    return task.id;
+  }
+
   /** Mark a task as done via NgRx action */
   onMarkDone(task: Task): void {
     this.store.dispatch(

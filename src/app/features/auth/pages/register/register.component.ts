@@ -11,6 +11,7 @@ import { selectAuthLoading, selectAuthError } from '../../store';
  * RegisterComponent — new account sign-up page.
  *
  * Dispatches NgRx register action on submit.
+ * Includes a password strength indicator (weak/medium/strong).
  * Loading and error states are driven by the store.
  */
 @Component({
@@ -59,6 +60,30 @@ export class RegisterComponent implements OnInit {
   /** Convenience getter for template validation access */
   get f() {
     return this.registerForm.controls;
+  }
+
+  /**
+   * Password strength classification:
+   *   - weak: < 6 chars
+   *   - medium: 6-10 chars without special characters
+   *   - strong: 10+ chars OR has a special character
+   */
+  get passwordStrength(): 'weak' | 'medium' | 'strong' {
+    const value: string = this.f['password']?.value || '';
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+    if (value.length < 6) return 'weak';
+    if (value.length >= 10 || hasSpecial) return 'strong';
+    return 'medium';
+  }
+
+  /** Strength bar fill percentage */
+  get strengthPercent(): number {
+    switch (this.passwordStrength) {
+      case 'weak': return 33;
+      case 'medium': return 66;
+      case 'strong': return 100;
+    }
   }
 
   onSubmit(): void {

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
 
 /**
@@ -14,6 +14,7 @@ import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskCardComponent {
   @Input() task!: Task;

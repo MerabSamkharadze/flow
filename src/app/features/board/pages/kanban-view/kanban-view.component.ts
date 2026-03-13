@@ -217,4 +217,13 @@ export class KanbanViewComponent implements OnInit {
   onGoBack(): void {
     this.router.navigate(['/projects', this.projectId]);
   }
+
+  // ---------------------------------------------------------------------------
+  // TrackBy functions for ngFor performance
+  // ---------------------------------------------------------------------------
+
+  /** TrackBy for column list */
+  trackByColumnId(_index: number, column: Column): string {
+    return column.id;
+  }
 }

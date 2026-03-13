@@ -1,70 +1,124 @@
-<!-- Login page -->
-<div class="auth">
-  <div class="auth__card">
+<!-- Login Page: split layout — branding left, form right -->
+<div class="login-page">
 
-    <!-- Header -->
-    <div class="auth__header">
-      <h1 class="auth__title">Welcome back</h1>
-      <p class="auth__subtitle">Sign in to your FLOW account</p>
-    </div>
-
-    <!-- Error message from store -->
-    <div class="auth__error" *ngIf="error$ | async as errorMessage">
-      {{ errorMessage }}
-    </div>
-
-    <!-- Login form -->
-    <form class="auth__form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
-      <!-- Email field -->
-      <div class="auth__field">
-        <label class="auth__label" for="email">Email</label>
-        <input
-          class="auth__input"
-          [class.auth__input--error]="f['email'].touched && f['email'].invalid"
-          id="email"
-          type="email"
-          formControlName="email"
-          placeholder="you@company.com"
-          autocomplete="email" />
-        <span class="auth__validation" *ngIf="f['email'].touched && f['email'].errors">
-          <span *ngIf="f['email'].errors?.['required']">Email is required</span>
-          <span *ngIf="f['email'].errors?.['email']">Enter a valid email address</span>
-        </span>
+  <!-- Left panel: branding (hidden on mobile) -->
+  <div class="login-page__branding">
+    <div class="login-page__branding-content">
+      <!-- Logo -->
+      <div class="login-page__logo">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        <span class="login-page__logo-text">FLOW</span>
       </div>
 
-      <!-- Password field -->
-      <div class="auth__field">
-        <label class="auth__label" for="password">Password</label>
-        <input
-          class="auth__input"
-          [class.auth__input--error]="f['password'].touched && f['password'].invalid"
-          id="password"
-          type="password"
-          formControlName="password"
-          placeholder="Enter your password"
-          autocomplete="current-password" />
-        <span class="auth__validation" *ngIf="f['password'].touched && f['password'].errors">
-          <span *ngIf="f['password'].errors?.['required']">Password is required</span>
-          <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
-        </span>
-      </div>
+      <!-- Tagline -->
+      <h2 class="login-page__tagline">Manage projects.<br>Ship faster.</h2>
 
-      <!-- Submit button -->
-      <button
-        class="auth__button"
-        type="submit"
-        [disabled]="loading$ | async">
-        {{ (loading$ | async) ? 'Signing in...' : 'Sign in' }}
-      </button>
-
-    </form>
-
-    <!-- Footer link -->
-    <p class="auth__footer">
-      Don't have an account?
-      <a class="auth__link" (click)="goToRegister()">Create one</a>
-    </p>
-
+      <!-- Feature bullets -->
+      <ul class="login-page__features">
+        <li class="login-page__feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Real-time collaboration
+        </li>
+        <li class="login-page__feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          Kanban boards
+        </li>
+        <li class="login-page__feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Track everything
+        </li>
+      </ul>
+    </div>
   </div>
+
+  <!-- Right panel: form -->
+  <div class="login-page__form-panel">
+    <div class="login-page__form-wrapper">
+
+      <!-- Header -->
+      <h1 class="login-page__title">Welcome back</h1>
+      <p class="login-page__subtitle">
+        Don't have an account?
+        <a class="login-page__link" (click)="goToRegister()">Sign up</a>
+      </p>
+
+      <!-- Error message from store -->
+      <div class="login-page__error" *ngIf="error$ | async as errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Login form -->
+      <form class="login-page__form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <!-- Email field -->
+        <div class="login-page__field">
+          <label class="login-page__label" for="login-email">Email address</label>
+          <input
+            class="login-page__input"
+            [class.login-page__input--error]="f['email'].touched && f['email'].invalid"
+            id="login-email"
+            type="email"
+            formControlName="email"
+            placeholder="you@company.com"
+            autocomplete="email" />
+          <span class="login-page__validation" *ngIf="f['email'].touched && f['email'].errors">
+            <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+            <span *ngIf="f['email'].errors?.['email']">Enter a valid email address</span>
+          </span>
+        </div>
+
+        <!-- Password field -->
+        <div class="login-page__field">
+          <div class="login-page__label-row">
+            <label class="login-page__label" for="login-password">Password</label>
+            <a class="login-page__forgot-link" href="javascript:void(0)">Forgot password?</a>
+          </div>
+          <input
+            class="login-page__input"
+            [class.login-page__input--error]="f['password'].touched && f['password'].invalid"
+            id="login-password"
+            type="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password" />
+          <span class="login-page__validation" *ngIf="f['password'].touched && f['password'].errors">
+            <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+            <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
+          </span>
+        </div>
+
+        <!-- Submit button with loading spinner -->
+        <button
+          class="login-page__submit"
+          type="submit"
+          [disabled]="loading$ | async">
+          <app-loading-spinner
+            *ngIf="loading$ | async"
+            size="sm"
+            [overlay]="false">
+          </app-loading-spinner>
+          <span *ngIf="!(loading$ | async)">Sign in</span>
+          <span *ngIf="loading$ | async">Signing in...</span>
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
 </div>

@@ -40,7 +40,7 @@
   <!-- Columns row — cdkDropListGroup connects all column drop zones -->
   <div class="kanban-view__board" cdkDropListGroup *ngIf="!(loading$ | async)">
     <app-board-column
-      *ngFor="let column of columns$ | async"
+      *ngFor="let column of columns$ | async; trackBy: trackByColumnId"
       [column]="column"
       [tasks]="(filteredTasksMap$ | async)?.[column.id] || []"
       [commentCounts]="(commentCounts$ | async) || {}"

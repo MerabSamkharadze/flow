@@ -31,7 +31,7 @@
 
       <div class="project-list__grid" *ngIf="projects.length > 0; else emptyState">
         <app-project-card
-          *ngFor="let project of projects"
+          *ngFor="let project of projects; trackBy: trackByProjectId"
           [project]="project">
         </app-project-card>
       </div>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { AppNotification, NotificationType } from '../../../../shared/models/notification.model';
 
 /**
@@ -12,6 +12,7 @@ import { AppNotification, NotificationType } from '../../../../shared/models/not
   selector: 'app-notification-item',
   templateUrl: './notification-item.component.html',
   styleUrls: ['./notification-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationItemComponent {
   @Input() notification!: AppNotification;

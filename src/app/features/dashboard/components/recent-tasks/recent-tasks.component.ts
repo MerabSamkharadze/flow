@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Task, PRIORITY_CONFIG, TaskPriority } from '../../../../shared/models/task.model';
 
@@ -12,6 +12,7 @@ import { Task, PRIORITY_CONFIG, TaskPriority } from '../../../../shared/models/t
   selector: 'app-recent-tasks',
   templateUrl: './recent-tasks.component.html',
   styleUrls: ['./recent-tasks.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecentTasksComponent {
   /** Tasks to display (max 5, pre-sorted by parent) */

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Column } from '../../../../shared/models/column.model';
 import { Task } from '../../../../shared/models/task.model';
@@ -16,6 +16,7 @@ import { Task } from '../../../../shared/models/task.model';
   selector: 'app-board-column',
   templateUrl: './board-column.component.html',
   styleUrls: ['./board-column.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardColumnComponent {
   @Input() column!: Column;
@@ -71,5 +72,10 @@ export class BoardColumnComponent {
   /** Forward the CDK drop event to the parent */
   onDrop(event: CdkDragDrop<Task[]>): void {
     this.taskDropped.emit(event);
+  }
+
+  /** TrackBy for task cards — improves ngFor performance */
+  trackByTaskId(_index: number, task: Task): string {
+    return task.id;
   }
 }

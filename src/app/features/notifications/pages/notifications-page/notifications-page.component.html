@@ -30,7 +30,7 @@
 
       <ng-container *ngIf="notifications.length > 0; else emptyState">
         <app-notification-item
-          *ngFor="let notification of notifications"
+          *ngFor="let notification of notifications; trackBy: trackByNotifId"
           [notification]="notification"
           (clicked)="onNotificationClick($event)">
         </app-notification-item>

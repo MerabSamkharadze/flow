@@ -1,0 +1,70 @@
+// ==========================================================================
+// Not Found (404) Page — BEM
+// Block: .not-found
+// ==========================================================================
+
+@use '../../../styles/abstracts/variables' as *;
+@use '../../../styles/abstracts/mixins' as *;
+
+.not-found {
+  @include flex-center;
+  @include flex-column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: $spacing-xl;
+  text-align: center;
+  background-color: $color-bg;
+
+  // --------------------------------------------------
+  // Element: large 404 number
+  // --------------------------------------------------
+  &__code {
+    font-size: 8rem;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    line-height: 1;
+    margin: 0;
+    opacity: 0.15;
+  }
+
+  // --------------------------------------------------
+  // Element: title
+  // --------------------------------------------------
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: $spacing-md 0 $spacing-sm;
+  }
+
+  // --------------------------------------------------
+  // Element: description
+  // --------------------------------------------------
+  &__message {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0 0 $spacing-xl;
+    max-width: 360px;
+  }
+
+  // --------------------------------------------------
+  // Element: action button
+  // --------------------------------------------------
+  &__action {
+    @include button-reset;
+    @include focus-ring;
+    display: inline-flex;
+    padding: $spacing-sm $spacing-xl;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    text-decoration: none;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+}

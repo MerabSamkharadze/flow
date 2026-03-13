@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { AuthGuard } from './core/auth/guards/auth.guard';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 
 /**
  * AppRoutingModule — top-level routing configuration.
@@ -71,8 +72,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
-  // Wildcard — redirect unknown routes to root
-  { path: '**', redirectTo: '' },
+  // Wildcard — show 404 page for unknown routes
+  { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({

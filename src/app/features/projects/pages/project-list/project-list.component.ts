@@ -47,4 +47,9 @@ export class ProjectListComponent implements OnInit {
   onNewProject(): void {
     this.router.navigate(['/projects/new']);
   }
+
+  /** TrackBy for project cards — improves ngFor performance */
+  trackByProjectId(_index: number, project: Project): string {
+    return project.id;
+  }
 }

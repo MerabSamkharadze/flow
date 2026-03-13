@@ -1,5 +1,254 @@
 // ==========================================================================
-// Login Component
-// Uses shared .auth BEM block defined in _auth-shared.scss
-// No component-specific overrides needed — all styling via shared block
+// Login Page — BEM
+// Block: .login-page
+// Split layout: branding left, form right
 // ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  // --------------------------------------------------
+  // Left panel: branding with animated gradient
+  // --------------------------------------------------
+  &__branding {
+    display: none;
+    width: 45%;
+    background: linear-gradient(135deg, $color-primary-dark 0%, $color-primary 50%, $color-primary-light 100%);
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+    color: $color-text-inverse;
+    @include flex-center;
+    padding: $spacing-3xl;
+
+    @include respond-to('lg') {
+      display: flex;
+    }
+  }
+
+  &__branding-content {
+    max-width: 400px;
+  }
+
+  // --------------------------------------------------
+  // Element: logo
+  // --------------------------------------------------
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__logo-text {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    letter-spacing: 2px;
+  }
+
+  // --------------------------------------------------
+  // Element: tagline
+  // --------------------------------------------------
+  &__tagline {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    margin: 0 0 $spacing-xl;
+  }
+
+  // --------------------------------------------------
+  // Element: feature bullets
+  // --------------------------------------------------
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    @include flex-column;
+    gap: $spacing-md;
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: $font-size-base;
+    opacity: 0.9;
+  }
+
+  // --------------------------------------------------
+  // Right panel: form area
+  // --------------------------------------------------
+  &__form-panel {
+    flex: 1;
+    @include flex-center;
+    padding: $spacing-xl;
+    background-color: $color-bg;
+  }
+
+  &__form-wrapper {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  // --------------------------------------------------
+  // Element: header
+  // --------------------------------------------------
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-xs;
+  }
+
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__link {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary-dark;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: error banner
+  // --------------------------------------------------
+  &__error {
+    padding: $spacing-sm $spacing-md;
+    margin-bottom: $spacing-md;
+    background-color: rgba($color-error, 0.1);
+    border: 1px solid rgba($color-error, 0.3);
+    border-radius: $border-radius-sm;
+    color: $color-error;
+    font-size: $font-size-sm;
+  }
+
+  // --------------------------------------------------
+  // Element: form
+  // --------------------------------------------------
+  &__form {
+    @include flex-column;
+    gap: $spacing-md;
+  }
+
+  &__field {
+    @include flex-column;
+    gap: $spacing-xs;
+  }
+
+  &__label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  &__forgot-link {
+    font-size: $font-size-xs;
+    color: $color-primary;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary-dark;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-base;
+    color: $color-text-primary;
+    background-color: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+
+    &::placeholder {
+      color: $color-text-disabled;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+    }
+
+    &--error {
+      border-color: $color-error;
+
+      &:focus {
+        border-color: $color-error;
+        box-shadow: 0 0 0 3px rgba($color-error, 0.15);
+      }
+    }
+  }
+
+  &__validation {
+    font-size: $font-size-xs;
+    color: $color-error;
+  }
+
+  // --------------------------------------------------
+  // Element: submit button
+  // --------------------------------------------------
+  &__submit {
+    @include button-reset;
+    @include flex-center;
+    gap: $spacing-sm;
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    margin-top: $spacing-sm;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    // Override spinner padding inside button
+    ::ng-deep .spinner {
+      padding: 0;
+    }
+  }
+}
+
+// --------------------------------------------------
+// Animated gradient background keyframes
+// --------------------------------------------------
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

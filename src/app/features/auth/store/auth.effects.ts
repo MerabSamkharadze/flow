@@ -8,6 +8,9 @@ import { FirebaseService } from '../../../core/services/firebase.service';
 import * as AuthActions from './auth.actions';
 import { AuthUser } from './auth.actions';
 
+/** localStorage key for post-login redirect */
+const REDIRECT_URL_KEY = 'flow_redirect_url';
+
 /**
  * AuthEffects — side effects for authentication actions.
  *
@@ -56,12 +59,23 @@ export class AuthEffects {
     )
   );
 
-  /** On successful login, navigate to the dashboard */
+  /**
+   * On successful login, check for a saved redirect URL.
+   * If one exists, navigate there and clear it. Otherwise go to dashboard.
+   */
   loginSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
-        tap(() => this.router.navigate(['/']))
+        tap(() => {
+          const redirectUrl = localStorage.getItem(REDIRECT_URL_KEY);
+          if (redirectUrl) {
+            localStorage.removeItem(REDIRECT_URL_KEY);
+            this.router.navigateByUrl(redirectUrl);
+          } else {
+            this.router.navigate(['/']);
+          }
+        })
       ),
     { dispatch: false }
   );

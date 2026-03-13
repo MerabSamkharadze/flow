@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * StatsCardComponent — displays a single statistic with icon, value, and label.
@@ -10,6 +10,7 @@ import { Component, Input } from '@angular/core';
   selector: 'app-stats-card',
   templateUrl: './stats-card.component.html',
   styleUrls: ['./stats-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatsCardComponent {
   /** Text label displayed below the value */

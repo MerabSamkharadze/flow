@@ -66,6 +66,11 @@ export class NotificationsPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** TrackBy for notification list — improves ngFor performance */
+  trackByNotifId(_index: number, notification: AppNotification): string {
+    return notification.id;
+  }
+
   /** Handle notification click: mark as read + navigate to the link */
   onNotificationClick(notification: AppNotification): void {
     if (!notification.read && this.userId) {
