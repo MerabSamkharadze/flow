@@ -1,0 +1,115 @@
+// ==========================================================================
+// Notification Item Component — BEM
+// Block: .notification-item
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.notification-item {
+  @include flex(row, flex-start);
+  gap: $spacing-md;
+  padding: 12px $spacing-md;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+  border-left: 3px solid transparent;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $color-border;
+  }
+
+  &:hover {
+    background-color: $color-surface-hover;
+  }
+
+  // --------------------------------------------------
+  // Modifier: unread — emphasized styling
+  // --------------------------------------------------
+  &--unread {
+    border-left-color: $color-primary;
+    background-color: rgba($color-primary, 0.03);
+
+    .notification-item__title {
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+    }
+
+    &:hover {
+      background-color: rgba($color-primary, 0.06);
+    }
+  }
+
+  // --------------------------------------------------
+  // Actor avatar
+  // --------------------------------------------------
+  &__avatar {
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-full;
+    background: linear-gradient(135deg, $color-primary, $color-primary-light);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: $border-radius-full;
+    object-fit: cover;
+  }
+
+  &__avatar-initials {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+  }
+
+  // --------------------------------------------------
+  // Content area
+  // --------------------------------------------------
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__top-row {
+    @include flex-between;
+    gap: $spacing-sm;
+    margin-bottom: 2px;
+  }
+
+  &__title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-regular;
+    color: $color-text-primary;
+    @include text-truncate;
+  }
+
+  &__time {
+    font-size: $font-size-xs;
+    color: $color-text-disabled;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__body {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: $line-height-base;
+    @include text-truncate;
+  }
+
+  // --------------------------------------------------
+  // Type icon
+  // --------------------------------------------------
+  &__type {
+    @include flex-center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: $color-text-disabled;
+    margin-top: 2px;
+  }
+}

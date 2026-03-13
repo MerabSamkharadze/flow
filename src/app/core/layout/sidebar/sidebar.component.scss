@@ -102,6 +102,12 @@
     font-size: $font-size-lg;
     flex-shrink: 0;
     line-height: 1;
+    position: relative;
+
+    // Badged variant — allows positioning the dot indicator
+    &--badged {
+      position: relative;
+    }
   }
 
   &__nav-label {
@@ -109,6 +115,39 @@
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     white-space: nowrap;
+    flex: 1;
+  }
+
+  // --------------------------------------------------
+  // Element: icon dot badge — small red dot on the nav icon
+  // Visible primarily in collapsed mode when label is hidden
+  // --------------------------------------------------
+  &__icon-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: $color-error;
+    border-radius: $border-radius-full;
+    border: 2px solid $color-gray-900; // matches sidebar bg for cut-out effect
+  }
+
+  // --------------------------------------------------
+  // Element: numeric badge pill — shown to the right of the label
+  // --------------------------------------------------
+  &__nav-badge {
+    @include flex-center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background-color: $color-error;
+    color: $color-text-inverse;
+    font-size: 10px;
+    font-weight: $font-weight-bold;
+    border-radius: $border-radius-full;
+    line-height: 1;
+    flex-shrink: 0;
   }
 
   // --------------------------------------------------
@@ -169,6 +208,11 @@
     // Separator shrinks to fit collapsed width
     .sidebar__separator {
       margin: 0 $spacing-sm;
+    }
+
+    // Hide the numeric badge in collapsed mode — the dot indicator is enough
+    .sidebar__nav-badge {
+      display: none;
     }
   }
 }

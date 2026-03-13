@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { NotificationsPageComponent } from './pages/notifications-page/notifications-page.component';
 
 const routes: Routes = [
-  { path: '', component: NotificationsComponent },
+  { path: '', component: NotificationsPageComponent },
 ];
 
 @NgModule({

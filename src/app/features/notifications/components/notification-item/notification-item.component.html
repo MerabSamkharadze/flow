@@ -1,0 +1,54 @@
+<!-- Notification Item: single notification row in the feed -->
+<div class="notification-item"
+     [class.notification-item--unread]="!notification.read"
+     (click)="onClick()">
+
+  <!-- Actor avatar -->
+  <div class="notification-item__avatar">
+    <img *ngIf="hasAvatar"
+         class="notification-item__avatar-img"
+         [src]="notification.actorAvatar"
+         [alt]="notification.actorName" />
+    <span *ngIf="!hasAvatar" class="notification-item__avatar-initials">
+      {{ actorInitial }}
+    </span>
+  </div>
+
+  <!-- Content: title, body, timestamp -->
+  <div class="notification-item__content">
+    <div class="notification-item__top-row">
+      <span class="notification-item__title">{{ notification.title }}</span>
+      <span class="notification-item__time">{{ relativeTime }}</span>
+    </div>
+    <p class="notification-item__body">{{ notification.body }}</p>
+  </div>
+
+  <!-- Type icon -->
+  <div class="notification-item__type" [title]="typeLabel">
+    <!-- Comment icon -->
+    <svg *ngIf="notification.type === 'comment_added'"
+         width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+
+    <!-- Task icon (assigned / updated) -->
+    <svg *ngIf="notification.type === 'task_assigned' || notification.type === 'task_updated'"
+         width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 11l3 3L22 4"/>
+      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+    </svg>
+
+    <!-- Member icon -->
+    <svg *ngIf="notification.type === 'member_added'"
+         width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="8.5" cy="7" r="4"/>
+      <line x1="20" y1="8" x2="20" y2="14"/>
+      <line x1="23" y1="11" x2="17" y2="11"/>
+    </svg>
+  </div>
+
+</div>

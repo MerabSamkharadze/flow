@@ -1,0 +1,58 @@
+<!-- Notifications Page: full-page notification feed with read/unread management -->
+<div class="notifications-page">
+  <div class="notifications-page__wrapper">
+
+    <!-- Page header -->
+    <div class="notifications-page__header">
+      <div class="notifications-page__header-left">
+        <h1 class="notifications-page__title">Notifications</h1>
+        <span class="notifications-page__badge" *ngIf="(unreadCount$ | async) as count">
+          {{ count }}
+        </span>
+      </div>
+      <button
+        class="notifications-page__mark-all-btn"
+        *ngIf="(unreadCount$ | async) as count"
+        (click)="onMarkAllRead()">
+        Mark all as read
+      </button>
+    </div>
+
+    <!-- Loading spinner -->
+    <div *ngIf="loading$ | async" class="notifications-page__loading">
+      Loading notifications...
+    </div>
+
+    <!-- Notification list -->
+    <div class="notifications-page__list"
+         *ngIf="!(loading$ | async) && (notifications$ | async) as notifications">
+
+      <ng-container *ngIf="notifications.length > 0; else emptyState">
+        <app-notification-item
+          *ngFor="let notification of notifications"
+          [notification]="notification"
+          (clicked)="onNotificationClick($event)">
+        </app-notification-item>
+      </ng-container>
+
+      <!-- Empty state -->
+      <ng-template #emptyState>
+        <div class="notifications-page__empty">
+          <div class="notifications-page__empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <p class="notifications-page__empty-text">You're all caught up!</p>
+          <p class="notifications-page__empty-hint">
+            No new notifications. We'll let you know when something happens.
+          </p>
+        </div>
+      </ng-template>
+
+    </div>
+
+  </div>
+</div>

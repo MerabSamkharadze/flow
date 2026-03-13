@@ -1,0 +1,193 @@
+// ==========================================================================
+// My Projects Component — BEM
+// Block: .my-projects
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.my-projects {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+
+  // --------------------------------------------------
+  // Section header
+  // --------------------------------------------------
+  &__header {
+    @include flex-between;
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+  }
+
+  &__link {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // --------------------------------------------------
+  // Project cards list
+  // --------------------------------------------------
+  &__list {
+    padding: $spacing-md;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__card {
+    padding: $spacing-md;
+    border: 1px solid $color-border;
+    border-left: 4px solid; // color set dynamically via [style.border-left-color]
+    border-radius: $border-radius-md;
+    cursor: pointer;
+    transition: background-color $transition-fast, box-shadow $transition-fast;
+
+    &:hover {
+      background-color: $color-surface-hover;
+      box-shadow: $shadow-sm;
+    }
+  }
+
+  &__card-header {
+    @include flex-between;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__card-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    @include text-truncate;
+    flex: 1;
+    margin-right: $spacing-sm;
+  }
+
+  // --------------------------------------------------
+  // Status badge
+  // --------------------------------------------------
+  &__card-status {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    padding: 2px $spacing-sm;
+    border-radius: $border-radius-full;
+    white-space: nowrap;
+
+    &--active {
+      background-color: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+
+    &--on-hold {
+      background-color: rgba($color-warning, 0.1);
+      color: $color-warning;
+    }
+
+    &--completed {
+      background-color: rgba($color-info, 0.1);
+      color: $color-info;
+    }
+
+    &--archived {
+      background-color: rgba($color-gray-400, 0.15);
+      color: $color-gray-600;
+    }
+  }
+
+  // --------------------------------------------------
+  // Footer: members + progress bar
+  // --------------------------------------------------
+  &__card-footer {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__card-members {
+    @include flex(row, center);
+    gap: 4px;
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    flex-shrink: 0;
+  }
+
+  &__progress {
+    flex: 1;
+    height: 4px;
+    background-color: $color-gray-200;
+    border-radius: $border-radius-full;
+    overflow: hidden;
+  }
+
+  &__progress-bar {
+    height: 100%;
+    border-radius: $border-radius-full;
+    transition: width $transition-base;
+  }
+
+  &__progress-text {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+    flex-shrink: 0;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  // --------------------------------------------------
+  // New project button
+  // --------------------------------------------------
+  &__new-btn {
+    @include button-reset;
+    width: calc(100% - #{$spacing-md * 2});
+    margin: 0 $spacing-md $spacing-md;
+    padding: $spacing-sm;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    border: 1px dashed $color-border;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast, border-color $transition-fast;
+
+    &:hover {
+      background-color: $color-primary-bg;
+      border-color: $color-primary;
+    }
+  }
+
+  // --------------------------------------------------
+  // Empty state
+  // --------------------------------------------------
+  &__empty {
+    @include flex-column;
+    align-items: center;
+    text-align: center;
+    padding: $spacing-xl $spacing-lg;
+  }
+
+  &__empty-text {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-xs;
+  }
+
+  &__empty-hint {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+}

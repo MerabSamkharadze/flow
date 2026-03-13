@@ -57,6 +57,9 @@
     gap: $spacing-sm;
   }
 
+  // --------------------------------------------------
+  // Element: action button (bell) — positioned for badge overlay
+  // --------------------------------------------------
   &__action {
     @include button-reset;
     @include flex-center;
@@ -76,6 +79,26 @@
   &__action-icon {
     font-size: $font-size-lg;
     line-height: 1;
+  }
+
+  // --------------------------------------------------
+  // Element: notification unread badge — red pill on bell icon
+  // --------------------------------------------------
+  &__notif-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    @include flex-center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    background-color: $color-error;
+    color: $color-text-inverse;
+    font-size: 10px;
+    font-weight: $font-weight-bold;
+    border-radius: $border-radius-full;
+    line-height: 1;
+    pointer-events: none;
   }
 
   // --------------------------------------------------

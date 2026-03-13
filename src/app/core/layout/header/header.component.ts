@@ -1,28 +1,34 @@
-import { Component, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, of } from 'rxjs';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 import { logout } from '../../../features/auth/store';
 import { selectUser } from '../../../features/auth/store';
+import { AuthUser } from '../../../features/auth/store/auth.actions';
+import { NotificationsService } from '../../services/notifications.service';
 
 /**
  * HeaderComponent — top navigation bar with hamburger toggle,
- * current page title (derived from the active route), and user profile.
+ * current page title (derived from the active route), user profile,
+ * and notification bell with unread badge.
  */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidebar = new EventEmitter<void>();
 
   user$ = this.store.select(selectUser);
 
   /** Current page title derived from the active route */
   pageTitle = 'Dashboard';
+
+  /** Unread notification count — drives the bell badge */
+  unreadCount$: Observable<number> = of(0);
 
   private destroy$ = new Subject<void>();
 
@@ -40,7 +46,8 @@ export class HeaderComponent implements OnDestroy {
 
   constructor(
     private store: Store,
-    private router: Router
+    private router: Router,
+    private notificationsService: NotificationsService
   ) {
     // Update page title on every navigation
     this.router.events
@@ -52,6 +59,16 @@ export class HeaderComponent implements OnDestroy {
         const url = (event as NavigationEnd).urlAfterRedirects || (event as NavigationEnd).url;
         this.pageTitle = this.extractTitle(url);
       });
+  }
+
+  ngOnInit(): void {
+    // Subscribe to the authenticated user, then stream unread count
+    this.unreadCount$ = this.store.select(selectUser).pipe(
+      switchMap((user) => {
+        if (!user) return of(0);
+        return this.notificationsService.getUnreadCount(user.uid);
+      })
+    );
   }
 
   onMenuToggle(): void {
@@ -69,15 +86,11 @@ export class HeaderComponent implements OnDestroy {
 
   /** Extract a readable page title from the current URL */
   private extractTitle(url: string): string {
-    // Split URL and remove empty/query segments
     const segments = url.split('/').filter((s) => s && !s.startsWith('?'));
-
-    // Walk segments from the end to find the first known route title
     for (let i = segments.length - 1; i >= 0; i--) {
       const title = this.routeTitles[segments[i]];
       if (title) return title;
     }
-
     return 'Dashboard';
   }
 }
