@@ -70,7 +70,7 @@
           <div class="project-settings__field">
             <label class="project-settings__label">Status</label>
             <select class="project-settings__select" formControlName="status">
-              <option *ngFor="let s of statuses" [value]="s">
+              <option *ngFor="let s of statuses; trackBy: trackByValue" [value]="s">
                 {{ s === 'on-hold' ? 'On Hold' : (s | titlecase) }}
               </option>
             </select>
@@ -81,7 +81,7 @@
             <label class="project-settings__label">Color</label>
             <div class="project-settings__colors">
               <button
-                *ngFor="let c of colors"
+                *ngFor="let c of colors; trackBy: trackByValue"
                 type="button"
                 class="project-settings__color-circle"
                 [style.background-color]="c"

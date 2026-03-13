@@ -12,6 +12,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./settings-shell.component.scss'],
 })
 export class SettingsShellComponent {
+  trackByRoute(_index: number, tab: { route: string }): string {
+    return tab.route;
+  }
+
   /** Navigation tabs for the settings sidebar */
   tabs = [
     { label: 'Profile', route: 'profile', icon: 'user' },

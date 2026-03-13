@@ -9,7 +9,8 @@
       "Bash(git rm:*)",
       "Bash(find /c/Users/msamkharadze/Desktop/personal/flow/src -type f \\\\\\( -name \"*.ts\" -o -name \"*.html\" -o -name \"*.scss\" \\\\\\) | xargs grep -l \"TODO\\\\|FIXME\\\\|PLACEHOLDER\\\\|coming soon\\\\|Coming soon\\\\|placeholder\" 2>/dev/null | head -30)",
       "Bash(/tmp/structure.txt:*)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

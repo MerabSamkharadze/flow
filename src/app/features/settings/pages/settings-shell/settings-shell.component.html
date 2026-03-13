@@ -6,7 +6,7 @@
     <h1 class="settings-shell__title">Settings</h1>
 
     <ul class="settings-shell__tabs">
-      <li class="settings-shell__tab" *ngFor="let tab of tabs">
+      <li class="settings-shell__tab" *ngFor="let tab of tabs; trackBy: trackByRoute">
         <a class="settings-shell__tab-link"
            [routerLink]="tab.route"
            routerLinkActive="settings-shell__tab-link--active">

@@ -29,6 +29,10 @@ export class TaskListComponent {
   /** Emitted when the user clicks a task row */
   @Output() taskClicked = new EventEmitter<Task>();
 
+  trackByTaskId(_index: number, task: Task): string {
+    return task.id;
+  }
+
   /** Get the project name for a task */
   getProjectName(task: Task): string {
     return this.projectMap[task.projectId]?.name || 'Unknown';

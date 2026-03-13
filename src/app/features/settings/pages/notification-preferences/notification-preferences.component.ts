@@ -42,6 +42,10 @@ export class NotificationPreferencesComponent implements OnInit, OnDestroy {
     { key: 'taskUpdated', label: 'Task status updated', description: 'Get notified when a task you are assigned to changes status.' },
   ];
 
+  trackByKey(_index: number, row: { key: string }): string {
+    return row.key;
+  }
+
   /** Loading state */
   loading = true;
 

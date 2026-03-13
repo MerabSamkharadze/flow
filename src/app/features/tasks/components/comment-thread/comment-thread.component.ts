@@ -18,6 +18,10 @@ export class CommentThreadComponent {
   @Output() editComment = new EventEmitter<{ commentId: string; content: string }>();
   @Output() deleteComment = new EventEmitter<string>();
 
+  trackByCommentId(_index: number, comment: Comment): string {
+    return comment.id;
+  }
+
   /** Currently editing comment ID */
   editingId: string | null = null;
   editContent = '';

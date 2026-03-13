@@ -80,4 +80,8 @@ export class MembersPanelComponent {
   onRoleChange(userId: string, newRole: MemberRole): void {
     this.changeRole.emit({ userId, newRole });
   }
+
+  trackByUserId(_index: number, member: Member): string {
+    return member.userId;
+  }
 }

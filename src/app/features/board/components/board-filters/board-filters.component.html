@@ -16,7 +16,7 @@
     <span class="board-filters__label">Priority:</span>
     <div class="board-filters__toggles">
       <button
-        *ngFor="let p of priorities"
+        *ngFor="let p of priorities; trackBy: trackByPriority"
         class="board-filters__toggle"
         [class.board-filters__toggle--active]="isPrioritySelected(p)"
         (click)="togglePriority(p)">

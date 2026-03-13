@@ -44,6 +44,18 @@ export class TaskFiltersComponent implements OnInit, OnDestroy {
     { value: 'createdAt', label: 'Created' },
   ];
 
+  trackByValue(_index: number, item: string): string {
+    return item;
+  }
+
+  trackByProjectId(_index: number, project: Project): string {
+    return project.id;
+  }
+
+  trackBySortValue(_index: number, opt: { value: string }): string {
+    return opt.value;
+  }
+
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {

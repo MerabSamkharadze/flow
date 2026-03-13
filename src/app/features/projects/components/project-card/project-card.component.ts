@@ -47,4 +47,8 @@ export class ProjectCardComponent {
   get remainingMemberCount(): number {
     return Math.max(0, this.project.memberIds.length - 3);
   }
+
+  trackByMemberId(_index: number, memberId: string): string {
+    return memberId;
+  }
 }

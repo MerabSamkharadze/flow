@@ -52,7 +52,7 @@
             type="button"
             class="project-form__color-swatch"
             [class.project-form__color-swatch--selected]="f['color'].value === color"
-            *ngFor="let color of colors"
+            *ngFor="let color of colors; trackBy: trackByColor"
             [style.background-color]="color"
             (click)="selectColor(color)">
           </button>

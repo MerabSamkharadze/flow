@@ -9,7 +9,7 @@
 
   <!-- Project cards -->
   <div class="my-projects__list" *ngIf="visibleProjects.length > 0; else emptyState">
-    <div *ngFor="let project of visibleProjects"
+    <div *ngFor="let project of visibleProjects; trackBy: trackByProjectId"
          class="my-projects__card"
          [style.border-left-color]="project.color"
          (click)="onClick(project)">

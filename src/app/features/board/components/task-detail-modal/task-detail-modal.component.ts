@@ -51,6 +51,14 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
   readonly statuses: TaskStatus[] = ['todo', 'in-progress', 'in-review', 'done'];
   readonly priorityConfig = PRIORITY_CONFIG;
 
+  trackByIndex(index: number): number {
+    return index;
+  }
+
+  trackBySubtaskId(_index: number, sub: Subtask): string {
+    return sub.id;
+  }
+
   /** Local copy of subtasks for manipulation before save */
   subtasks: Subtask[] = [];
 

@@ -14,7 +14,7 @@
     <!-- Options row: priority + assignee -->
     <div class="task-form__options">
       <select class="task-form__select" formControlName="priority">
-        <option *ngFor="let p of priorities" [value]="p">
+        <option *ngFor="let p of priorities; trackBy: trackByPriority" [value]="p">
           {{ p | titlecase }}
         </option>
       </select>

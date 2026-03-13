@@ -14,7 +14,7 @@
 
   <!-- Members list -->
   <ul class="members-panel__list">
-    <li class="members-panel__item" *ngFor="let member of members">
+    <li class="members-panel__item" *ngFor="let member of members; trackBy: trackByUserId">
 
       <!-- Avatar -->
       <div class="members-panel__avatar"

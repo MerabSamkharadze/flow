@@ -222,6 +222,10 @@ export class ProjectSettingsComponent implements OnInit, OnDestroy {
       .join('');
   }
 
+  trackByValue(_index: number, value: string): string {
+    return value;
+  }
+
   trackMember(_index: number, member: Member): string {
     return member.userId;
   }

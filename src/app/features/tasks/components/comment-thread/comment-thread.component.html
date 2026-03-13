@@ -7,7 +7,7 @@
   </p>
 
   <!-- Comment items -->
-  <div class="comment-thread__item" *ngFor="let comment of comments">
+  <div class="comment-thread__item" *ngFor="let comment of comments; trackBy: trackByCommentId">
 
     <!-- Avatar -->
     <div class="comment-thread__avatar">

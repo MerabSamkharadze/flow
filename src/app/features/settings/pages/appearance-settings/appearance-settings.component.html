@@ -10,7 +10,7 @@
 
     <div class="appearance-settings__theme-grid">
       <button
-        *ngFor="let t of themes"
+        *ngFor="let t of themes; trackBy: trackByTheme"
         class="appearance-settings__theme-card"
         [class.appearance-settings__theme-card--selected]="theme === t.value"
         (click)="onThemeChange(t.value)"
@@ -50,7 +50,7 @@
 
     <div class="appearance-settings__density-grid">
       <button
-        *ngFor="let d of densities"
+        *ngFor="let d of densities; trackBy: trackByDensity"
         class="appearance-settings__density-card"
         [class.appearance-settings__density-card--selected]="density === d.value"
         (click)="onDensityChange(d.value)"

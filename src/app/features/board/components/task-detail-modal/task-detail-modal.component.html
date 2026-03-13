@@ -36,7 +36,7 @@
         <div class="task-modal__field task-modal__field--half">
           <label class="task-modal__label">Priority</label>
           <select class="task-modal__select" formControlName="priority">
-            <option *ngFor="let p of priorities" [value]="p">
+            <option *ngFor="let p of priorities; trackBy: trackByIndex" [value]="p">
               {{ p | titlecase }}
             </option>
           </select>
@@ -44,7 +44,7 @@
         <div class="task-modal__field task-modal__field--half">
           <label class="task-modal__label">Status</label>
           <select class="task-modal__select" formControlName="status">
-            <option *ngFor="let s of statuses" [value]="s">
+            <option *ngFor="let s of statuses; trackBy: trackByIndex" [value]="s">
               {{ s }}
             </option>
           </select>
@@ -146,7 +146,7 @@
         <ul class="task-modal__subtask-list">
           <li
             class="task-modal__subtask"
-            *ngFor="let sub of subtasks; let i = index">
+            *ngFor="let sub of subtasks; let i = index; trackBy: trackBySubtaskId">
             <label class="task-modal__subtask-check">
               <input
                 type="checkbox"

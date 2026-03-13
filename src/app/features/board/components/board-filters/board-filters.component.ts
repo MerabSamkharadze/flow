@@ -39,6 +39,10 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
   /** All available priorities for the toggle buttons */
   readonly priorities: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
 
+  trackByPriority(_index: number, p: TaskPriority): string {
+    return p;
+  }
+
   /** Whether the filter panel is expanded (for mobile / compact view) */
   isExpanded = false;
 

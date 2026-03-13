@@ -20,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let task of tasks"
+        <tr *ngFor="let task of tasks; trackBy: trackByTaskId"
             class="recent-tasks__row"
             (click)="onClick(task)">
           <td class="recent-tasks__td recent-tasks__td--title">{{ task.title }}</td>

@@ -38,6 +38,14 @@ export class AppearanceSettingsComponent implements OnInit {
     { value: 'compact', label: 'Compact', description: 'Denser layout, more content visible' },
   ];
 
+  trackByTheme(_index: number, t: { value: Theme }): string {
+    return t.value;
+  }
+
+  trackByDensity(_index: number, d: { value: Density }): string {
+    return d.value;
+  }
+
   ngOnInit(): void {
     // Load saved preferences from localStorage
     this.theme = (localStorage.getItem('flow-theme') as Theme) || 'light';

@@ -22,7 +22,7 @@
       <span class="task-filters__group-label">Status</span>
       <div class="task-filters__toggles">
         <button
-          *ngFor="let status of statuses"
+          *ngFor="let status of statuses; trackBy: trackByValue"
           class="task-filters__toggle"
           [class.task-filters__toggle--active]="isStatusSelected(status)"
           (click)="toggleStatus(status)">
@@ -36,7 +36,7 @@
       <span class="task-filters__group-label">Priority</span>
       <div class="task-filters__toggles">
         <button
-          *ngFor="let priority of priorities"
+          *ngFor="let priority of priorities; trackBy: trackByValue"
           class="task-filters__toggle task-filters__toggle--priority"
           [class.task-filters__toggle--active]="isPrioritySelected(priority)"
           (click)="togglePriority(priority)">
@@ -53,7 +53,7 @@
         [value]="selectedProjectId"
         (change)="onProjectChange($any($event.target).value)">
         <option value="">All projects</option>
-        <option *ngFor="let project of projects" [value]="project.id">
+        <option *ngFor="let project of projects; trackBy: trackByProjectId" [value]="project.id">
           {{ project.name }}
         </option>
       </select>
@@ -67,7 +67,7 @@
           class="task-filters__select"
           [value]="sortBy"
           (change)="onSortByChange($any($event.target).value)">
-          <option *ngFor="let opt of sortOptions" [value]="opt.value">
+          <option *ngFor="let opt of sortOptions; trackBy: trackBySortValue" [value]="opt.value">
             {{ opt.label }}
           </option>
         </select>

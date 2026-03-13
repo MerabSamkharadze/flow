@@ -26,6 +26,10 @@ export class TaskFormComponent implements OnInit {
   /** Available priorities for the dropdown */
   readonly priorities: TaskPriority[] = ['low', 'medium', 'high', 'critical'];
 
+  trackByPriority(_index: number, p: TaskPriority): string {
+    return p;
+  }
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {

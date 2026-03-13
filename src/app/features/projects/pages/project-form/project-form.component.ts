@@ -45,6 +45,10 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  trackByColor(_index: number, color: string): string {
+    return color;
+  }
+
   get f() {
     return this.projectForm.controls;
   }

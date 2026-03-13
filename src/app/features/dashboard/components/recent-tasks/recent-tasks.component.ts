@@ -23,6 +23,10 @@ export class RecentTasksComponent {
 
   constructor(private router: Router) {}
 
+  trackByTaskId(_index: number, task: Task): string {
+    return task.id;
+  }
+
   /** Navigate to the task's project board */
   onClick(task: Task): void {
     this.router.navigate(['/projects', task.projectId, 'board']);

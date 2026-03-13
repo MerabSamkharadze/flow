@@ -37,7 +37,7 @@
       <div class="project-card__members">
         <span
           class="project-card__avatar"
-          *ngFor="let memberId of visibleMembers"
+          *ngFor="let memberId of visibleMembers; trackBy: trackByMemberId"
           [style.background-color]="project.color">
           {{ memberId.charAt(0) | uppercase }}
         </span>

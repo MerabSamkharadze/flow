@@ -40,6 +40,10 @@ export class MyProjectsComponent {
       .join(' ');
   }
 
+  trackByProjectId(_index: number, project: Project): string {
+    return project.id;
+  }
+
   /** Compute a mock progress percentage based on project status */
   getProgress(project: Project): number {
     switch (project.status) {

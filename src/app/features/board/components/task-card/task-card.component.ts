@@ -52,6 +52,10 @@ export class TaskCardComponent {
     return this.task.subtasks.length;
   }
 
+  trackByLabel(_index: number, label: string): string {
+    return label;
+  }
+
   /** Handle card click — emit task for detail modal */
   onCardClick(): void {
     this.taskClicked.emit(this.task);
