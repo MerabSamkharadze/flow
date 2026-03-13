@@ -6,6 +6,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
  * Emits the comment text on submit, then clears the input.
  */
 @Component({
+  standalone: false,
   selector: 'app-comment-input',
   templateUrl: './comment-input.component.html',
   styleUrls: ['./comment-input.component.scss'],

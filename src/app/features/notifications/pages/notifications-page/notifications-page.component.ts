@@ -23,6 +23,7 @@ import {
  * read/unread styling, and provides mark-as-read functionality.
  */
 @Component({
+  standalone: false,
   selector: 'app-notifications-page',
   templateUrl: './notifications-page.component.html',
   styleUrls: ['./notifications-page.component.scss'],

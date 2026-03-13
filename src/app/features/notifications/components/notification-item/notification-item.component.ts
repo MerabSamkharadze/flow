@@ -9,6 +9,7 @@ import { AppNotification, NotificationType } from '../../../../shared/models/not
  * (left border + bold title).
  */
 @Component({
+  standalone: false,
   selector: 'app-notification-item',
   templateUrl: './notification-item.component.html',
   styleUrls: ['./notification-item.component.scss'],

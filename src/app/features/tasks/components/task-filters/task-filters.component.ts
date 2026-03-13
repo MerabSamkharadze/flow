@@ -14,6 +14,7 @@ import { TaskFilters, EMPTY_TASK_FILTERS } from '../../models/task-filters.model
  * Emits the full TaskFilters object whenever any filter changes.
  */
 @Component({
+  standalone: false,
   selector: 'app-task-filters',
   templateUrl: './task-filters.component.html',
   styleUrls: ['./task-filters.component.scss'],

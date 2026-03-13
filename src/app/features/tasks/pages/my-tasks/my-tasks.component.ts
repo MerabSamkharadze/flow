@@ -32,6 +32,7 @@ import {
  *   - Dispatches updateTaskStatus for "Mark as Done" quick action
  */
 @Component({
+  standalone: false,
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrls: ['./my-tasks.component.scss'],

@@ -9,6 +9,7 @@ import { Task, PRIORITY_CONFIG, TaskPriority } from '../../../../shared/models/t
  * Clicking a task row navigates to that task's project board.
  */
 @Component({
+  standalone: false,
   selector: 'app-recent-tasks',
   templateUrl: './recent-tasks.component.html',
   styleUrls: ['./recent-tasks.component.scss'],

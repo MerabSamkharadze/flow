@@ -15,6 +15,7 @@ import { NotificationsService } from '../../services/notifications.service';
  * and notification bell with unread badge.
  */
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

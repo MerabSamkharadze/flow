@@ -8,6 +8,7 @@ import { Component, Input } from '@angular/core';
  * @Input message — optional loading text displayed below the spinner
  */
 @Component({
+  standalone: false,
   selector: 'app-loading-spinner',
   templateUrl: './loading-spinner.component.html',
   styleUrls: ['./loading-spinner.component.scss'],

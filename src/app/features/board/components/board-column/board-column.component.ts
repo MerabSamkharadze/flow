@@ -13,6 +13,7 @@ import { Column } from '../../../../shared/models/column.model';
 import { Task } from '../../../../shared/models/task.model';
 
 @Component({
+  standalone: false,
   selector: 'app-board-column',
   templateUrl: './board-column.component.html',
   styleUrls: ['./board-column.component.scss'],

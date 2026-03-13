@@ -16,6 +16,7 @@ import * as ProjectsActions from '../../store/projects.actions';
 type SettingsTab = 'general' | 'members' | 'danger';
 
 @Component({
+  standalone: false,
   selector: 'app-project-settings',
   templateUrl: './project-settings.component.html',
   styleUrls: ['./project-settings.component.scss'],

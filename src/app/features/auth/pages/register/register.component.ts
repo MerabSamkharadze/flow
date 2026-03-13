@@ -15,6 +15,7 @@ import { selectAuthLoading, selectAuthError } from '../../store';
  * Loading and error states are driven by the store.
  */
 @Component({
+  standalone: false,
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']

@@ -36,6 +36,7 @@ import {
  * observables for the template.
  */
 @Component({
+  standalone: false,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

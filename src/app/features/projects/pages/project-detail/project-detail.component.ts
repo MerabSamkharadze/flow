@@ -16,6 +16,7 @@ import { ProjectsService } from '../../services/projects.service';
 import { BoardService } from '../../../board/services/board.service';
 
 @Component({
+  standalone: false,
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrls: ['./project-detail.component.scss'],

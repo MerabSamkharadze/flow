@@ -10,6 +10,7 @@ import { selectProjectsLoading, selectProjectsError } from '../../store';
 import { selectUser } from '../../../auth/store';
 
 @Component({
+  standalone: false,
   selector: 'app-project-form',
   templateUrl: './project-form.component.html',
   styleUrls: ['./project-form.component.scss']

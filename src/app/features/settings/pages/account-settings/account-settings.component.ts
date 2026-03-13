@@ -10,6 +10,7 @@ import { FirebaseService } from '../../../../core/services/firebase.service';
  * and a danger zone section with a disabled delete-account button.
  */
 @Component({
+  standalone: false,
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.scss'],

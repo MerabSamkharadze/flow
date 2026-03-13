@@ -14,6 +14,7 @@ import { Member, INVITE_ROLES, REMOVE_ROLES, ROLE_CHANGE_ROLES, MemberRole } fro
  *   - "Change Role" dropdown: visible to admin only
  */
 @Component({
+  standalone: false,
   selector: 'app-members-panel',
   templateUrl: './members-panel.component.html',
   styleUrls: ['./members-panel.component.scss'],

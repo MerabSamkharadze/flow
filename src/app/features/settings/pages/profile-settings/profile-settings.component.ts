@@ -14,6 +14,7 @@ import { FirebaseService } from '../../../../core/services/firebase.service';
  * for displayName, bio, and avatar, and saves changes via FirebaseService.
  */
 @Component({
+  standalone: false,
   selector: 'app-profile-settings',
   templateUrl: './profile-settings.component.html',
   styleUrls: ['./profile-settings.component.scss'],

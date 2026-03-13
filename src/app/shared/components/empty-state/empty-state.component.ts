@@ -12,6 +12,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
  * @Output actionClicked — fires when the CTA button is clicked
  */
 @Component({
+  standalone: false,
   selector: 'app-empty-state',
   templateUrl: './empty-state.component.html',
   styleUrls: ['./empty-state.component.scss'],

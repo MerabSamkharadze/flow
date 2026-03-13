@@ -21,6 +21,7 @@ interface NotificationPrefs {
  * and auto-saves on each toggle (no save button needed).
  */
 @Component({
+  standalone: false,
   selector: 'app-notification-preferences',
   templateUrl: './notification-preferences.component.html',
   styleUrls: ['./notification-preferences.component.scss'],

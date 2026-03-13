@@ -7,6 +7,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
  * Supports variant-based coloring for contextual emphasis.
  */
 @Component({
+  standalone: false,
   selector: 'app-stats-card',
   templateUrl: './stats-card.component.html',
   styleUrls: ['./stats-card.component.scss'],

@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
  * Each tab links to a child route (profile, account, appearance, notifications).
  */
 @Component({
+  standalone: false,
   selector: 'app-settings-shell',
   templateUrl: './settings-shell.component.html',
   styleUrls: ['./settings-shell.component.scss'],

@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
  * Provides a link back to the dashboard.
  */
 @Component({
+  standalone: false,
   selector: 'app-not-found',
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],

@@ -5,6 +5,7 @@ import { loadUser } from './features/auth/store/auth.actions';
 import { KeyboardShortcutsService } from './core/services/keyboard-shortcuts.service';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

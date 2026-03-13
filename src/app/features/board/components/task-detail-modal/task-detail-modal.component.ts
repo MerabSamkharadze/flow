@@ -32,6 +32,7 @@ import { selectUser } from '../../../auth/store';
  * and closeModal when the overlay or close button is clicked.
  */
 @Component({
+  standalone: false,
   selector: 'app-task-detail-modal',
   templateUrl: './task-detail-modal.component.html',
   styleUrls: ['./task-detail-modal.component.scss'],

@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
  * Each toast slides in and auto-dismisses after its duration.
  */
 @Component({
+  standalone: false,
   selector: 'app-toast-container',
   templateUrl: './toast-container.component.html',
   styleUrls: ['./toast-container.component.scss'],

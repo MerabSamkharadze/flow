@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
  * Will be expanded with user preferences, notifications, and account settings.
  */
 @Component({
+  standalone: false,
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],

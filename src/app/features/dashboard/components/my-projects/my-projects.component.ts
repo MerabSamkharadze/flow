@@ -7,6 +7,7 @@ import { Project, ProjectStatus } from '../../../../shared/models/project.model'
  * with color accent, status badge, and progress indicator.
  */
 @Component({
+  standalone: false,
   selector: 'app-my-projects',
   templateUrl: './my-projects.component.html',
   styleUrls: ['./my-projects.component.scss'],

@@ -9,6 +9,7 @@ import { Project } from '../../../../shared/models/project.model';
  * Supports "Mark as Done" quick action per task row.
  */
 @Component({
+  standalone: false,
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],

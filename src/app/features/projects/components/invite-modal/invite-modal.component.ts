@@ -20,6 +20,7 @@ export interface InvitePayload {
  * Emits the invite payload to the parent, which dispatches the NgRx action.
  */
 @Component({
+  standalone: false,
   selector: 'app-invite-modal',
   templateUrl: './invite-modal.component.html',
   styleUrls: ['./invite-modal.component.scss']

@@ -22,6 +22,7 @@ import { BoardFilters, EMPTY_FILTERS } from '../../models/board-filters.model';
  * Emits the combined BoardFilters object whenever any filter changes.
  */
 @Component({
+  standalone: false,
   selector: 'app-board-filters',
   templateUrl: './board-filters.component.html',
   styleUrls: ['./board-filters.component.scss'],

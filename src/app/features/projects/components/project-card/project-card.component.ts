@@ -8,6 +8,7 @@ import { Project } from '../../../../shared/models/project.model';
  * progress indicator, and deadline.
  */
 @Component({
+  standalone: false,
   selector: 'app-project-card',
   templateUrl: './project-card.component.html',
   styleUrls: ['./project-card.component.scss']

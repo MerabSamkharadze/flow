@@ -15,6 +15,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
  * @Output cancelled — fires when user clicks cancel or overlay
  */
 @Component({
+  standalone: false,
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],

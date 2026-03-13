@@ -10,6 +10,7 @@ import { Task, TaskPriority } from '../../../../shared/models/task.model';
  * or emits cancelled when the user dismisses the form.
  */
 @Component({
+  standalone: false,
   selector: 'app-task-form',
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss'],

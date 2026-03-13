@@ -14,6 +14,7 @@ import { NotificationsService } from '../../services/notifications.service';
  * service for the real-time unread count.
  */
 @Component({
+  standalone: false,
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],

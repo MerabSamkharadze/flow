@@ -14,6 +14,7 @@ type Density = 'comfortable' | 'compact';
  * user's selection in localStorage and applies a body class for future use.
  */
 @Component({
+  standalone: false,
   selector: 'app-appearance-settings',
   templateUrl: './appearance-settings.component.html',
   styleUrls: ['./appearance-settings.component.scss'],

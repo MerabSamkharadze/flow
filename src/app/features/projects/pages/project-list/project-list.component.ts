@@ -20,6 +20,7 @@ import {
  *   - Shows a loading spinner while data is being fetched
  */
 @Component({
+  standalone: false,
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
   styleUrls: ['./project-list.component.scss'],

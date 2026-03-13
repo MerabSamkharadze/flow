@@ -7,6 +7,7 @@ import { Comment } from '../../../../shared/models/comment.model';
  * Supports inline editing and deletion for comments owned by the current user.
  */
 @Component({
+  standalone: false,
   selector: 'app-comment-thread',
   templateUrl: './comment-thread.component.html',
   styleUrls: ['./comment-thread.component.scss'],

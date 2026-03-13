@@ -11,6 +11,7 @@ import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
  * to open the task detail modal.
  */
 @Component({
+  standalone: false,
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
