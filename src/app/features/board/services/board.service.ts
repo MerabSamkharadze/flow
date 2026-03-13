@@ -63,11 +63,27 @@ export class BoardService {
       .update(changes);
   }
 
-  /** Delete a column */
+  /** Delete a column and all tasks in it (batch operation) */
   async deleteColumn(projectId: string, columnId: string): Promise<void> {
-    await this.firestore
-      .doc(`projects/${projectId}/columns/${columnId}`)
-      .delete();
+    const batch = this.firestore.firestore.batch();
+    const tasksPath = `projects/${projectId}/tasks`;
+
+    // Find all tasks in this column and add them to the batch delete
+    const tasksSnapshot = await this.firestore.firestore
+      .collection(tasksPath)
+      .where('columnId', '==', columnId)
+      .get();
+
+    for (const doc of tasksSnapshot.docs) {
+      batch.delete(doc.ref);
+    }
+
+    // Delete the column document itself
+    const columnRef = this.firestore.firestore
+      .doc(`projects/${projectId}/columns/${columnId}`);
+    batch.delete(columnRef);
+
+    await batch.commit();
   }
 
   // ---------------------------------------------------------------------------

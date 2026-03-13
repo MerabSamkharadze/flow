@@ -46,7 +46,9 @@
       [commentCounts]="(commentCounts$ | async) || {}"
       (addTask)="onAddTask($event)"
       (taskDropped)="onTaskDropped($event, column.id)"
-      (taskClicked)="onTaskClicked($event)">
+      (taskClicked)="onTaskClicked($event)"
+      (renameColumn)="onRenameColumn($event)"
+      (deleteColumnRequest)="onDeleteColumn($event)">
     </app-board-column>
   </div>
 

@@ -6,12 +6,53 @@
     <div class="board-column__header-left">
       <!-- Color dot -->
       <span class="board-column__dot" [style.background-color]="column.color"></span>
-      <!-- Column name -->
-      <h3 class="board-column__name">{{ column.name }}</h3>
+
+      <!-- Column name (display mode) -->
+      <h3 class="board-column__name" *ngIf="!isRenaming">{{ column.name }}</h3>
+
+      <!-- Column name (rename mode) -->
+      <input
+        *ngIf="isRenaming"
+        #renameInput
+        class="board-column__rename-input"
+        type="text"
+        [(ngModel)]="editName"
+        (keyup.enter)="confirmRename()"
+        (keyup.escape)="cancelRename()"
+        (blur)="confirmRename()" />
+
       <!-- Task count (with optional WIP limit) -->
-      <span class="board-column__count" [class.board-column__count--over]="isOverLimit">
+      <span
+        class="board-column__count"
+        [class.board-column__count--over]="isOverLimit"
+        *ngIf="!isRenaming">
         {{ tasks.length }} {{ limitText }}
       </span>
+    </div>
+
+    <!-- Menu button + dropdown -->
+    <div class="board-column__menu">
+      <button
+        class="board-column__menu-btn"
+        type="button"
+        (click)="toggleMenu($event)">
+        &#8942;
+      </button>
+
+      <div class="board-column__dropdown" *ngIf="isMenuOpen">
+        <button
+          class="board-column__dropdown-item"
+          type="button"
+          (click)="startRename()">
+          &#9998; Rename
+        </button>
+        <button
+          class="board-column__dropdown-item board-column__dropdown-item--danger"
+          type="button"
+          (click)="requestDelete()">
+          &#128465; Delete Column
+        </button>
+      </div>
     </div>
   </div>
 
@@ -56,3 +97,14 @@
   </button>
 
 </div>
+
+<!-- Delete column confirmation dialog -->
+<app-confirm-dialog
+  *ngIf="showDeleteConfirm"
+  title="Delete Column"
+  message="Are you sure you want to delete this column? All tasks in this column will also be deleted."
+  confirmLabel="Delete"
+  variant="danger"
+  (confirmed)="onConfirmDelete()"
+  (cancelled)="onCancelDelete()">
+</app-confirm-dialog>

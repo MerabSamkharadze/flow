@@ -189,6 +189,27 @@ export class KanbanViewComponent implements OnInit {
   // Column actions
   // ---------------------------------------------------------------------------
 
+  /** Handle column rename from board-column */
+  onRenameColumn(event: { columnId: string; name: string }): void {
+    this.store.dispatch(
+      BoardActions.updateColumn({
+        projectId: this.projectId,
+        columnId: event.columnId,
+        changes: { name: event.name },
+      })
+    );
+  }
+
+  /** Handle column delete from board-column */
+  onDeleteColumn(columnId: string): void {
+    this.store.dispatch(
+      BoardActions.deleteColumn({
+        projectId: this.projectId,
+        columnId,
+      })
+    );
+  }
+
   onAddColumn(): void {
     const newOrder = 0; // Will be set properly by a dialog
     this.store.dispatch(

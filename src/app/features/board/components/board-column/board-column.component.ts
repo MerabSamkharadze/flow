@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+  ElementRef,
+  HostListener,
+  ViewChild,
+} from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Column } from '../../../../shared/models/column.model';
 import { Task } from '../../../../shared/models/task.model';
 
-/**
- * BoardColumnComponent — a single vertical column on the Kanban board.
- *
- * Each column acts as a CDK drop list. Task cards within it are cdkDrag items.
- * The cdkDropListGroup on the parent board container connects all columns.
- *
- * Supports inline task creation via TaskFormComponent and forwards
- * task clicks up to the kanban-view for opening the detail modal.
- */
 @Component({
   selector: 'app-board-column',
   templateUrl: './board-column.component.html',
@@ -21,60 +21,124 @@ import { Task } from '../../../../shared/models/task.model';
 export class BoardColumnComponent {
   @Input() column!: Column;
   @Input() tasks: Task[] = [];
-
-  /** Comment counts keyed by task ID, passed down from kanban-view */
   @Input() commentCounts: { [taskId: string]: number } = {};
 
-  /** Emits partial task data from the inline task form */
   @Output() addTask = new EventEmitter<{ columnId: string; taskData: Partial<Task> }>();
-
-  /** Emits CDK drop event to the parent kanban-view for dispatch */
   @Output() taskDropped = new EventEmitter<CdkDragDrop<Task[]>>();
-
-  /** Emits when a task card is clicked (to open detail modal) */
   @Output() taskClicked = new EventEmitter<Task>();
+  @Output() renameColumn = new EventEmitter<{ columnId: string; name: string }>();
+  @Output() deleteColumnRequest = new EventEmitter<string>(); // columnId
 
-  /** Whether the inline task form is visible */
+  @ViewChild('renameInput') renameInput!: ElementRef<HTMLInputElement>;
+
   showTaskForm = false;
 
-  /** Whether the column is at or over its WIP limit */
+  /** Column header menu state */
+  isMenuOpen = false;
+  isRenaming = false;
+  editName = '';
+  showDeleteConfirm = false;
+
   get isOverLimit(): boolean {
     return this.column.taskLimit !== null && this.tasks.length >= this.column.taskLimit;
   }
 
-  /** WIP limit display text */
   get limitText(): string {
     if (this.column.taskLimit === null) return '';
     return `/ ${this.column.taskLimit}`;
   }
 
-  /** Show the inline task form */
+  // ── Menu ─────────────────────────────────────────────────────────
+
+  toggleMenu(event: Event): void {
+    event.stopPropagation();
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.board-column__menu')) {
+      this.isMenuOpen = false;
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.isMenuOpen) {
+      this.isMenuOpen = false;
+    }
+    if (this.isRenaming) {
+      this.cancelRename();
+    }
+  }
+
+  // ── Rename ───────────────────────────────────────────────────────
+
+  startRename(): void {
+    this.isMenuOpen = false;
+    this.isRenaming = true;
+    this.editName = this.column.name;
+
+    // Auto-focus after Angular renders the input
+    setTimeout(() => {
+      this.renameInput?.nativeElement?.focus();
+      this.renameInput?.nativeElement?.select();
+    });
+  }
+
+  confirmRename(): void {
+    const name = this.editName.trim();
+    if (name && name !== this.column.name) {
+      this.renameColumn.emit({ columnId: this.column.id, name });
+    }
+    this.isRenaming = false;
+  }
+
+  cancelRename(): void {
+    this.isRenaming = false;
+    this.editName = '';
+  }
+
+  // ── Delete ───────────────────────────────────────────────────────
+
+  requestDelete(): void {
+    this.isMenuOpen = false;
+    this.showDeleteConfirm = true;
+  }
+
+  onConfirmDelete(): void {
+    this.deleteColumnRequest.emit(this.column.id);
+    this.showDeleteConfirm = false;
+  }
+
+  onCancelDelete(): void {
+    this.showDeleteConfirm = false;
+  }
+
+  // ── Task form ────────────────────────────────────────────────────
+
   onShowTaskForm(): void {
     this.showTaskForm = true;
   }
 
-  /** Handle task form submission */
   onTaskCreated(taskData: Partial<Task>): void {
     this.addTask.emit({ columnId: this.column.id, taskData });
     this.showTaskForm = false;
   }
 
-  /** Hide the inline task form */
   onTaskFormCancelled(): void {
     this.showTaskForm = false;
   }
 
-  /** Forward task card click to parent */
   onTaskClicked(task: Task): void {
     this.taskClicked.emit(task);
   }
 
-  /** Forward the CDK drop event to the parent */
   onDrop(event: CdkDragDrop<Task[]>): void {
     this.taskDropped.emit(event);
   }
 
-  /** TrackBy for task cards — improves ngFor performance */
   trackByTaskId(_index: number, task: Task): string {
     return task.id;
   }
