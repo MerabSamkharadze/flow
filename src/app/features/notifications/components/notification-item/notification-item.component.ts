@@ -27,26 +27,6 @@ export class NotificationItemComponent {
     return (this.notification.actorName || '?').charAt(0).toUpperCase();
   }
 
-  /** Compute a human-readable relative timestamp */
-  get relativeTime(): string {
-    const diff = Date.now() - this.notification.createdAt;
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (seconds < 60) return 'Just now';
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    if (days < 7) return `${days}d ago`;
-
-    // Fallback to formatted date for older notifications
-    return new Date(this.notification.createdAt).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    });
-  }
-
   /** Whether to show the actor avatar image or fallback to initials */
   get hasAvatar(): boolean {
     return !!this.notification.actorAvatar;

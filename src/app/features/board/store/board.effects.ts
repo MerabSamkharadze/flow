@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { forkJoin, of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { catchError, exhaustMap, map, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 
 import { BoardService } from '../services/board.service';
+import { NotificationsService } from '../../../core/services/notifications.service';
 import { Column } from '../../../shared/models/column.model';
 import { Task } from '../../../shared/models/task.model';
+import { selectUser } from '../../auth/store';
 import * as BoardActions from './board.actions';
 import { selectTasksMap } from './board.selectors';
 
@@ -22,6 +24,7 @@ export class BoardEffects {
   constructor(
     private actions$: Actions,
     private boardService: BoardService,
+    private notificationsService: NotificationsService,
     private store: Store
   ) {}
 
@@ -110,6 +113,30 @@ export class BoardEffects {
         )
       )
     )
+  );
+
+  /** Notify the assignee when a new task is created and assigned to them */
+  notifyTaskAssigned$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(BoardActions.addTaskSuccess),
+        withLatestFrom(this.store.select(selectUser)),
+        tap(([{ task }, currentUser]) => {
+          if (!task.assigneeId || !currentUser || task.assigneeId === currentUser.uid) return;
+          this.notificationsService.createNotification(task.assigneeId, {
+            userId: task.assigneeId,
+            type: 'task_assigned',
+            title: 'New task assigned',
+            body: `${currentUser.displayName || currentUser.email} assigned you "${task.title}".`,
+            link: `/projects/${task.projectId}`,
+            read: false,
+            createdAt: Date.now(),
+            actorName: currentUser.displayName || currentUser.email || 'Someone',
+            actorAvatar: currentUser.photoURL || null,
+          });
+        })
+      ),
+    { dispatch: false }
   );
 
   /** Updates an existing task in Firestore */

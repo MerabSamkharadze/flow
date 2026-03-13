@@ -18,7 +18,7 @@
   <div class="notification-item__content">
     <div class="notification-item__top-row">
       <span class="notification-item__title">{{ notification.title }}</span>
-      <span class="notification-item__time">{{ relativeTime }}</span>
+      <span class="notification-item__time">{{ notification.createdAt | timeAgo }}</span>
     </div>
     <p class="notification-item__body">{{ notification.body }}</p>
   </div>

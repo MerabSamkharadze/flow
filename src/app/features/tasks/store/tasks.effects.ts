@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap } from 'rxjs/operators';
+import { catchError, exhaustMap, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { TasksService } from '../services/tasks.service';
 import { CommentsService } from '../services/comments.service';
+import { NotificationsService } from '../../../core/services/notifications.service';
+import { selectAllTasks } from '../../board/store/board.selectors';
 import * as TasksActions from './tasks.actions';
 
 /**
@@ -21,6 +23,7 @@ export class TasksEffects {
     private actions$: Actions,
     private tasksService: TasksService,
     private commentsService: CommentsService,
+    private notificationsService: NotificationsService,
     private store: Store
   ) {}
 
@@ -178,6 +181,31 @@ export class TasksEffects {
         )
       )
     )
+  );
+
+  /** Notify the task assignee when a new comment is added */
+  notifyCommentAdded$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TasksActions.addCommentSuccess),
+        withLatestFrom(this.store.select(selectAllTasks)),
+        tap(([{ taskId, comment }, allTasks]) => {
+          const task = allTasks.find((t) => t.id === taskId);
+          if (!task?.assigneeId || task.assigneeId === comment.authorId) return;
+          this.notificationsService.createNotification(task.assigneeId, {
+            userId: task.assigneeId,
+            type: 'comment_added',
+            title: 'New comment on your task',
+            body: `${comment.authorName} commented on "${task.title}".`,
+            link: `/projects/${task.projectId}`,
+            read: false,
+            createdAt: Date.now(),
+            actorName: comment.authorName,
+            actorAvatar: comment.authorAvatar,
+          });
+        })
+      ),
+    { dispatch: false }
   );
 
   // ---------------------------------------------------------------------------

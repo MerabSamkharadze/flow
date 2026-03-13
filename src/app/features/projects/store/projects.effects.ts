@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, exhaustMap, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { ProjectsService } from '../services/projects.service';
+import { NotificationsService } from '../../../core/services/notifications.service';
+import { selectUser } from '../../auth/store';
 import * as ProjectsActions from './projects.actions';
 
 /**
@@ -21,7 +24,9 @@ export class ProjectsEffects {
   constructor(
     private actions$: Actions,
     private projectsService: ProjectsService,
-    private router: Router
+    private notificationsService: NotificationsService,
+    private router: Router,
+    private store: Store
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -153,6 +158,30 @@ export class ProjectsEffects {
         )
       )
     )
+  );
+
+  /** Notify the newly added member */
+  notifyMemberAdded$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ProjectsActions.addMemberSuccess),
+        withLatestFrom(this.store.select(selectUser)),
+        tap(([{ projectId, member }, currentUser]) => {
+          if (!currentUser || member.userId === currentUser.uid) return;
+          this.notificationsService.createNotification(member.userId, {
+            userId: member.userId,
+            type: 'member_added',
+            title: 'Added to project',
+            body: `${currentUser.displayName || currentUser.email} added you to a project.`,
+            link: `/projects/${projectId}`,
+            read: false,
+            createdAt: Date.now(),
+            actorName: currentUser.displayName || currentUser.email || 'Someone',
+            actorAvatar: currentUser.photoURL || null,
+          });
+        })
+      ),
+    { dispatch: false }
   );
 
   /** Removes a member document from Firestore + updates project memberIds array */

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { TimeAgoPipe } from './pipes/time-ago.pipe';
+
 /**
  * SharedModule — reusable components, directives, and pipes.
  *
@@ -14,8 +16,7 @@ import { RouterModule } from '@angular/router';
  */
 @NgModule({
   declarations: [
-    // Shared components, directives, and pipes go here
-    // e.g. ButtonComponent, ModalComponent, StatusBadgePipe
+    TimeAgoPipe,
   ],
   imports: [
     CommonModule,
@@ -30,7 +31,8 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     RouterModule,
 
-    // Export shared declarations here as they're added
+    // Export shared declarations
+    TimeAgoPipe,
   ],
 })
 export class SharedModule {}

@@ -20,7 +20,7 @@
       <!-- Header: author + time -->
       <div class="comment-thread__header">
         <span class="comment-thread__author">{{ comment.authorName }}</span>
-        <span class="comment-thread__time">{{ formatTime(comment.createdAt) }}</span>
+        <span class="comment-thread__time">{{ comment.createdAt | timeAgo }}</span>
         <span class="comment-thread__edited" *ngIf="comment.updatedAt">(edited)</span>
       </div>
 
