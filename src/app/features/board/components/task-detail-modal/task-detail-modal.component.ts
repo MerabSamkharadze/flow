@@ -7,6 +7,8 @@ import {
   OnChanges,
   OnDestroy,
   SimpleChanges,
+  ElementRef,
+  HostListener,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -14,6 +16,8 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Task, Subtask, TaskPriority, TaskStatus, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
 import { Comment } from '../../../../shared/models/comment.model';
+import { Member } from '../../../../shared/models/member.model';
+import { ProjectsService } from '../../../projects/services/projects.service';
 import * as TasksActions from '../../../tasks/store/tasks.actions';
 import { selectCommentsByTask } from '../../../tasks/store/tasks.selectors';
 import { selectUser } from '../../../auth/store';
@@ -56,13 +60,25 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
   currentUserName = '';
   currentUserAvatar: string | null = null;
 
+  /** Assignee autocomplete */
+  members: Member[] = [];
+  filteredMembers: Member[] = [];
+  assigneeSearchText = '';
+  showAssigneeDropdown = false;
+
   private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private store: Store) {}
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private projectsService: ProjectsService,
+    private elRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.loadComments();
+    this.loadMembers();
 
     this.store
       .select(selectUser)
@@ -153,6 +169,86 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
     return Math.round(
       (this.subtasks.filter((s) => s.completed).length / this.subtasks.length) * 100
     );
+  }
+
+  /** Close assignee dropdown when clicking outside it */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.assignee-autocomplete')) {
+      this.showAssigneeDropdown = false;
+    }
+  }
+
+  /** Load project members from Firestore */
+  private loadMembers(): void {
+    this.projectsService
+      .getMembers(this.task.projectId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((members) => {
+        this.members = members;
+        // Set the display text if assignee is already set
+        if (this.task.assigneeId) {
+          const assigned = members.find((m) => m.userId === this.task.assigneeId);
+          if (assigned) {
+            this.assigneeSearchText = assigned.displayName || assigned.email;
+          }
+        }
+      });
+  }
+
+  /** Filter members as user types in the assignee field */
+  onAssigneeSearch(query: string): void {
+    this.assigneeSearchText = query;
+    this.showAssigneeDropdown = true;
+
+    const q = query.toLowerCase().trim();
+    this.filteredMembers = q
+      ? this.members.filter((m) =>
+          m.displayName.toLowerCase().includes(q) ||
+          m.email.toLowerCase().includes(q)
+        )
+      : [...this.members];
+
+    // If user clears the field, also clear the form control
+    if (!query.trim()) {
+      this.form.patchValue({ assigneeId: '' });
+    }
+  }
+
+  /** Handle focus on assignee input — show full member list */
+  onAssigneeFocus(): void {
+    this.filteredMembers = [...this.members];
+    this.showAssigneeDropdown = true;
+  }
+
+  /** Select a member from the dropdown */
+  selectAssignee(member: Member): void {
+    this.assigneeSearchText = member.displayName || member.email;
+    this.form.patchValue({ assigneeId: member.userId });
+    this.showAssigneeDropdown = false;
+  }
+
+  /** Clear the selected assignee */
+  clearAssignee(): void {
+    this.assigneeSearchText = '';
+    this.form.patchValue({ assigneeId: '' });
+    this.showAssigneeDropdown = false;
+  }
+
+  /** trackBy for member list */
+  trackMember(_index: number, member: Member): string {
+    return member.userId;
+  }
+
+  /** Get initials from a display name (for avatar fallback) */
+  getInitials(name: string): string {
+    return name
+      .split(' ')
+      .filter((p) => p.length > 0)
+      .map((p) => p[0].toUpperCase())
+      .slice(0, 2)
+      .join('');
   }
 
   /** Save changes — build the updated Task object and emit */

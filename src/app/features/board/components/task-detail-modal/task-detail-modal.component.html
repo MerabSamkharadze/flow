@@ -55,11 +55,53 @@
       <div class="task-modal__row">
         <div class="task-modal__field task-modal__field--half">
           <label class="task-modal__label">Assignee</label>
-          <input
-            class="task-modal__input"
-            type="text"
-            formControlName="assigneeId"
-            placeholder="User ID" />
+          <div class="assignee-autocomplete">
+            <div class="assignee-autocomplete__input-wrap">
+              <input
+                class="task-modal__input assignee-autocomplete__input"
+                type="text"
+                [value]="assigneeSearchText"
+                (input)="onAssigneeSearch($any($event.target).value)"
+                (focus)="onAssigneeFocus()"
+                placeholder="Search members..." />
+              <button
+                *ngIf="assigneeSearchText"
+                class="assignee-autocomplete__clear"
+                type="button"
+                (click)="clearAssignee()">
+                &times;
+              </button>
+            </div>
+
+            <ul
+              class="assignee-autocomplete__dropdown"
+              *ngIf="showAssigneeDropdown">
+              <li
+                class="assignee-autocomplete__item"
+                *ngFor="let member of filteredMembers; trackBy: trackMember"
+                (mousedown)="selectAssignee(member)">
+                <span
+                  class="assignee-autocomplete__avatar"
+                  *ngIf="!member.avatarUrl">
+                  {{ getInitials(member.displayName || member.email) }}
+                </span>
+                <img
+                  class="assignee-autocomplete__avatar assignee-autocomplete__avatar--img"
+                  *ngIf="member.avatarUrl"
+                  [src]="member.avatarUrl"
+                  [alt]="member.displayName" />
+                <div class="assignee-autocomplete__info">
+                  <span class="assignee-autocomplete__name">{{ member.displayName }}</span>
+                  <span class="assignee-autocomplete__email">{{ member.email }}</span>
+                </div>
+              </li>
+              <li
+                class="assignee-autocomplete__empty"
+                *ngIf="filteredMembers.length === 0">
+                No members found
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="task-modal__field task-modal__field--half">
           <label class="task-modal__label">Deadline</label>
