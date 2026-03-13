@@ -7,7 +7,28 @@
 @use '../../../../../styles/abstracts/mixins' as *;
 
 .project-form {
-  max-width: 600px;
+  max-width: 620px;
+  margin: 0 auto;
+
+  // --------------------------------------------------
+  // Element: back link
+  // --------------------------------------------------
+  &__back {
+    @include button-reset;
+    @include flex(row, center);
+    gap: 6px;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-lg;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-md;
+    transition: color $transition-fast, background-color $transition-fast;
+
+    &:hover {
+      color: $color-text-primary;
+      background-color: $color-gray-100;
+    }
+  }
 
   // --------------------------------------------------
   // Element: card wrapper
@@ -15,82 +36,143 @@
   &__card {
     background-color: $color-surface;
     border-radius: $border-radius-lg;
+    border: 1px solid $color-border;
     box-shadow: $shadow-sm;
-    padding: $spacing-xl;
   }
 
   // --------------------------------------------------
   // Element: header
   // --------------------------------------------------
   &__header {
-    margin-bottom: $spacing-lg;
+    @include flex(row, center);
+    gap: $spacing-md;
+    padding: $spacing-lg $spacing-xl;
+  }
+
+  &__header-icon {
+    @include flex-center;
+    width: 44px;
+    height: 44px;
+    border-radius: $border-radius-md;
+    background-color: $color-primary-bg;
+    color: $color-primary;
+    flex-shrink: 0;
   }
 
   &__title {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    margin-bottom: $spacing-xs;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+    line-height: $line-height-tight;
   }
 
   &__subtitle {
     font-size: $font-size-sm;
     color: $color-text-secondary;
-    margin-bottom: 0;
+    margin: 2px 0 0;
+    line-height: $line-height-base;
   }
 
   // --------------------------------------------------
-  // Element: form + fields
+  // Element: divider
   // --------------------------------------------------
-  &__form {
-    @include flex-column;
-    gap: $spacing-md;
+  &__divider {
+    height: 1px;
+    background-color: $color-border;
   }
 
+  // --------------------------------------------------
+  // Element: form body
+  // --------------------------------------------------
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    padding: $spacing-xl;
+  }
+
+  // --------------------------------------------------
+  // Element: field
+  // --------------------------------------------------
   &__field {
-    @include flex-column;
-    gap: $spacing-xs;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &--color {
+      flex: 1;
+    }
+
+    &--deadline {
+      flex: 0 0 180px;
+    }
   }
 
   &__label {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     color: $color-text-primary;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
   }
 
+  &__label-optional {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-regular;
+    color: $color-text-disabled;
+  }
+
+  &__hint {
+    font-size: $font-size-xs;
+    color: $color-text-disabled;
+  }
+
+  // --------------------------------------------------
+  // Element: inputs
+  // --------------------------------------------------
   &__input,
   &__textarea {
     width: 100%;
-    padding: $spacing-sm $spacing-md;
-    font-size: $font-size-base;
+    padding: 10px $spacing-md;
+    font-size: $font-size-sm;
     color: $color-text-primary;
-    background-color: $color-surface;
+    background-color: $color-bg;
     border: 1px solid $color-border;
     border-radius: $border-radius-md;
-    transition: border-color $transition-fast, box-shadow $transition-fast;
+    transition: border-color $transition-fast, box-shadow $transition-fast, background-color $transition-fast;
 
     &::placeholder {
       color: $color-text-disabled;
     }
 
+    &:hover {
+      border-color: $color-gray-300;
+    }
+
     &:focus {
       outline: none;
+      background-color: $color-surface;
       border-color: $color-primary;
-      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
     }
 
     &--error {
       border-color: $color-error;
+      background-color: rgba($color-error, 0.02);
 
       &:focus {
         border-color: $color-error;
-        box-shadow: 0 0 0 3px rgba($color-error, 0.15);
+        box-shadow: 0 0 0 3px rgba($color-error, 0.1);
       }
     }
   }
 
   &__textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 80px;
+    line-height: $line-height-base;
   }
 
   &__validation {
@@ -99,42 +181,73 @@
   }
 
   // --------------------------------------------------
+  // Element: inline row (color + deadline)
+  // --------------------------------------------------
+  &__row {
+    display: flex;
+    gap: $spacing-xl;
+    align-items: flex-start;
+  }
+
+  // --------------------------------------------------
   // Element: color picker
   // --------------------------------------------------
   &__colors {
     @include flex(row, center);
-    gap: $spacing-sm;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 2px;
   }
 
   &__color-swatch {
     @include button-reset;
-    width: 36px;
-    height: 36px;
+    @include flex-center;
+    width: 30px;
+    height: 30px;
     border-radius: $border-radius-full;
-    border: 3px solid transparent;
-    transition: border-color $transition-fast, transform $transition-fast;
+    border: 2px solid transparent;
+    color: $color-text-inverse;
+    transition: transform $transition-fast, border-color $transition-fast, box-shadow $transition-fast;
+    position: relative;
 
-    &:hover {
-      transform: scale(1.1);
+    svg {
+      opacity: 0;
+      transition: opacity $transition-fast;
     }
 
-    // Modifier: selected state
-    &--selected {
-      border-color: $color-text-primary;
+    &:hover {
       transform: scale(1.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &--selected {
+      transform: scale(1.15);
+      border-color: $color-text-primary;
+      box-shadow: 0 0 0 2px $color-surface, 0 0 0 4px currentColor;
+      border-color: transparent;
+
+      svg {
+        opacity: 1;
+      }
     }
   }
 
   // --------------------------------------------------
-  // Element: error message from store
+  // Element: error message
   // --------------------------------------------------
   &__error {
+    @include flex(row, center);
+    gap: $spacing-sm;
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
     color: $color-error;
-    background-color: rgba($color-error, 0.08);
-    border: 1px solid rgba($color-error, 0.2);
+    background-color: rgba($color-error, 0.06);
+    border: 1px solid rgba($color-error, 0.15);
     border-radius: $border-radius-md;
+
+    svg {
+      flex-shrink: 0;
+    }
   }
 
   // --------------------------------------------------
@@ -144,24 +257,27 @@
     @include flex(row, center);
     justify-content: flex-end;
     gap: $spacing-sm;
-    margin-top: $spacing-md;
+    padding-top: $spacing-xs;
   }
 
   &__btn {
     @include button-reset;
-    @include focus-ring;
-    padding: $spacing-sm $spacing-lg;
+    @include flex(row, center);
+    gap: 6px;
+    padding: 10px $spacing-lg;
     font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-medium;
     border-radius: $border-radius-md;
-    transition: background-color $transition-fast;
+    transition: background-color $transition-fast, color $transition-fast, box-shadow $transition-fast;
+    cursor: pointer;
 
     &--cancel {
-      background-color: $color-gray-100;
-      color: $color-text-primary;
+      color: $color-text-secondary;
+      background-color: transparent;
 
       &:hover {
-        background-color: $color-gray-200;
+        background-color: $color-gray-100;
+        color: $color-text-primary;
       }
     }
 
@@ -171,12 +287,42 @@
 
       &:hover:not(:disabled) {
         background-color: $color-primary-dark;
+        box-shadow: 0 1px 3px rgba($color-primary, 0.3);
       }
 
       &:disabled {
-        opacity: 0.6;
+        opacity: 0.5;
         cursor: not-allowed;
       }
+    }
+  }
+}
+
+// --------------------------------------------------
+// Responsive
+// --------------------------------------------------
+@include respond-below('sm') {
+  .project-form {
+    &__header {
+      padding: $spacing-md;
+    }
+
+    &__body {
+      padding: $spacing-md;
+    }
+
+    &__row {
+      flex-direction: column;
+      gap: $spacing-lg;
+    }
+
+    &__field--deadline {
+      flex: 1;
+      width: 100%;
+    }
+
+    &__header-icon {
+      display: none;
     }
   }
 }

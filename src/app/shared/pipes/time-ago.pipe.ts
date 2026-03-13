@@ -12,6 +12,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'timeAgo',
   pure: true,
+  standalone: false,
 })
 export class TimeAgoPipe implements PipeTransform {
   transform(timestamp: number | null | undefined): string {

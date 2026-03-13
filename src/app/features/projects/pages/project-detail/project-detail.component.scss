@@ -22,13 +22,17 @@ $card-padding: $spacing-lg;
 
   &__back-btn {
     @include button-reset;
-    @include focus-ring;
+    @include flex(row, center);
+    gap: 6px;
     font-size: $font-size-sm;
     color: $color-text-secondary;
-    transition: color $transition-fast;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-md;
+    transition: color $transition-fast, background-color $transition-fast;
 
     &:hover {
-      color: $color-primary;
+      color: $color-text-primary;
+      background-color: $color-gray-100;
     }
   }
 
@@ -39,7 +43,8 @@ $card-padding: $spacing-lg;
 
   &__btn {
     @include button-reset;
-    @include focus-ring;
+    @include flex(row, center);
+    gap: 6px;
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
@@ -145,9 +150,31 @@ $card-padding: $spacing-lg;
   }
 
   &__stat-icon {
-    font-size: $font-size-xl;
-    line-height: 1;
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $border-radius-md;
     flex-shrink: 0;
+
+    &--tasks {
+      background-color: rgba($color-primary, 0.1);
+      color: $color-primary;
+    }
+
+    &--completed {
+      background-color: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+
+    &--overdue {
+      background-color: rgba($color-warning, 0.1);
+      color: $color-warning;
+    }
+
+    &--members {
+      background-color: rgba($color-info, 0.1);
+      color: $color-info;
+    }
   }
 
   &__stat-body {

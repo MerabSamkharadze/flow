@@ -1,95 +1,138 @@
-<!-- Task Filters: search, status, priority, project, sort controls -->
+<!-- Task Filters: compact filter bar with dropdown multi-selects -->
 <div class="task-filters">
 
-  <!-- Search input -->
-  <div class="task-filters__search">
-    <svg class="task-filters__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-    </svg>
-    <input
-      class="task-filters__search-input"
-      type="text"
-      placeholder="Search tasks..."
-      [formControl]="searchControl" />
-  </div>
+  <!-- Top row: search + filter controls -->
+  <div class="task-filters__bar">
 
-  <!-- Filter controls row -->
-  <div class="task-filters__controls">
+    <!-- Search input -->
+    <div class="task-filters__search">
+      <svg class="task-filters__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        class="task-filters__search-input"
+        type="text"
+        placeholder="Search tasks..."
+        [formControl]="searchControl" />
+    </div>
 
-    <!-- Status toggles -->
-    <div class="task-filters__group">
-      <span class="task-filters__group-label">Status</span>
-      <div class="task-filters__toggles">
+    <!-- Filter controls -->
+    <div class="task-filters__controls">
+
+      <!-- Status dropdown -->
+      <div class="task-filters__dropdown-wrap">
         <button
-          *ngFor="let status of statuses; trackBy: trackByValue"
-          class="task-filters__toggle"
-          [class.task-filters__toggle--active]="isStatusSelected(status)"
-          (click)="toggleStatus(status)">
-          {{ status }}
-        </button>
-      </div>
-    </div>
-
-    <!-- Priority toggles -->
-    <div class="task-filters__group">
-      <span class="task-filters__group-label">Priority</span>
-      <div class="task-filters__toggles">
-        <button
-          *ngFor="let priority of priorities; trackBy: trackByValue"
-          class="task-filters__toggle task-filters__toggle--priority"
-          [class.task-filters__toggle--active]="isPrioritySelected(priority)"
-          (click)="togglePriority(priority)">
-          {{ priority }}
-        </button>
-      </div>
-    </div>
-
-    <!-- Project dropdown -->
-    <div class="task-filters__group">
-      <span class="task-filters__group-label">Project</span>
-      <select
-        class="task-filters__select"
-        [value]="selectedProjectId"
-        (change)="onProjectChange($any($event.target).value)">
-        <option value="">All projects</option>
-        <option *ngFor="let project of projects; trackBy: trackByProjectId" [value]="project.id">
-          {{ project.name }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Sort controls -->
-    <div class="task-filters__group">
-      <span class="task-filters__group-label">Sort by</span>
-      <div class="task-filters__sort">
-        <select
-          class="task-filters__select"
-          [value]="sortBy"
-          (change)="onSortByChange($any($event.target).value)">
-          <option *ngFor="let opt of sortOptions; trackBy: trackBySortValue" [value]="opt.value">
-            {{ opt.label }}
-          </option>
-        </select>
-        <button class="task-filters__sort-dir" (click)="toggleSortDir()" [title]="sortDir === 'asc' ? 'Ascending' : 'Descending'">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <polyline *ngIf="sortDir === 'asc'" points="19 12 12 19 5 12"/>
-            <polyline *ngIf="sortDir === 'desc'" points="5 12 12 5 19 12"/>
+          class="task-filters__trigger"
+          [class.task-filters__trigger--active]="selectedStatuses.length > 0"
+          [class.task-filters__trigger--open]="openDropdown === 'status'"
+          type="button"
+          (click)="toggleDropdown('status')">
+          <span class="task-filters__trigger-label">Status</span>
+          <span class="task-filters__trigger-value">{{ statusLabel }}</span>
+          <svg class="task-filters__trigger-chevron" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
           </svg>
         </button>
+        <div class="task-filters__dropdown" *ngIf="openDropdown === 'status'">
+          <label
+            class="task-filters__dropdown-item"
+            *ngFor="let status of statuses; trackBy: trackByValue">
+            <input
+              type="checkbox"
+              class="task-filters__checkbox"
+              [checked]="isStatusSelected(status)"
+              (change)="toggleStatus(status)" />
+            <span class="task-filters__dropdown-text">{{ status }}</span>
+          </label>
+        </div>
       </div>
+
+      <!-- Priority dropdown -->
+      <div class="task-filters__dropdown-wrap">
+        <button
+          class="task-filters__trigger"
+          [class.task-filters__trigger--active]="selectedPriorities.length > 0"
+          [class.task-filters__trigger--open]="openDropdown === 'priority'"
+          type="button"
+          (click)="toggleDropdown('priority')">
+          <span class="task-filters__trigger-label">Priority</span>
+          <span class="task-filters__trigger-value">{{ priorityLabel }}</span>
+          <svg class="task-filters__trigger-chevron" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="task-filters__dropdown" *ngIf="openDropdown === 'priority'">
+          <label
+            class="task-filters__dropdown-item"
+            *ngFor="let priority of priorities; trackBy: trackByValue">
+            <input
+              type="checkbox"
+              class="task-filters__checkbox"
+              [checked]="isPrioritySelected(priority)"
+              (change)="togglePriority(priority)" />
+            <span class="task-filters__dropdown-text">{{ priority }}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Project select -->
+      <div class="task-filters__select-wrap">
+        <span class="task-filters__select-label">Project</span>
+        <select
+          class="task-filters__select"
+          [value]="selectedProjectId"
+          (change)="onProjectChange($any($event.target).value)">
+          <option value="">All projects</option>
+          <option *ngFor="let project of projects; trackBy: trackByProjectId" [value]="project.id">
+            {{ project.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Sort select + direction -->
+      <div class="task-filters__sort-wrap">
+        <span class="task-filters__select-label">Sort</span>
+        <div class="task-filters__sort">
+          <select
+            class="task-filters__select"
+            [value]="sortBy"
+            (change)="onSortByChange($any($event.target).value)">
+            <option *ngFor="let opt of sortOptions; trackBy: trackBySortValue" [value]="opt.value">
+              {{ opt.label }}
+            </option>
+          </select>
+          <button
+            class="task-filters__sort-dir"
+            type="button"
+            (click)="toggleSortDir()"
+            [title]="sortDir === 'asc' ? 'Ascending' : 'Descending'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <polyline *ngIf="sortDir === 'asc'" points="19 12 12 19 5 12"/>
+              <polyline *ngIf="sortDir === 'desc'" points="5 12 12 5 19 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Clear all -->
+      <button
+        *ngIf="hasActiveFilters"
+        class="task-filters__clear"
+        type="button"
+        (click)="clearFilters()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+        Clear
+      </button>
+
     </div>
-
-    <!-- Clear button -->
-    <button
-      *ngIf="hasActiveFilters"
-      class="task-filters__clear"
-      (click)="clearFilters()">
-      Clear
-    </button>
-
   </div>
 
 </div>

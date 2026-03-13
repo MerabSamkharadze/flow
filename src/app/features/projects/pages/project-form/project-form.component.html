@@ -1,20 +1,41 @@
 <!-- Project Form Page — Create New Project -->
 <div class="project-form">
 
+  <!-- Back link -->
+  <button class="project-form__back" type="button" (click)="onCancel()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12"/>
+      <polyline points="12 19 5 12 12 5"/>
+    </svg>
+    Back to Projects
+  </button>
+
   <div class="project-form__card">
 
     <!-- Header -->
     <div class="project-form__header">
-      <h1 class="project-form__title">New Project</h1>
-      <p class="project-form__subtitle">Set up a new project for your team</p>
+      <div class="project-form__header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="project-form__title">Create new project</h1>
+        <p class="project-form__subtitle">Set up a workspace for your team to collaborate</p>
+      </div>
     </div>
 
+    <!-- Divider -->
+    <div class="project-form__divider"></div>
+
     <!-- Form -->
-    <form class="project-form__form" [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <form class="project-form__body" [formGroup]="projectForm" (ngSubmit)="onSubmit()">
 
       <!-- Name -->
       <div class="project-form__field">
-        <label class="project-form__label" for="name">Project name *</label>
+        <label class="project-form__label" for="name">Project name</label>
         <input
           class="project-form__input"
           [class.project-form__input--error]="f['name'].touched && f['name'].invalid"
@@ -22,6 +43,9 @@
           type="text"
           formControlName="name"
           placeholder="e.g. Website Redesign" />
+        <span class="project-form__hint" *ngIf="!(f['name'].touched && f['name'].errors)">
+          Give your project a short, memorable name.
+        </span>
         <span class="project-form__validation" *ngIf="f['name'].touched && f['name'].errors">
           <span *ngIf="f['name'].errors?.['required']">Project name is required</span>
           <span *ngIf="f['name'].errors?.['minlength']">Name must be at least 2 characters</span>
@@ -31,48 +55,72 @@
 
       <!-- Description -->
       <div class="project-form__field">
-        <label class="project-form__label" for="description">Description</label>
+        <label class="project-form__label" for="description">
+          Description
+          <span class="project-form__label-optional">optional</span>
+        </label>
         <textarea
           class="project-form__textarea"
           id="description"
           formControlName="description"
-          rows="4"
-          placeholder="What is this project about?">
+          rows="3"
+          placeholder="Briefly describe the goal of this project...">
         </textarea>
         <span class="project-form__validation" *ngIf="f['description'].touched && f['description'].errors">
           <span *ngIf="f['description'].errors?.['maxlength']">Description must not exceed 500 characters</span>
         </span>
       </div>
 
-      <!-- Color picker -->
-      <div class="project-form__field">
-        <label class="project-form__label">Project color</label>
-        <div class="project-form__colors">
-          <button
-            type="button"
-            class="project-form__color-swatch"
-            [class.project-form__color-swatch--selected]="f['color'].value === color"
-            *ngFor="let color of colors; trackBy: trackByColor"
-            [style.background-color]="color"
-            (click)="selectColor(color)">
-          </button>
-        </div>
-      </div>
+      <!-- Color + Deadline row -->
+      <div class="project-form__row">
 
-      <!-- Deadline -->
-      <div class="project-form__field">
-        <label class="project-form__label" for="deadline">Deadline</label>
-        <input
-          class="project-form__input"
-          id="deadline"
-          type="date"
-          formControlName="deadline" />
+        <!-- Color picker -->
+        <div class="project-form__field project-form__field--color">
+          <label class="project-form__label">Color</label>
+          <div class="project-form__colors">
+            <button
+              type="button"
+              class="project-form__color-swatch"
+              [class.project-form__color-swatch--selected]="f['color'].value === color"
+              *ngFor="let color of colors; trackBy: trackByColor"
+              [style.background-color]="color"
+              (click)="selectColor(color)">
+              <svg *ngIf="f['color'].value === color"
+                   width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Deadline -->
+        <div class="project-form__field project-form__field--deadline">
+          <label class="project-form__label" for="deadline">
+            Deadline
+            <span class="project-form__label-optional">optional</span>
+          </label>
+          <input
+            class="project-form__input"
+            id="deadline"
+            type="date"
+            formControlName="deadline" />
+        </div>
+
       </div>
 
       <!-- Error message -->
       <div class="project-form__error" *ngIf="error$ | async as error">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
         {{ error }}
       </div>
+
+      <!-- Divider -->
+      <div class="project-form__divider"></div>
 
       <!-- Actions -->
       <div class="project-form__actions">
@@ -86,7 +134,11 @@
         <button
           type="submit"
           class="project-form__btn project-form__btn--submit"
-          [disabled]="loading$ | async">
+          [disabled]="(loading$ | async) || projectForm.invalid">
+          <svg *ngIf="!(loading$ | async)" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
           {{ (loading$ | async) ? 'Creating...' : 'Create Project' }}
         </button>
       </div>

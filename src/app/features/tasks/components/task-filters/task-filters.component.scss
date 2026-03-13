@@ -7,31 +7,39 @@
 @use '../../../../../styles/abstracts/mixins' as *;
 
 .task-filters {
-  @include flex-column;
-  gap: $spacing-md;
-  padding: $spacing-md;
   background-color: $color-surface;
   border-radius: $border-radius-lg;
   border: 1px solid $color-border;
+  padding: $spacing-md;
 
   // --------------------------------------------------
-  // Element: search bar
+  // Element: top bar (search + controls)
+  // --------------------------------------------------
+  &__bar {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  // --------------------------------------------------
+  // Element: search
   // --------------------------------------------------
   &__search {
     position: relative;
-    @include flex(row, center);
+    display: flex;
+    align-items: center;
   }
 
   &__search-icon {
     position: absolute;
-    left: $spacing-sm;
+    left: 12px;
     color: $color-text-disabled;
     pointer-events: none;
   }
 
   &__search-input {
     width: 100%;
-    padding: $spacing-sm $spacing-sm $spacing-sm 36px;
+    padding: 9px 12px 9px 36px;
     font-size: $font-size-sm;
     color: $color-text-primary;
     background-color: $color-bg;
@@ -46,81 +54,152 @@
     &:focus {
       outline: none;
       border-color: $color-primary;
-      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.08);
     }
   }
 
   // --------------------------------------------------
-  // Element: controls row
+  // Element: filter controls row
   // --------------------------------------------------
   &__controls {
-    @include flex(row, flex-end);
-    flex-wrap: wrap;
-    gap: $spacing-md;
-  }
-
-  // --------------------------------------------------
-  // Element: filter group (label + controls)
-  // --------------------------------------------------
-  &__group {
-    @include flex-column;
-    gap: $spacing-xs;
-  }
-
-  &__group-label {
-    font-size: $font-size-xs;
-    font-weight: $font-weight-semibold;
-    color: $color-text-secondary;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  // --------------------------------------------------
-  // Element: toggle buttons (status/priority)
-  // --------------------------------------------------
-  &__toggles {
-    @include flex(row, center);
-    gap: 4px;
+    display: flex;
+    align-items: flex-end;
+    gap: $spacing-sm;
     flex-wrap: wrap;
   }
 
-  &__toggle {
+  // --------------------------------------------------
+  // Element: dropdown wrapper (status / priority)
+  // --------------------------------------------------
+  &__dropdown-wrap {
+    position: relative;
+  }
+
+  // --------------------------------------------------
+  // Element: trigger button
+  // --------------------------------------------------
+  &__trigger {
     @include button-reset;
-    padding: 4px $spacing-sm;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
     font-size: $font-size-xs;
-    font-weight: $font-weight-medium;
     color: $color-text-secondary;
     background-color: $color-bg;
     border: 1px solid $color-border;
-    border-radius: $border-radius-full;
-    text-transform: capitalize;
-    transition: all $transition-fast;
+    border-radius: $border-radius-md;
+    cursor: pointer;
+    transition: border-color $transition-fast, background-color $transition-fast;
     white-space: nowrap;
 
     &:hover {
-      border-color: $color-primary;
-      color: $color-primary;
+      border-color: $color-gray-300;
+      background-color: $color-surface;
     }
 
-    // Modifier: active toggle
-    &--active {
-      background-color: $color-primary;
+    &--open {
       border-color: $color-primary;
-      color: $color-text-inverse;
+      background-color: $color-surface;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.08);
+    }
 
-      &:hover {
-        background-color: $color-primary-dark;
-        border-color: $color-primary-dark;
-        color: $color-text-inverse;
+    &--active {
+      border-color: $color-primary;
+      background-color: rgba($color-primary, 0.04);
+
+      .task-filters__trigger-value {
+        color: $color-primary;
+        font-weight: $font-weight-medium;
       }
     }
   }
 
+  &__trigger-label {
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  &__trigger-value {
+    color: $color-text-secondary;
+    text-transform: capitalize;
+  }
+
+  &__trigger-chevron {
+    color: $color-text-disabled;
+    transition: transform $transition-fast;
+    flex-shrink: 0;
+
+    .task-filters__trigger--open & {
+      transform: rotate(180deg);
+    }
+  }
+
   // --------------------------------------------------
-  // Element: select dropdown
+  // Element: dropdown panel
   // --------------------------------------------------
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 170px;
+    background-color: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-md;
+    z-index: $z-dropdown;
+    padding: $spacing-xs 0;
+  }
+
+  &__dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: 7px 12px;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-gray-50;
+    }
+  }
+
+  &__checkbox {
+    width: 15px;
+    height: 15px;
+    accent-color: $color-primary;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  &__dropdown-text {
+    text-transform: capitalize;
+  }
+
+  // --------------------------------------------------
+  // Element: native select wrappers
+  // --------------------------------------------------
+  &__select-wrap,
+  &__sort-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  &__select-label {
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    color: $color-text-disabled;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-left: 2px;
+    margin-bottom: 3px;
+  }
+
   &__select {
-    padding: 4px $spacing-sm;
+    padding: 7px 10px;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
     color: $color-text-primary;
@@ -130,29 +209,36 @@
     cursor: pointer;
     transition: border-color $transition-fast;
 
+    &:hover {
+      border-color: $color-gray-300;
+    }
+
     &:focus {
       outline: none;
       border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.08);
     }
   }
 
   // --------------------------------------------------
-  // Element: sort direction button
+  // Element: sort row
   // --------------------------------------------------
   &__sort {
-    @include flex(row, center);
+    display: flex;
+    align-items: center;
     gap: 4px;
   }
 
   &__sort-dir {
     @include button-reset;
     @include flex-center;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: $border-radius-md;
     color: $color-text-secondary;
     border: 1px solid $color-border;
-    transition: all $transition-fast;
+    background-color: $color-bg;
+    transition: border-color $transition-fast, color $transition-fast;
 
     &:hover {
       border-color: $color-primary;
@@ -161,32 +247,56 @@
   }
 
   // --------------------------------------------------
-  // Element: clear filters button
+  // Element: clear button
   // --------------------------------------------------
   &__clear {
     @include button-reset;
-    padding: 4px $spacing-md;
+    @include flex(row, center);
+    gap: 4px;
+    padding: 7px 12px;
     font-size: $font-size-xs;
-    font-weight: $font-weight-semibold;
-    color: $color-error;
-    background-color: rgba($color-error, 0.06);
-    border: 1px solid rgba($color-error, 0.2);
-    border-radius: $border-radius-full;
-    transition: all $transition-fast;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast, color $transition-fast;
+    white-space: nowrap;
     align-self: flex-end;
 
     &:hover {
-      background-color: rgba($color-error, 0.12);
+      background-color: rgba($color-error, 0.06);
+      color: $color-error;
     }
   }
 }
 
-// Responsive: stack controls vertically on small screens
-@include respond-below('lg') {
+// --------------------------------------------------
+// Responsive: stack on small screens
+// --------------------------------------------------
+@include respond-below('md') {
   .task-filters {
     &__controls {
       flex-direction: column;
       align-items: stretch;
+    }
+
+    &__dropdown-wrap,
+    &__select-wrap,
+    &__sort-wrap {
+      width: 100%;
+    }
+
+    &__trigger,
+    &__select {
+      width: 100%;
+    }
+
+    &__dropdown {
+      width: 100%;
+    }
+
+    &__clear {
+      align-self: stretch;
+      justify-content: center;
     }
   }
 }
