@@ -4,9 +4,9 @@ import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Project } from '../../../../shared/models/project.model';
-import { Member, MemberRole } from '../../../../shared/models/member.model';
-import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
+import { Project } from '@shared/models/project.model';
+import { Member, MemberRole } from '@shared/models/member.model';
+import { Task, PRIORITY_CONFIG } from '@shared/models/task.model';
 import { InvitePayload } from '../../components/invite-modal/invite-modal.component';
 
 import * as ProjectsActions from '../../store/projects.actions';

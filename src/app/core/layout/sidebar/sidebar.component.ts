@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subject, of } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 
-import { selectUser } from '../../../features/auth/store';
+import { AuthUser, logout, selectUser } from '../../../features/auth/store';
 import { NotificationsService } from '../../services/notifications.service';
 
 /**
@@ -25,6 +25,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /** Unread notification count for badge display */
   unreadCount$: Observable<number> = of(0);
 
+  /** Current authenticated user for profile section */
+  user: AuthUser | null = null;
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -33,6 +36,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Keep local user reference for profile section
+    this.store.select(selectUser).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((user) => {
+      this.user = user;
+    });
+
     // Stream unread count from the notifications service based on current user
     this.unreadCount$ = this.store.select(selectUser).pipe(
       switchMap((user) => {
@@ -45,6 +55,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   onToggle(): void {
     this.toggleSidebar.emit();
+  }
+
+  onLogout(): void {
+    this.store.dispatch(logout());
+  }
+
+  getInitials(name: string | null): string {
+    if (!name) return '?';
+    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
   }
 
   ngOnDestroy(): void {

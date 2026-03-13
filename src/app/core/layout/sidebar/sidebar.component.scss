@@ -7,12 +7,13 @@
 @use '../../../../styles/abstracts/mixins' as *;
 
 .sidebar {
-  @include flex-column;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   background-color: $color-gray-900;
   color: $color-text-inverse;
   transition: width $transition-base;
-  overflow: hidden;
+  overflow-x: hidden; // clip horizontal overflow for collapse animation only
 
   // --------------------------------------------------
   // Element: brand / logo area
@@ -22,6 +23,7 @@
     gap: $spacing-sm;
     padding: $spacing-md $spacing-md;
     height: $header-height;
+    flex-shrink: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
@@ -45,19 +47,22 @@
   }
 
   // --------------------------------------------------
-  // Element: navigation list
+  // Element: navigation list (main scrollable area)
   // --------------------------------------------------
   &__nav {
     flex: 1;
+    min-height: 0; // allow shrinking below content size for scroll
     list-style: none;
     padding: $spacing-sm 0;
     margin: 0;
-    @include scrollable(y);
+    overflow-y: auto;
+    overflow-x: hidden;
 
-    // Footer nav variant — does not flex-grow, sits above toggle
+    // Footer nav variant — does not flex-grow, sits below separator
     &--footer {
-      flex: 0;
+      flex: 0 0 auto;
       padding: $spacing-xs 0;
+      overflow: visible; // no scroll on footer nav
     }
   }
 
@@ -80,7 +85,7 @@
       color: $color-gray-200;
     }
 
-    // Modifier: active route — visible in both expanded and collapsed states
+    // Modifier: active route
     &--active {
       background-color: rgba($color-primary, 0.15);
       color: $color-primary-light;
@@ -104,7 +109,6 @@
     line-height: 1;
     position: relative;
 
-    // Badged variant — allows positioning the dot indicator
     &--badged {
       position: relative;
     }
@@ -119,8 +123,7 @@
   }
 
   // --------------------------------------------------
-  // Element: icon dot badge — small red dot on the nav icon
-  // Visible primarily in collapsed mode when label is hidden
+  // Element: icon dot badge
   // --------------------------------------------------
   &__icon-dot {
     position: absolute;
@@ -130,11 +133,11 @@
     height: 8px;
     background-color: $color-error;
     border-radius: $border-radius-full;
-    border: 2px solid $color-gray-900; // matches sidebar bg for cut-out effect
+    border: 2px solid $color-gray-900;
   }
 
   // --------------------------------------------------
-  // Element: numeric badge pill — shown to the right of the label
+  // Element: numeric badge pill
   // --------------------------------------------------
   &__nav-badge {
     @include flex-center;
@@ -155,15 +158,96 @@
   // --------------------------------------------------
   &__separator {
     height: 1px;
+    flex-shrink: 0;
     margin: 0 $spacing-md;
     background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  // --------------------------------------------------
+  // Element: user profile section (above collapse toggle)
+  // --------------------------------------------------
+  &__profile {
+    flex-shrink: 0;
+  }
+
+  &__profile-divider {
+    height: 1px;
+    margin: 0 $spacing-md;
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  &__profile-row {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: 12px;
+    margin: 4px;
+    border-radius: $border-radius-md;
+    cursor: default;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  &__profile-avatar {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: $border-radius-full;
+    background: linear-gradient(135deg, $color-primary, $color-primary-light);
+    color: $color-text-inverse;
+    font-size: 12px;
+    font-weight: $font-weight-bold;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+  }
+
+  &__profile-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 1px;
+  }
+
+  &__profile-name {
+    @include text-truncate;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-gray-200;
+    line-height: 1.3;
+  }
+
+  &__profile-email {
+    @include text-truncate;
+    font-size: 11px;
+    color: $color-gray-500;
+    line-height: 1.3;
+  }
+
+  &__profile-logout {
+    @include button-reset;
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: $border-radius-sm;
+    color: $color-gray-500;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: $color-gray-200;
+    }
   }
 
   // --------------------------------------------------
   // Element: footer with collapse toggle
   // --------------------------------------------------
   &__footer {
-    padding: $spacing-sm;
+    flex-shrink: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
@@ -171,10 +255,9 @@
     @include button-reset;
     @include flex-center;
     width: 100%;
-    padding: $spacing-sm;
-    border-radius: $border-radius-md;
+    height: 40px;
     color: $color-gray-500;
-    transition: background-color $transition-fast, color $transition-fast;
+    transition: background-color 0.2s ease, color 0.2s ease;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.06);
@@ -182,8 +265,12 @@
     }
   }
 
-  &__toggle-icon {
-    font-size: $font-size-sm;
+  &__toggle-chevron {
+    transition: transform 0.2s ease;
+
+    &--collapsed {
+      transform: rotate(180deg);
+    }
   }
 
   // --------------------------------------------------
@@ -205,14 +292,21 @@
       height: 28px;
     }
 
-    // Separator shrinks to fit collapsed width
     .sidebar__separator {
       margin: 0 $spacing-sm;
     }
 
-    // Hide the numeric badge in collapsed mode — the dot indicator is enough
     .sidebar__nav-badge {
       display: none;
+    }
+
+    .sidebar__profile-divider {
+      margin: 0 $spacing-sm;
+    }
+
+    .sidebar__profile-row {
+      justify-content: center;
+      padding: 12px $spacing-xs;
     }
   }
 }
