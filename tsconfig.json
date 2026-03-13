@@ -22,7 +22,13 @@
       "ES2020",
       "dom"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@core/*": ["src/app/core/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@features/*": ["src/app/features/*"],
+      "@env/*": ["src/environments/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

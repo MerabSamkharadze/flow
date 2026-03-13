@@ -10,7 +10,8 @@ type Density = 'comfortable' | 'compact';
  * AppearanceSettingsComponent — theme and density preferences.
  *
  * Saves selections to localStorage and applies theme class to document.body.
- * Dark mode CSS variables are a TODO — this stores the selection only for now.
+ * Note: Dark mode CSS variables are not yet implemented — this stores the
+ * user's selection in localStorage and applies a body class for future use.
  */
 @Component({
   selector: 'app-appearance-settings',
