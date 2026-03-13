@@ -1,0 +1,85 @@
+<!-- Profile Settings: edit display name, bio, avatar -->
+<div class="profile-settings">
+
+  <h2 class="profile-settings__heading">Profile</h2>
+  <p class="profile-settings__description">Manage your public profile information.</p>
+
+  <!-- Avatar section -->
+  <div class="profile-settings__avatar-section">
+    <div class="profile-settings__avatar">
+      <span class="profile-settings__avatar-initials">{{ initials }}</span>
+    </div>
+    <div class="profile-settings__avatar-actions">
+      <button class="profile-settings__upload-btn" type="button" disabled
+              title="Photo upload coming soon">
+        Change photo
+      </button>
+      <span class="profile-settings__upload-hint">Photo upload coming soon</span>
+    </div>
+  </div>
+
+  <!-- Profile form -->
+  <form class="profile-settings__form" [formGroup]="form" (ngSubmit)="onSave()">
+
+    <!-- Display Name -->
+    <div class="profile-settings__field">
+      <label class="profile-settings__label" for="displayName">Display Name</label>
+      <input
+        class="profile-settings__input"
+        id="displayName"
+        type="text"
+        formControlName="displayName"
+        placeholder="Your display name" />
+      <span class="profile-settings__error"
+            *ngIf="form.get('displayName')?.touched && form.get('displayName')?.hasError('required')">
+        Display name is required.
+      </span>
+    </div>
+
+    <!-- Email (readonly) -->
+    <div class="profile-settings__field">
+      <label class="profile-settings__label" for="email">Email</label>
+      <input
+        class="profile-settings__input profile-settings__input--disabled"
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="your@email.com" />
+      <span class="profile-settings__hint">Email cannot be changed.</span>
+    </div>
+
+    <!-- Bio -->
+    <div class="profile-settings__field">
+      <label class="profile-settings__label" for="bio">Bio</label>
+      <textarea
+        class="profile-settings__textarea"
+        id="bio"
+        formControlName="bio"
+        rows="3"
+        placeholder="A short bio about yourself..."
+        [maxlength]="bioMaxLength">
+      </textarea>
+      <div class="profile-settings__char-counter"
+           [class.profile-settings__char-counter--warn]="bioLength > 140">
+        {{ bioLength }} / {{ bioMaxLength }}
+      </div>
+    </div>
+
+    <!-- Success / Error messages -->
+    <div class="profile-settings__message profile-settings__message--success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+    <div class="profile-settings__message profile-settings__message--error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Save button -->
+    <button class="profile-settings__save-btn" type="submit"
+            [disabled]="form.invalid || saving">
+      <span *ngIf="!saving">Save Changes</span>
+      <span *ngIf="saving">Saving...</span>
+    </button>
+
+  </form>
+
+</div>

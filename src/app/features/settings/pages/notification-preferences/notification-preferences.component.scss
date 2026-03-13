@@ -1,0 +1,113 @@
+// ==========================================================================
+// Notification Preferences Component — BEM
+// Block: .notif-prefs
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.notif-prefs {
+  @include flex-column;
+  gap: $spacing-lg;
+
+  // --------------------------------------------------
+  // Element: heading
+  // --------------------------------------------------
+  &__heading {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+  }
+
+  &__description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+
+  // --------------------------------------------------
+  // Element: loading
+  // --------------------------------------------------
+  &__loading {
+    font-size: $font-size-sm;
+    color: $color-text-disabled;
+    padding: $spacing-lg 0;
+  }
+
+  // --------------------------------------------------
+  // Element: toggle list
+  // --------------------------------------------------
+  &__list {
+    @include flex-column;
+    gap: 0;
+  }
+
+  &__row {
+    @include flex-between;
+    gap: $spacing-lg;
+    padding: $spacing-lg 0;
+    border-bottom: 1px solid $color-border;
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__info {
+    @include flex-column;
+    gap: $spacing-xs;
+    flex: 1;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__desc {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    line-height: $line-height-relaxed;
+  }
+
+  // --------------------------------------------------
+  // Element: CSS-only toggle switch
+  // --------------------------------------------------
+  &__toggle {
+    @include button-reset;
+    position: relative;
+    width: 40px;
+    height: 22px;
+    border-radius: $border-radius-full;
+    background-color: $color-gray-300;
+    transition: background-color $transition-fast;
+    flex-shrink: 0;
+
+    // Modifier: toggle is ON
+    &--on {
+      background-color: $color-primary;
+
+      .notif-prefs__toggle-knob {
+        transform: translateX(18px);
+      }
+    }
+  }
+
+  &__toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: $border-radius-full;
+    background-color: $color-text-inverse;
+    box-shadow: $shadow-sm;
+    transition: transform $transition-fast;
+  }
+}

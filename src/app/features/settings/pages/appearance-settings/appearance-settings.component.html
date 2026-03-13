@@ -1,0 +1,64 @@
+<!-- Appearance Settings: theme + density selection -->
+<div class="appearance-settings">
+
+  <!-- Theme section -->
+  <section class="appearance-settings__section">
+    <h2 class="appearance-settings__heading">Theme</h2>
+    <p class="appearance-settings__description">
+      Choose how FLOW looks to you. Dark mode CSS is a work in progress.
+    </p>
+
+    <div class="appearance-settings__theme-grid">
+      <button
+        *ngFor="let t of themes"
+        class="appearance-settings__theme-card"
+        [class.appearance-settings__theme-card--selected]="theme === t.value"
+        (click)="onThemeChange(t.value)"
+        type="button">
+
+        <!-- Mini preview -->
+        <div class="appearance-settings__theme-preview">
+          <div class="appearance-settings__preview-bar"
+               [style.background-color]="t.colors[0]"></div>
+          <div class="appearance-settings__preview-body"
+               [style.background-color]="t.colors[1]">
+            <div class="appearance-settings__preview-accent"
+                 [style.background-color]="t.colors[2]"></div>
+          </div>
+        </div>
+
+        <!-- Label + checkmark -->
+        <div class="appearance-settings__theme-footer">
+          <span class="appearance-settings__theme-label">{{ t.label }}</span>
+          <svg *ngIf="theme === t.value"
+               class="appearance-settings__checkmark"
+               width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- Density section -->
+  <section class="appearance-settings__section">
+    <h2 class="appearance-settings__heading">Density</h2>
+    <p class="appearance-settings__description">
+      Adjust the spacing and size of UI elements.
+    </p>
+
+    <div class="appearance-settings__density-grid">
+      <button
+        *ngFor="let d of densities"
+        class="appearance-settings__density-card"
+        [class.appearance-settings__density-card--selected]="density === d.value"
+        (click)="onDensityChange(d.value)"
+        type="button">
+        <span class="appearance-settings__density-label">{{ d.label }}</span>
+        <span class="appearance-settings__density-desc">{{ d.description }}</span>
+      </button>
+    </div>
+  </section>
+
+</div>

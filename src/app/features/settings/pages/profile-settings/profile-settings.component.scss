@@ -1,0 +1,206 @@
+// ==========================================================================
+// Profile Settings Component — BEM
+// Block: .profile-settings
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.profile-settings {
+
+  // --------------------------------------------------
+  // Element: heading
+  // --------------------------------------------------
+  &__heading {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-xs;
+  }
+
+  &__description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0 0 $spacing-xl;
+  }
+
+  // --------------------------------------------------
+  // Element: avatar section
+  // --------------------------------------------------
+  &__avatar-section {
+    @include flex(row, center);
+    gap: $spacing-md;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__avatar {
+    @include flex-center;
+    width: 80px;
+    height: 80px;
+    border-radius: $border-radius-full;
+    background: linear-gradient(135deg, $color-primary, $color-primary-light);
+    flex-shrink: 0;
+  }
+
+  &__avatar-initials {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-inverse;
+  }
+
+  &__avatar-actions {
+    @include flex-column;
+    gap: $spacing-xs;
+  }
+
+  &__upload-btn {
+    @include button-reset;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    border: 1px solid $color-primary;
+    border-radius: $border-radius-md;
+    transition: all $transition-fast;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      background-color: $color-primary-bg;
+    }
+  }
+
+  &__upload-hint {
+    font-size: $font-size-xs;
+    color: $color-text-disabled;
+  }
+
+  // --------------------------------------------------
+  // Element: form
+  // --------------------------------------------------
+  &__form {
+    max-width: 480px;
+    @include flex-column;
+    gap: $spacing-lg;
+  }
+
+  &__field {
+    @include flex-column;
+    gap: $spacing-xs;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+    padding: 10px $spacing-md;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background-color: $color-bg;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+    font-family: $font-family-base;
+
+    &::placeholder {
+      color: $color-text-disabled;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    }
+
+    // Modifier: disabled/readonly input
+    &--disabled {
+      background-color: $color-gray-100;
+      color: $color-text-disabled;
+      cursor: not-allowed;
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  &__hint {
+    font-size: $font-size-xs;
+    color: $color-text-disabled;
+  }
+
+  &__error {
+    font-size: $font-size-xs;
+    color: $color-error;
+  }
+
+  // --------------------------------------------------
+  // Element: character counter
+  // --------------------------------------------------
+  &__char-counter {
+    font-size: $font-size-xs;
+    color: $color-text-disabled;
+    text-align: right;
+
+    // Modifier: warning state (> 140 chars)
+    &--warn {
+      color: $color-error;
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: inline messages
+  // --------------------------------------------------
+  &__message {
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+
+    &--success {
+      background-color: rgba($color-success, 0.08);
+      color: $color-success;
+      border: 1px solid rgba($color-success, 0.2);
+    }
+
+    &--error {
+      background-color: rgba($color-error, 0.08);
+      color: $color-error;
+      border: 1px solid rgba($color-error, 0.2);
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: save button
+  // --------------------------------------------------
+  &__save-btn {
+    @include button-reset;
+    align-self: flex-start;
+    padding: 10px $spacing-xl;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

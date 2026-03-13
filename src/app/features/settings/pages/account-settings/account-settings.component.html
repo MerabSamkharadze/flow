@@ -1,0 +1,129 @@
+<!-- Account Settings: change password + danger zone -->
+<div class="account-settings">
+
+  <!-- Change Password section -->
+  <section class="account-settings__section">
+    <h2 class="account-settings__heading">Change Password</h2>
+    <p class="account-settings__description">Update your password to keep your account secure.</p>
+
+    <form class="account-settings__form" [formGroup]="form" (ngSubmit)="onChangePassword()">
+
+      <!-- Current Password -->
+      <div class="account-settings__field">
+        <label class="account-settings__label" for="currentPassword">Current Password</label>
+        <div class="account-settings__input-wrap">
+          <input
+            class="account-settings__input"
+            id="currentPassword"
+            [type]="showCurrentPassword ? 'text' : 'password'"
+            formControlName="currentPassword"
+            placeholder="Enter current password" />
+          <button class="account-settings__toggle-vis" type="button"
+                  (click)="toggleVisibility('current')" tabindex="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ng-container *ngIf="!showCurrentPassword">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </ng-container>
+              <ng-container *ngIf="showCurrentPassword">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </ng-container>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- New Password -->
+      <div class="account-settings__field">
+        <label class="account-settings__label" for="newPassword">New Password</label>
+        <div class="account-settings__input-wrap">
+          <input
+            class="account-settings__input"
+            id="newPassword"
+            [type]="showNewPassword ? 'text' : 'password'"
+            formControlName="newPassword"
+            placeholder="At least 8 characters" />
+          <button class="account-settings__toggle-vis" type="button"
+                  (click)="toggleVisibility('new')" tabindex="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ng-container *ngIf="!showNewPassword">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </ng-container>
+              <ng-container *ngIf="showNewPassword">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </ng-container>
+            </svg>
+          </button>
+        </div>
+        <span class="account-settings__error"
+              *ngIf="form.get('newPassword')?.touched && form.get('newPassword')?.hasError('minlength')">
+          Password must be at least 8 characters.
+        </span>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="account-settings__field">
+        <label class="account-settings__label" for="confirmPassword">Confirm Password</label>
+        <div class="account-settings__input-wrap">
+          <input
+            class="account-settings__input"
+            id="confirmPassword"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Repeat new password" />
+          <button class="account-settings__toggle-vis" type="button"
+                  (click)="toggleVisibility('confirm')" tabindex="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ng-container *ngIf="!showConfirmPassword">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </ng-container>
+              <ng-container *ngIf="showConfirmPassword">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </ng-container>
+            </svg>
+          </button>
+        </div>
+        <span class="account-settings__error" *ngIf="passwordMismatch">
+          Passwords do not match.
+        </span>
+      </div>
+
+      <!-- Success / Error messages -->
+      <div class="account-settings__message account-settings__message--success" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+      <div class="account-settings__message account-settings__message--error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Submit -->
+      <button class="account-settings__submit-btn" type="submit"
+              [disabled]="form.invalid || saving">
+        <span *ngIf="!saving">Update Password</span>
+        <span *ngIf="saving">Updating...</span>
+      </button>
+
+    </form>
+  </section>
+
+  <!-- Danger Zone section -->
+  <section class="account-settings__danger-zone">
+    <h3 class="account-settings__danger-title">Danger Zone</h3>
+    <p class="account-settings__danger-text">
+      Permanently delete your account and all associated data. This action cannot be undone.
+    </p>
+    <button class="account-settings__delete-btn" type="button" disabled
+            title="Contact admin to delete account">
+      Delete Account
+    </button>
+  </section>
+
+</div>

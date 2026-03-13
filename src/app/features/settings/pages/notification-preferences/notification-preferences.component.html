@@ -1,0 +1,37 @@
+<!-- Notification Preferences: toggle notification types -->
+<div class="notif-prefs">
+
+  <h2 class="notif-prefs__heading">Notifications</h2>
+  <p class="notif-prefs__description">
+    Choose which notifications you'd like to receive.
+  </p>
+
+  <!-- Loading state -->
+  <div class="notif-prefs__loading" *ngIf="loading">
+    Loading preferences...
+  </div>
+
+  <!-- Toggle list -->
+  <div class="notif-prefs__list" *ngIf="!loading">
+    <div class="notif-prefs__row" *ngFor="let row of toggleRows">
+
+      <!-- Label + description -->
+      <div class="notif-prefs__info">
+        <span class="notif-prefs__label">{{ row.label }}</span>
+        <span class="notif-prefs__desc">{{ row.description }}</span>
+      </div>
+
+      <!-- CSS-only toggle switch -->
+      <button class="notif-prefs__toggle"
+              [class.notif-prefs__toggle--on]="prefs[row.key]"
+              (click)="onToggle(row.key)"
+              type="button"
+              [attr.aria-checked]="prefs[row.key]"
+              role="switch">
+        <span class="notif-prefs__toggle-knob"></span>
+      </button>
+
+    </div>
+  </div>
+
+</div>

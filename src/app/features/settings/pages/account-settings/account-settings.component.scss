@@ -1,0 +1,188 @@
+// ==========================================================================
+// Account Settings Component — BEM
+// Block: .account-settings
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.account-settings {
+  @include flex-column;
+  gap: $spacing-2xl;
+
+  // --------------------------------------------------
+  // Element: section heading
+  // --------------------------------------------------
+  &__heading {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-xs;
+  }
+
+  &__description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0 0 $spacing-lg;
+  }
+
+  // --------------------------------------------------
+  // Element: form
+  // --------------------------------------------------
+  &__form {
+    max-width: 420px;
+    @include flex-column;
+    gap: $spacing-lg;
+  }
+
+  &__field {
+    @include flex-column;
+    gap: $spacing-xs;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__input-wrap {
+    position: relative;
+    @include flex(row, center);
+  }
+
+  &__input {
+    width: 100%;
+    padding: 10px $spacing-md;
+    padding-right: 40px; // space for toggle button
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background-color: $color-bg;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+    font-family: $font-family-base;
+
+    &::placeholder {
+      color: $color-text-disabled;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    }
+  }
+
+  &__toggle-vis {
+    @include button-reset;
+    @include flex-center;
+    position: absolute;
+    right: $spacing-sm;
+    width: 28px;
+    height: 28px;
+    color: $color-text-disabled;
+    border-radius: $border-radius-sm;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-text-secondary;
+    }
+  }
+
+  &__error {
+    font-size: $font-size-xs;
+    color: $color-error;
+  }
+
+  // --------------------------------------------------
+  // Element: inline messages
+  // --------------------------------------------------
+  &__message {
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+
+    &--success {
+      background-color: rgba($color-success, 0.08);
+      color: $color-success;
+      border: 1px solid rgba($color-success, 0.2);
+    }
+
+    &--error {
+      background-color: rgba($color-error, 0.08);
+      color: $color-error;
+      border: 1px solid rgba($color-error, 0.2);
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: submit button
+  // --------------------------------------------------
+  &__submit-btn {
+    @include button-reset;
+    align-self: flex-start;
+    padding: 10px $spacing-xl;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: danger zone
+  // --------------------------------------------------
+  &__danger-zone {
+    padding: $spacing-lg;
+    border: 1px solid rgba($color-error, 0.3);
+    border-radius: $border-radius-lg;
+    background-color: rgba($color-error, 0.02);
+  }
+
+  &__danger-title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $color-error;
+    margin: 0 0 $spacing-sm;
+  }
+
+  &__danger-text {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0 0 $spacing-md;
+    line-height: $line-height-relaxed;
+  }
+
+  &__delete-btn {
+    @include button-reset;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-error;
+    background-color: transparent;
+    border: 1px solid rgba($color-error, 0.4);
+    border-radius: $border-radius-md;
+    transition: all $transition-fast;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      background-color: rgba($color-error, 0.08);
+    }
+  }
+}

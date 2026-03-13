@@ -1,0 +1,59 @@
+<!-- Settings Shell: left tab nav + right content area -->
+<div class="settings-shell">
+
+  <!-- Left tab navigation -->
+  <nav class="settings-shell__nav">
+    <h1 class="settings-shell__title">Settings</h1>
+
+    <ul class="settings-shell__tabs">
+      <li class="settings-shell__tab" *ngFor="let tab of tabs">
+        <a class="settings-shell__tab-link"
+           [routerLink]="tab.route"
+           routerLinkActive="settings-shell__tab-link--active">
+
+          <!-- User icon -->
+          <svg *ngIf="tab.icon === 'user'" class="settings-shell__tab-icon"
+               width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+
+          <!-- Shield icon -->
+          <svg *ngIf="tab.icon === 'shield'" class="settings-shell__tab-icon"
+               width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+
+          <!-- Palette icon -->
+          <svg *ngIf="tab.icon === 'palette'" class="settings-shell__tab-icon"
+               width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r="2.5"/>
+            <circle cx="17.5" cy="10.5" r="2.5"/>
+            <circle cx="8.5" cy="7.5" r="2.5"/>
+            <circle cx="6.5" cy="12.5" r="2.5"/>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.04-.23-.29-.38-.63-.38-1.03 0-.83.67-1.5 1.5-1.5H16c3.31 0 6-2.69 6-6 0-5.17-4.49-9-10-9z"/>
+          </svg>
+
+          <!-- Bell icon -->
+          <svg *ngIf="tab.icon === 'bell'" class="settings-shell__tab-icon"
+               width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+
+          <span class="settings-shell__tab-label">{{ tab.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Right content area -->
+  <main class="settings-shell__content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

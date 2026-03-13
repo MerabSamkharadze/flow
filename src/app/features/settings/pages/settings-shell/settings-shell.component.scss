@@ -1,0 +1,122 @@
+// ==========================================================================
+// Settings Shell Component — BEM
+// Block: .settings-shell
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.settings-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-xl;
+  min-height: calc(100vh - #{$header-height});
+
+  // --------------------------------------------------
+  // Element: left navigation
+  // --------------------------------------------------
+  &__nav {
+    @include flex-column;
+    gap: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-sm;
+    padding: 0 $spacing-sm;
+  }
+
+  &__tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    @include flex-column;
+    gap: 2px;
+  }
+
+  &__tab {
+    margin: 0;
+  }
+
+  &__tab-link {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    padding: 10px $spacing-md;
+    border-radius: $border-radius-md;
+    color: $color-text-secondary;
+    text-decoration: none;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: $color-surface-hover;
+      color: $color-text-primary;
+    }
+
+    // Modifier: active tab
+    &--active {
+      background-color: $color-primary-bg;
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+
+      .settings-shell__tab-icon {
+        color: $color-primary;
+      }
+
+      &:hover {
+        background-color: $color-primary-bg;
+      }
+    }
+  }
+
+  &__tab-icon {
+    flex-shrink: 0;
+    color: $color-text-disabled;
+    transition: color $transition-fast;
+  }
+
+  &__tab-label {
+    white-space: nowrap;
+  }
+
+  // --------------------------------------------------
+  // Element: right content area
+  // --------------------------------------------------
+  &__content {
+    background-color: $color-surface;
+    border-radius: $border-radius-lg;
+    border: 1px solid $color-border;
+    padding: $spacing-xl;
+    min-height: 400px;
+  }
+}
+
+// Responsive: stack layout on smaller screens
+@include respond-below('lg') {
+  .settings-shell {
+    grid-template-columns: 1fr;
+    padding: $spacing-md;
+
+    &__nav {
+      border-bottom: 1px solid $color-border;
+      padding-bottom: $spacing-md;
+    }
+
+    &__tabs {
+      flex-direction: row;
+      gap: $spacing-xs;
+      overflow-x: auto;
+    }
+
+    &__tab-link {
+      white-space: nowrap;
+      padding: $spacing-sm $spacing-md;
+    }
+  }
+}

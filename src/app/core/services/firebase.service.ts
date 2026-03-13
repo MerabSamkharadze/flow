@@ -57,4 +57,53 @@ export class FirebaseService {
   signOut() {
     return this.auth.signOut();
   }
+
+  // ---------------------------------------------------------------------------
+  // Profile helpers
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Update the current user's profile (displayName and optional photoURL).
+   * Updates both Firebase Auth profile and Firestore users/{uid} document.
+   */
+  async updateProfile(displayName: string, photoURL?: string): Promise<void> {
+    const user = await this.auth.currentUser;
+    if (!user) throw new Error('No authenticated user.');
+
+    // Update Firebase Auth profile
+    await user.updateProfile({
+      displayName,
+      ...(photoURL !== undefined && { photoURL }),
+    });
+
+    // Sync to Firestore user document
+    await this.firestore.doc(`users/${user.uid}`).set(
+      {
+        displayName,
+        ...(photoURL !== undefined && { photoURL }),
+        updatedAt: Date.now(),
+      },
+      { merge: true }
+    );
+  }
+
+  /**
+   * Change the current user's password.
+   * Reauthenticates with the current password first, then updates.
+   */
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    const user = await this.auth.currentUser;
+    if (!user || !user.email) throw new Error('No authenticated user.');
+
+    // Reauthenticate with current password
+    const { default: firebase } = await import('firebase/compat/app');
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      currentPassword
+    );
+    await user.reauthenticateWithCredential(credential);
+
+    // Update to new password
+    await user.updatePassword(newPassword);
+  }
 }
