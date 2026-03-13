@@ -20,7 +20,7 @@
     @include button-reset;
     @include focus-ring;
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     transition: color $transition-fast;
 
     &:hover {
@@ -41,7 +41,7 @@
     gap: $spacing-xs;
     width: 200px;
     flex-shrink: 0;
-    background-color: $color-surface;
+    background-color: var(--color-surface, $color-surface);
     border-radius: $border-radius-lg;
     box-shadow: $shadow-sm;
     padding: $spacing-sm;
@@ -55,7 +55,7 @@
     gap: $spacing-sm;
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     border-radius: $border-radius-md;
     border-left: 3px solid transparent;
     transition: background-color $transition-fast, color $transition-fast,
@@ -64,13 +64,13 @@
     width: 100%;
 
     &:hover {
-      background-color: $color-surface-hover;
-      color: $color-text-primary;
+      background-color: var(--color-surface-hover, $color-surface-hover);
+      color: var(--color-text-primary, $color-text-primary);
     }
 
     &--active {
       border-left-color: $color-primary;
-      color: $color-text-primary;
+      color: var(--color-text-primary, $color-text-primary);
       font-weight: $font-weight-semibold;
       background-color: $color-primary-bg;
     }
@@ -104,7 +104,7 @@
   }
 
   &__panel {
-    background-color: $color-surface;
+    background-color: var(--color-surface, $color-surface);
     border-radius: $border-radius-lg;
     box-shadow: $shadow-sm;
     padding: $spacing-lg;
@@ -113,10 +113,10 @@
   &__panel-title {
     font-size: $font-size-lg;
     font-weight: $font-weight-bold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin-bottom: $spacing-lg;
     padding-bottom: $spacing-sm;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid var(--color-border, $color-border);
 
     &--danger {
       color: $color-error;
@@ -133,7 +133,7 @@
   &__label {
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -141,12 +141,12 @@
   &__input,
   &__select,
   &__textarea {
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
     font-family: $font-family-base;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     outline: none;
     transition: border-color $transition-fast;
     width: 100%;
@@ -157,7 +157,7 @@
     }
 
     &::placeholder {
-      color: $color-text-disabled;
+      color: var(--color-text-disabled, $color-text-disabled);
     }
   }
 
@@ -168,7 +168,7 @@
 
   &__select {
     cursor: pointer;
-    background-color: $color-surface;
+    background-color: var(--color-surface, $color-surface);
   }
 
   // ── Color picker ─────────────────────────────────────────────────
@@ -194,7 +194,7 @@
     }
 
     &--selected {
-      border-color: $color-text-primary;
+      border-color: var(--color-text-primary, $color-text-primary);
       transform: scale(1.15);
     }
   }
@@ -213,7 +213,7 @@
     gap: $spacing-md;
     margin-top: $spacing-lg;
     padding-top: $spacing-md;
-    border-top: 1px solid $color-border;
+    border-top: 1px solid var(--color-border, $color-border);
   }
 
   &__save-btn {
@@ -257,7 +257,7 @@
     gap: $spacing-xs;
     margin-bottom: $spacing-lg;
     padding-bottom: $spacing-lg;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid var(--color-border, $color-border);
   }
 
   &__invite-row {
@@ -306,7 +306,7 @@
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
   }
 
@@ -337,13 +337,13 @@
   &__member-name {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     @include text-truncate;
   }
 
   &__member-email {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     @include text-truncate;
   }
 
@@ -365,9 +365,9 @@
     font-weight: $font-weight-semibold;
     padding: 2px $spacing-sm;
     border-radius: $border-radius-full;
-    border: 1px solid $color-border;
-    background-color: $color-gray-100;
-    color: $color-text-secondary;
+    border: 1px solid var(--color-border, $color-border);
+    background-color: var(--color-gray-100, $color-gray-100);
+    color: var(--color-text-secondary, $color-text-secondary);
     cursor: pointer;
     outline: none;
     transition: border-color $transition-fast;
@@ -389,9 +389,9 @@
     }
 
     &--member {
-      background-color: $color-gray-100;
-      color: $color-text-secondary;
-      border-color: $color-gray-200;
+      background-color: var(--color-gray-100, $color-gray-100);
+      color: var(--color-text-secondary, $color-text-secondary);
+      border-color: var(--color-gray-200, $color-gray-200);
     }
   }
 
@@ -402,7 +402,7 @@
     height: 28px;
     @include flex-center;
     font-size: $font-size-lg;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     border-radius: $border-radius-sm;
     transition: color $transition-fast, background-color $transition-fast;
     flex-shrink: 0;
@@ -417,7 +417,7 @@
     padding: $spacing-lg;
     text-align: center;
     font-size: $font-size-sm;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
   }
 
   // ── Danger zone ──────────────────────────────────────────────────
@@ -437,7 +437,7 @@
 
   &__danger-text {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     margin-bottom: $spacing-md;
     line-height: $line-height-relaxed;
   }

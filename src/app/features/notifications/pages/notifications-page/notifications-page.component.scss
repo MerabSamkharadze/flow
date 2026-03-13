@@ -30,7 +30,7 @@
   &__title {
     font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin: 0;
   }
 
@@ -67,15 +67,15 @@
     text-align: center;
     padding: $spacing-2xl;
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 
   // --------------------------------------------------
   // List container
   // --------------------------------------------------
   &__list {
-    background-color: $color-surface;
-    border: 1px solid $color-border;
+    background-color: var(--color-surface, $color-surface);
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-lg;
     overflow: hidden;
   }
@@ -103,13 +103,13 @@
   &__empty-text {
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin: 0 0 $spacing-xs;
   }
 
   &__empty-hint {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     max-width: 320px;
     margin: 0;
     line-height: $line-height-relaxed;

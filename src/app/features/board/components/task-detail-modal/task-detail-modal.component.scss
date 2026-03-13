@@ -25,7 +25,7 @@
 // Modal panel
 // --------------------------------------------------
 .task-modal {
-  background-color: $color-surface;
+  background-color: var(--color-surface, $color-surface);
   border-radius: $border-radius-lg;
   box-shadow: $shadow-lg;
   width: 100%;
@@ -40,21 +40,21 @@
   &__header {
     @include flex-between;
     padding: $spacing-md $spacing-lg;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid var(--color-border, $color-border);
     flex-shrink: 0;
   }
 
   &__title {
     font-size: $font-size-lg;
     font-weight: $font-weight-bold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
   }
 
   &__close-btn {
     @include button-reset;
     @include focus-ring;
     font-size: $font-size-xl;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     width: 32px;
     height: 32px;
     @include flex-center;
@@ -62,8 +62,8 @@
     transition: background-color $transition-fast, color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
-      color: $color-text-primary;
+      background-color: var(--color-surface-hover, $color-surface-hover);
+      color: var(--color-text-primary, $color-text-primary);
     }
   }
 
@@ -99,7 +99,7 @@
   &__label {
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -107,12 +107,12 @@
   &__input,
   &__select,
   &__textarea {
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
     font-family: $font-family-base;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     outline: none;
     transition: border-color $transition-fast;
 
@@ -121,7 +121,7 @@
     }
 
     &::placeholder {
-      color: $color-text-disabled;
+      color: var(--color-text-disabled, $color-text-disabled);
     }
   }
 
@@ -132,7 +132,7 @@
 
   &__select {
     cursor: pointer;
-    background-color: $color-surface;
+    background-color: var(--color-surface, $color-surface);
   }
 
   // --------------------------------------------------
@@ -142,7 +142,7 @@
     @include flex-column;
     gap: $spacing-sm;
     padding-top: $spacing-sm;
-    border-top: 1px solid $color-border;
+    border-top: 1px solid var(--color-border, $color-border);
   }
 
   &__section-header {
@@ -151,7 +151,7 @@
 
   &__subtask-count {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 
   &__subtask-list {
@@ -169,7 +169,7 @@
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
   }
 
@@ -186,19 +186,19 @@
 
   &__subtask-title {
     font-size: $font-size-sm;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
 
     // Modifier: completed subtask
     &--done {
       text-decoration: line-through;
-      color: $color-text-disabled;
+      color: var(--color-text-disabled, $color-text-disabled);
     }
   }
 
   &__subtask-remove {
     @include button-reset;
     font-size: $font-size-base;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     width: 24px;
     height: 24px;
     @include flex-center;
@@ -227,7 +227,7 @@
   &__progress-bar {
     flex: 1;
     height: 6px;
-    background-color: $color-border;
+    background-color: var(--color-border, $color-border);
     border-radius: 3px;
     overflow: hidden;
   }
@@ -241,7 +241,7 @@
 
   &__progress-text {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     min-width: 32px;
     text-align: right;
   }
@@ -269,7 +269,7 @@
   &__footer {
     @include flex-between;
     padding: $spacing-md $spacing-lg;
-    border-top: 1px solid $color-border;
+    border-top: 1px solid var(--color-border, $color-border);
     flex-shrink: 0;
   }
 
@@ -299,12 +299,12 @@
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     border-radius: $border-radius-md;
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
   }
 
@@ -355,12 +355,12 @@
     height: 20px;
     @include flex-center;
     font-size: $font-size-base;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     border-radius: $border-radius-sm;
     transition: color $transition-fast;
 
     &:hover {
-      color: $color-text-primary;
+      color: var(--color-text-primary, $color-text-primary);
     }
   }
 
@@ -372,8 +372,8 @@
     margin: 0;
     padding: $spacing-xs 0;
     list-style: none;
-    background-color: $color-surface;
-    border: 1px solid $color-border;
+    background-color: var(--color-surface, $color-surface);
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     box-shadow: $shadow-md;
     z-index: $z-dropdown;
@@ -390,7 +390,7 @@
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
   }
 
@@ -419,7 +419,7 @@
   &__name {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -427,7 +427,7 @@
 
   &__email {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -436,7 +436,7 @@
   &__empty {
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     text-align: center;
   }
 }

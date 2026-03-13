@@ -10,7 +10,7 @@
   @include flex(row);
   @include full-height;
   overflow: hidden;
-  background-color: $color-bg;
+  background-color: var(--color-bg, $color-bg);
 
   // --------------------------------------------------
   // Element: sidebar panel
@@ -53,7 +53,7 @@
   &__content {
     flex: 1;
     padding: $spacing-lg $spacing-xl; // 24px 32px on desktop
-    background-color: $color-bg;
+    background-color: var(--color-bg, $color-bg);
   }
 
   // --------------------------------------------------

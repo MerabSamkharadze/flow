@@ -7,8 +7,8 @@
 @use '../../../../../styles/abstracts/mixins' as *;
 
 .recent-tasks {
-  background-color: $color-surface;
-  border: 1px solid $color-border;
+  background-color: var(--color-surface, $color-surface);
+  border: 1px solid var(--color-border, $color-border);
   border-radius: $border-radius-lg;
   overflow: hidden;
 
@@ -18,13 +18,13 @@
   &__header {
     @include flex-between;
     padding: $spacing-md $spacing-lg;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid var(--color-border, $color-border);
   }
 
   &__title {
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin: 0;
   }
 
@@ -55,11 +55,11 @@
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    background-color: $color-gray-50;
+    background-color: var(--color-gray-50, $color-gray-50);
     white-space: nowrap;
   }
 
@@ -68,18 +68,18 @@
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
 
     &:not(:last-child) {
-      border-bottom: 1px solid $color-border;
+      border-bottom: 1px solid var(--color-border, $color-border);
     }
   }
 
   &__td {
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     white-space: nowrap;
 
     &--title {
@@ -161,7 +161,7 @@
     width: 64px;
     height: 64px;
     border-radius: $border-radius-full;
-    background-color: $color-gray-100;
+    background-color: var(--color-gray-100, $color-gray-100);
     color: $color-gray-400;
     margin-bottom: $spacing-md;
   }
@@ -169,13 +169,13 @@
   &__empty-text {
     font-size: $font-size-base;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin: 0 0 $spacing-xs;
   }
 
   &__empty-hint {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     margin: 0;
   }
 }

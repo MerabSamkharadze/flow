@@ -28,7 +28,7 @@
     @include button-reset;
     @include focus-ring;
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     transition: color $transition-fast;
 
     &:hover {
@@ -53,13 +53,13 @@
     padding: $spacing-xs $spacing-sm;
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     border-radius: $border-radius-sm;
     transition: background-color $transition-fast, color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
-      color: $color-text-primary;
+      background-color: var(--color-surface-hover, $color-surface-hover);
+      color: var(--color-text-primary, $color-text-primary);
     }
 
     // Modifier: active view
@@ -92,7 +92,7 @@
     @include flex-center;
     flex: 1;
     font-size: $font-size-base;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 
   &__error {

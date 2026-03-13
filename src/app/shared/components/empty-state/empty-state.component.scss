@@ -27,7 +27,7 @@
   &__title {
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin: 0;
   }
 
@@ -36,7 +36,7 @@
   // --------------------------------------------------
   &__subtitle {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     margin: 0;
     max-width: 320px;
   }

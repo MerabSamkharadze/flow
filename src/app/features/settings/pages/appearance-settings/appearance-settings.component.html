@@ -1,4 +1,4 @@
-<!-- Appearance Settings: theme + density selection -->
+<!-- Appearance Settings: theme selection -->
 <div class="appearance-settings">
 
   <!-- Theme section -->
@@ -41,24 +41,5 @@
     </div>
   </section>
 
-  <!-- Density section -->
-  <section class="appearance-settings__section">
-    <h2 class="appearance-settings__heading">Density</h2>
-    <p class="appearance-settings__description">
-      Adjust the spacing and size of UI elements.
-    </p>
-
-    <div class="appearance-settings__density-grid">
-      <button
-        *ngFor="let d of densities; trackBy: trackByDensity"
-        class="appearance-settings__density-card"
-        [class.appearance-settings__density-card--selected]="density === d.value"
-        (click)="onDensityChange(d.value)"
-        type="button">
-        <span class="appearance-settings__density-label">{{ d.label }}</span>
-        <span class="appearance-settings__density-desc">{{ d.description }}</span>
-      </button>
-    </div>
-  </section>
 
 </div>

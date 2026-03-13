@@ -27,7 +27,7 @@
 
   &__count {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 
   &__new-btn {
@@ -67,14 +67,14 @@
     @include flex-column;
     gap: $spacing-md;
     padding: $spacing-3xl $spacing-lg;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     font-size: $font-size-sm;
   }
 
   &__spinner {
     width: 32px;
     height: 32px;
-    border: 3px solid $color-gray-200;
+    border: 3px solid var(--color-gray-200, $color-gray-200);
     border-top-color: $color-primary;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
@@ -107,12 +107,12 @@
   &__empty-title {
     font-size: $font-size-xl;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
   }
 
   &__empty-text {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     margin-bottom: 0;
   }
 }

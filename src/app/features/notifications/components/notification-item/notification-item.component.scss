@@ -15,11 +15,11 @@
   border-left: 3px solid transparent;
 
   &:not(:last-child) {
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid var(--color-border, $color-border);
   }
 
   &:hover {
-    background-color: $color-surface-hover;
+    background-color: var(--color-surface-hover, $color-surface-hover);
   }
 
   // --------------------------------------------------
@@ -31,7 +31,7 @@
 
     .notification-item__title {
       font-weight: $font-weight-semibold;
-      color: $color-text-primary;
+      color: var(--color-text-primary, $color-text-primary);
     }
 
     &:hover {
@@ -82,20 +82,20 @@
   &__title {
     font-size: $font-size-sm;
     font-weight: $font-weight-regular;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     @include text-truncate;
   }
 
   &__time {
     font-size: $font-size-xs;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     white-space: nowrap;
     flex-shrink: 0;
   }
 
   &__body {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     margin: 0;
     line-height: $line-height-base;
     @include text-truncate;
@@ -109,7 +109,7 @@
     width: 24px;
     height: 24px;
     flex-shrink: 0;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     margin-top: 2px;
   }
 }

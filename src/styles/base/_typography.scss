@@ -10,15 +10,16 @@ body {
   font-size: $font-size-base;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
-  color: $color-text-primary;
-  background-color: $color-bg;
+  color: var(--color-text-primary, $color-text-primary);
+  background-color: var(--color-bg, $color-bg);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 // Headings
 h1, h2, h3, h4, h5, h6 {
   font-weight: $font-weight-semibold;
   line-height: $line-height-tight;
-  color: $color-text-primary;
+  color: var(--color-text-primary, $color-text-primary);
 }
 
 h1 { font-size: $font-size-3xl; }
@@ -31,7 +32,7 @@ h6 { font-size: $font-size-sm; }
 // Paragraphs
 p {
   margin-bottom: $spacing-md;
-  color: $color-text-secondary;
+  color: var(--color-text-secondary, $color-text-secondary);
 
   &:last-child {
     margin-bottom: 0;
@@ -41,7 +42,7 @@ p {
 // Small / helper text
 small {
   font-size: $font-size-sm;
-  color: $color-text-secondary;
+  color: var(--color-text-secondary, $color-text-secondary);
 }
 
 // Code / monospace

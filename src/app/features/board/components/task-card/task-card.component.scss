@@ -7,7 +7,7 @@
 @use '../../../../../styles/abstracts/mixins' as *;
 
 .task-card {
-  background-color: $color-surface;
+  background-color: var(--color-surface, $color-surface);
   border-radius: $border-radius-md;
   padding: $spacing-sm $spacing-md;
   box-shadow: $shadow-sm;
@@ -41,8 +41,8 @@
     user-select: none;
 
     &:hover {
-      color: $color-text-primary;
-      background-color: $color-gray-200;
+      color: var(--color-text-primary, $color-text-primary);
+      background-color: var(--color-gray-200, $color-gray-200);
     }
 
     &:active {
@@ -74,7 +74,7 @@
   &__title {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     line-height: $line-height-base;
     margin-bottom: $spacing-sm;
     @include text-clamp(2);
@@ -106,7 +106,7 @@
     @include flex(row, center);
     gap: 2px;
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
 
     svg {
       width: 12px;
@@ -116,12 +116,12 @@
 
   &__subtasks {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 
   &__deadline {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
 
     // Modifier: overdue deadline
     &--overdue {

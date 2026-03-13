@@ -7,8 +7,8 @@
 @use '../../../../../styles/abstracts/mixins' as *;
 
 .my-projects {
-  background-color: $color-surface;
-  border: 1px solid $color-border;
+  background-color: var(--color-surface, $color-surface);
+  border: 1px solid var(--color-border, $color-border);
   border-radius: $border-radius-lg;
   overflow: hidden;
 
@@ -18,13 +18,13 @@
   &__header {
     @include flex-between;
     padding: $spacing-md $spacing-lg;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid var(--color-border, $color-border);
   }
 
   &__title {
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin: 0;
   }
 
@@ -51,14 +51,14 @@
 
   &__card {
     padding: $spacing-md;
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border, $color-border);
     border-left: 4px solid; // color set dynamically via [style.border-left-color]
     border-radius: $border-radius-md;
     cursor: pointer;
     transition: background-color $transition-fast, box-shadow $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
       box-shadow: $shadow-sm;
     }
   }
@@ -71,7 +71,7 @@
   &__card-name {
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     @include text-truncate;
     flex: 1;
     margin-right: $spacing-sm;
@@ -120,14 +120,14 @@
     @include flex(row, center);
     gap: 4px;
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     flex-shrink: 0;
   }
 
   &__progress {
     flex: 1;
     height: 4px;
-    background-color: $color-gray-200;
+    background-color: var(--color-gray-200, $color-gray-200);
     border-radius: $border-radius-full;
     overflow: hidden;
   }
@@ -140,7 +140,7 @@
 
   &__progress-text {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     font-weight: $font-weight-medium;
     flex-shrink: 0;
     min-width: 30px;
@@ -158,7 +158,7 @@
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     color: $color-primary;
-    border: 1px dashed $color-border;
+    border: 1px dashed var(--color-border, $color-border);
     border-radius: $border-radius-md;
     transition: background-color $transition-fast, border-color $transition-fast;
 
@@ -181,13 +181,13 @@
   &__empty-text {
     font-size: $font-size-base;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin: 0 0 $spacing-xs;
   }
 
   &__empty-hint {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     margin: 0;
   }
 }

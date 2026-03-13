@@ -10,7 +10,30 @@
       "Bash(find /c/Users/msamkharadze/Desktop/personal/flow/src -type f \\\\\\( -name \"*.ts\" -o -name \"*.html\" -o -name \"*.scss\" \\\\\\) | xargs grep -l \"TODO\\\\|FIXME\\\\|PLACEHOLDER\\\\|coming soon\\\\|Coming soon\\\\|placeholder\" 2>/dev/null | head -30)",
       "Bash(/tmp/structure.txt:*)",
       "Read(//tmp/**)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(ls -la C:/Users/msamkharadze/Desktop/personal/flow/src/app/*.ts)",
+      "Bash(grep -rn \"^[[:space:]]*\\\\/\\\\/\\\\s*\\\\w\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -E \"\\(console\\\\.|debugger|alert|@ts-ignore|if.*false\\)\" | head -30)",
+      "Bash(grep -rn \"['\\\\\"]\\\\\\(localhost\\\\|127\\\\.0\\\\.0\\\\.1\\\\|hardcode\\\\|FIXME\\\\|TODO\\\\|HACK\\\\|XXX\\\\|temp\\\\\\)\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | head -30)",
+      "Bash(grep -rn \"\\\\/\\\\*\\\\|\\\\/\\\\/\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -iE \"\\(disabled|commented|remove|stub|not used|never|skip|ignore\\)\" | head -30)",
+      "Bash(grep -rn \"^\\\\s*[a-zA-Z_][a-zA-Z0-9_]*\\\\s*\\(\\\\s*\\)\\\\s*{\\\\s*}\\\\|^\\\\s*[a-zA-Z_][a-zA-Z0-9_]*\\\\s*:\\\\s*\\\\[\\\\s*\\\\]\\\\|^\\\\s*[a-zA-Z_][a-zA-Z0-9_]*\\\\s*=\\\\s*{}\\\\s*;\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | head -30)",
+      "Bash(grep -rn \":\\\\s*null\\\\|undefined\\\\|''\\\\|\\\\\"\\\\\"\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -iE \"\\(hardcode|default|mock|placeholder|test\\)\" | head -20)",
+      "Bash(wc -l C:/Users/msamkharadze/Desktop/personal/flow/src/app/features/*/pages/*/team.component.html C:/Users/msamkharadze/Desktop/personal/flow/src/app/features/team/pages/team/team.component.html C:/Users/msamkharadze/Desktop/personal/flow/src/app/features/not-found/not-found.component.html 2>/dev/null | head -20)",
+      "Bash(find /c/Users/msamkharadze/Desktop/personal/flow/src -name \"*.ts\" -exec grep -l \"boolean = false\\\\|= \\\\[\\\\]\\\\|= {}\" {} \\\\; 2>/dev/null | head -20)",
+      "Bash(grep -rn \"^\\\\s*\\\\/\\\\/\\\\s*if\\\\|^\\\\s*\\\\/\\\\/\\\\s*const\\\\|^\\\\s*\\\\/\\\\/\\\\s*let\\\\|^\\\\s*\\\\/\\\\/\\\\s*function\\\\|^\\\\s*\\\\/\\\\/\\\\s*for\\\\|^\\\\s*\\\\/\\\\/\\\\s*this\\\\.\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | head -40)",
+      "Bash(grep -rn \"color:\\\\|priority:\\\\|status:\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -E \"\\('#|\\\\\"\\)\" | head -30)",
+      "Bash(grep -rn \"^\\\\s*\\\\/\\\\/.*\\\\\\(:\\\\|\\\\.ts\\\\|\\\\.html\\\\\\)\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -v \"http\\\\|@\" | head -40)",
+      "Bash(grep -rn \": any\\\\|as any\\\\|as unknown\\\\|unknown\\\\>\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | head -40)",
+      "Bash(grep -rn \"throw new Error\\\\|throw Error\\\\|return;\\\\s*$\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | head -40)",
+      "Bash(grep -rn \"^\\\\s*\\\\/\\\\/\\\\|\\\\/\\\\*\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.json\" 2>/dev/null | head -20)",
+      "Bash(grep -rn \"^\\\\s*{\\\\s*}\\\\s*$\\\\|^\\\\s*{\\\\s*$\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | head -20)",
+      "Bash(find /c/Users/msamkharadze/Desktop/personal/flow/src -type f \\\\\\( -name \"*.ts\" -o -name \"*.html\" \\\\\\) | xargs grep -l \"test\\\\|spec\\\\|mock\\\\|stub\\\\|dummy\" 2>/dev/null | head -20)",
+      "Bash(grep -rn \"\\\\/\\\\/\\\\s*\\\\\\(.*\\\\\\)\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -iE \"disable|enable|skip|ignore|remove|delete|refactor|improve|optimize|issue\\\\s*#|bug\\\\s*#\" | head -30)",
+      "Bash(grep -rn \"\\\\btest\\\\b.*:\\\\s*\\\\\\(true\\\\|false\\\\\\)\\\\|mock\\\\|MOCK\\\\|stub\\\\|STUB\\\\|dummy\\\\|DUMMY\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | head -30)",
+      "Bash(grep -rn \"Phase.*[0-9]\\\\|TODO\\\\|FIXME\\\\|HACK\\\\|XXX\\\\|in Phase\\\\|will be\\\\|coming soon\\\\|not yet\\\\|future\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | head -40)",
+      "Bash(grep -rn \"disabled\\\\|DISABLED\\\\|will later\\\\|will be\\\\|in the future\\\\|future use\\\\|dark mode\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" --include=\"*.html\" 2>/dev/null | head -20)",
+      "Bash(grep -rn \"disabled\\\\|DISABLED\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.html\" 2>/dev/null | grep -v \"\\\\[disabled\\\\]\" | head -20)",
+      "Bash(grep -rn \"Contact admin\\\\|disabled\\\\|not yet\\\\|placeholder\\\\|Placeholder\\\\|not implemented\" /c/Users/msamkharadze/Desktop/personal\\\\flow/src --include=\"*.html\" 2>/dev/null | head -20)",
+      "Bash(grep -rn \"stub\\\\|mock\\\\|test\\\\|dummy\\\\|temporary\\\\|temp\\\\|debug\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -v node_modules | head -30)"
     ]
   }
 }

@@ -1,29 +1,152 @@
-<!-- List View (placeholder) -->
-<div class="list-view">
+<!-- List View — table-based view of board tasks -->
+<div class="board-list-view">
 
   <!-- Header -->
-  <div class="list-view__header">
-    <div class="list-view__header-left">
-      <button class="list-view__back-btn" (click)="onGoBack()">
+  <div class="board-list-view__header">
+    <div class="board-list-view__header-left">
+      <button class="board-list-view__back-btn" (click)="onGoBack()">
         &larr; Back
       </button>
-      <h1 class="list-view__title">Board</h1>
+      <h1 class="board-list-view__title">Board</h1>
     </div>
-    <div class="list-view__header-right">
-      <button class="list-view__view-btn" (click)="onSwitchToBoard()">
+    <div class="board-list-view__header-right">
+      <button class="board-list-view__view-btn" (click)="onSwitchToBoard()">
         Board
       </button>
-      <button class="list-view__view-btn list-view__view-btn--active">
+      <button class="board-list-view__view-btn board-list-view__view-btn--active">
         List
       </button>
     </div>
   </div>
 
-  <!-- Empty state — list view not yet implemented -->
-  <div class="list-view__placeholder">
-    <p class="list-view__placeholder-text">
-      The list view will display tasks in a sortable, filterable table. Use the Board view for now.
-    </p>
+  <!-- Filters bar (shared with kanban view) -->
+  <app-board-filters (filtersChanged)="onFiltersChanged($event)"></app-board-filters>
+
+  <!-- Loading spinner -->
+  <app-loading-spinner
+    *ngIf="loading$ | async"
+    size="lg"
+    message="Loading tasks...">
+  </app-loading-spinner>
+
+  <!-- Error message -->
+  <div *ngIf="error$ | async as error" class="board-list-view__error">
+    {{ error }}
   </div>
+
+  <!-- Table -->
+  <ng-container *ngIf="!(loading$ | async)">
+    <ng-container *ngIf="sortedTasks$ | async as tasks">
+      <ng-container *ngIf="columnMap$ | async as columnMap">
+
+        <!-- Empty state -->
+        <app-empty-state
+          *ngIf="tasks.length === 0"
+          title="No tasks found"
+          message="There are no tasks matching your current filters.">
+        </app-empty-state>
+
+        <!-- Task table -->
+        <div class="board-list-view__table-wrap" *ngIf="tasks.length > 0">
+          <table class="board-list-view__table">
+            <thead>
+              <tr class="board-list-view__head-row">
+                <th class="board-list-view__th board-list-view__th--title"
+                    (click)="onSort('title')">
+                  Title{{ getSortIcon('title') }}
+                </th>
+                <th class="board-list-view__th board-list-view__th--status"
+                    (click)="onSort('status')">
+                  Status{{ getSortIcon('status') }}
+                </th>
+                <th class="board-list-view__th board-list-view__th--priority"
+                    (click)="onSort('priority')">
+                  Priority{{ getSortIcon('priority') }}
+                </th>
+                <th class="board-list-view__th board-list-view__th--assignee"
+                    (click)="onSort('assigneeId')">
+                  Assignee{{ getSortIcon('assigneeId') }}
+                </th>
+                <th class="board-list-view__th board-list-view__th--deadline"
+                    (click)="onSort('deadline')">
+                  Deadline{{ getSortIcon('deadline') }}
+                </th>
+                <th class="board-list-view__th board-list-view__th--column"
+                    (click)="onSort('columnId')">
+                  Column{{ getSortIcon('columnId') }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of tasks; trackBy: trackByTaskId"
+                  class="board-list-view__row"
+                  (click)="onTaskClicked(task)">
+
+                <!-- Title -->
+                <td class="board-list-view__cell board-list-view__cell--title">
+                  {{ task.title }}
+                </td>
+
+                <!-- Status badge -->
+                <td class="board-list-view__cell">
+                  <span class="board-list-view__badge board-list-view__badge--status-{{ task.status }}">
+                    {{ getStatusLabel(task.status) }}
+                  </span>
+                </td>
+
+                <!-- Priority badge -->
+                <td class="board-list-view__cell">
+                  <span class="board-list-view__badge"
+                        [style.background-color]="priorityConfig[task.priority].color + '1a'"
+                        [style.color]="priorityConfig[task.priority].color">
+                    {{ priorityConfig[task.priority].label }}
+                  </span>
+                </td>
+
+                <!-- Assignee -->
+                <td class="board-list-view__cell">
+                  <div class="board-list-view__assignee" *ngIf="task.assigneeId">
+                    <span class="board-list-view__avatar">
+                      {{ getInitials(task.assigneeId) }}
+                    </span>
+                    <span class="board-list-view__assignee-name">{{ task.assigneeId }}</span>
+                  </div>
+                  <span class="board-list-view__muted" *ngIf="!task.assigneeId">&mdash;</span>
+                </td>
+
+                <!-- Deadline -->
+                <td class="board-list-view__cell">
+                  <span [class.board-list-view__overdue]="isOverdue(task)">
+                    {{ formatDeadline(task.deadline) }}
+                  </span>
+                </td>
+
+                <!-- Column name -->
+                <td class="board-list-view__cell">
+                  <span class="board-list-view__column-badge"
+                        *ngIf="columnMap[task.columnId] as col"
+                        [style.border-left-color]="col.color">
+                    {{ col.name }}
+                  </span>
+                  <span class="board-list-view__muted" *ngIf="!columnMap[task.columnId]">&mdash;</span>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <!-- Task detail modal -->
+  <app-task-detail-modal
+    *ngIf="activeTask$ | async as activeTask"
+    [task]="activeTask"
+    (closeModal)="onCloseModal()"
+    (taskUpdated)="onTaskUpdated($event)"
+    (taskDeleted)="onTaskDeleted($event)">
+  </app-task-detail-modal>
 
 </div>

@@ -7,9 +7,9 @@
 @use '../../../../../styles/abstracts/mixins' as *;
 
 .task-filters {
-  background-color: $color-surface;
+  background-color: var(--color-surface, $color-surface);
   border-radius: $border-radius-lg;
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border, $color-border);
   padding: $spacing-md;
 
   // --------------------------------------------------
@@ -33,7 +33,7 @@
   &__search-icon {
     position: absolute;
     left: 12px;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     pointer-events: none;
   }
 
@@ -41,14 +41,14 @@
     width: 100%;
     padding: 9px 12px 9px 36px;
     font-size: $font-size-sm;
-    color: $color-text-primary;
-    background-color: $color-bg;
-    border: 1px solid $color-border;
+    color: var(--color-text-primary, $color-text-primary);
+    background-color: var(--color-bg, $color-bg);
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     transition: border-color $transition-fast, box-shadow $transition-fast;
 
     &::placeholder {
-      color: $color-text-disabled;
+      color: var(--color-text-disabled, $color-text-disabled);
     }
 
     &:focus {
@@ -85,9 +85,9 @@
     gap: 6px;
     padding: 7px 10px;
     font-size: $font-size-xs;
-    color: $color-text-secondary;
-    background-color: $color-bg;
-    border: 1px solid $color-border;
+    color: var(--color-text-secondary, $color-text-secondary);
+    background-color: var(--color-bg, $color-bg);
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     cursor: pointer;
     transition: border-color $transition-fast, background-color $transition-fast;
@@ -95,12 +95,12 @@
 
     &:hover {
       border-color: $color-gray-300;
-      background-color: $color-surface;
+      background-color: var(--color-surface, $color-surface);
     }
 
     &--open {
       border-color: $color-primary;
-      background-color: $color-surface;
+      background-color: var(--color-surface, $color-surface);
       box-shadow: 0 0 0 3px rgba($color-primary, 0.08);
     }
 
@@ -117,16 +117,16 @@
 
   &__trigger-label {
     font-weight: $font-weight-medium;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
   }
 
   &__trigger-value {
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     text-transform: capitalize;
   }
 
   &__trigger-chevron {
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     transition: transform $transition-fast;
     flex-shrink: 0;
 
@@ -143,8 +143,8 @@
     top: calc(100% + 4px);
     left: 0;
     min-width: 170px;
-    background-color: $color-surface;
-    border: 1px solid $color-border;
+    background-color: var(--color-surface, $color-surface);
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     box-shadow: $shadow-md;
     z-index: $z-dropdown;
@@ -157,12 +157,12 @@
     gap: $spacing-sm;
     padding: 7px 12px;
     font-size: $font-size-sm;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     cursor: pointer;
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-gray-50;
+      background-color: var(--color-gray-50, $color-gray-50);
     }
   }
 
@@ -191,7 +191,7 @@
   &__select-label {
     font-size: 10px;
     font-weight: $font-weight-semibold;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding-left: 2px;
@@ -202,9 +202,9 @@
     padding: 7px 10px;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
-    color: $color-text-primary;
-    background-color: $color-bg;
-    border: 1px solid $color-border;
+    color: var(--color-text-primary, $color-text-primary);
+    background-color: var(--color-bg, $color-bg);
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     cursor: pointer;
     transition: border-color $transition-fast;
@@ -235,9 +235,9 @@
     width: 30px;
     height: 30px;
     border-radius: $border-radius-md;
-    color: $color-text-secondary;
-    border: 1px solid $color-border;
-    background-color: $color-bg;
+    color: var(--color-text-secondary, $color-text-secondary);
+    border: 1px solid var(--color-border, $color-border);
+    background-color: var(--color-bg, $color-bg);
     transition: border-color $transition-fast, color $transition-fast;
 
     &:hover {
@@ -256,7 +256,7 @@
     padding: 7px 12px;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     border-radius: $border-radius-md;
     transition: background-color $transition-fast, color $transition-fast;
     white-space: nowrap;

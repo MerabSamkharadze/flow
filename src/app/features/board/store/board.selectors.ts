@@ -141,3 +141,15 @@ export const selectFilteredTasksByColumn = (columnId: string) =>
     selectFilteredTasksMap,
     (filteredMap) => filteredMap[columnId] || []
   );
+
+/** All filtered tasks as a flat array — used by the list view */
+export const selectFilteredAllTasks = createSelector(
+  selectFilteredTasksMap,
+  (filteredMap): Task[] => {
+    const all: Task[] = [];
+    for (const columnTasks of Object.values(filteredMap)) {
+      all.push(...columnTasks);
+    }
+    return all;
+  }
+);

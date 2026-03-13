@@ -19,7 +19,7 @@
 
   &__empty-text {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 
   // --------------------------------------------------
@@ -34,14 +34,14 @@
   // Element: table header
   // --------------------------------------------------
   &__thead {
-    border-bottom: 2px solid $color-border;
+    border-bottom: 2px solid var(--color-border, $color-border);
   }
 
   &__th {
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -70,12 +70,12 @@
   // Element: table row
   // --------------------------------------------------
   &__row {
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid var(--color-border, $color-border);
     cursor: pointer;
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
 
     // Modifier: done task — dim it
@@ -95,7 +95,7 @@
   &__td {
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     vertical-align: middle;
 
     &--title {
@@ -123,12 +123,12 @@
   // --------------------------------------------------
   &__task-title {
     font-weight: $font-weight-medium;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
   }
 
   &__subtask-count {
     font-size: $font-size-xs;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
   }
 
   // --------------------------------------------------
@@ -144,7 +144,7 @@
 
   &__project-name {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     @include text-truncate;
     max-width: 120px;
   }
@@ -175,7 +175,7 @@
     white-space: nowrap;
 
     &--todo {
-      background-color: $color-gray-100;
+      background-color: var(--color-gray-100, $color-gray-100);
       color: $color-gray-600;
     }
 
@@ -204,8 +204,8 @@
     width: 28px;
     height: 28px;
     border-radius: $border-radius-md;
-    color: $color-text-disabled;
-    border: 1px solid $color-border;
+    color: var(--color-text-disabled, $color-text-disabled);
+    border: 1px solid var(--color-border, $color-border);
     margin: 0 auto;
     transition: all $transition-fast;
 

@@ -10,8 +10,9 @@
   @include flex-between;
   height: $header-height;
   padding: 0 $spacing-lg;
-  background-color: $color-surface;
-  border-bottom: 1px solid $color-border;
+  background-color: var(--color-surface, $color-surface);
+  border-bottom: 1px solid var(--color-border, $color-border);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 
   // --------------------------------------------------
   // Element: left section
@@ -27,12 +28,12 @@
     width: 36px;
     height: 36px;
     border-radius: $border-radius-md;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     transition: background-color $transition-fast, color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
-      color: $color-text-primary;
+      background-color: var(--color-surface-hover, $color-surface-hover);
+      color: var(--color-text-primary, $color-text-primary);
     }
   }
 
@@ -44,7 +45,7 @@
   &__page-title {
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin: 0;
     white-space: nowrap;
   }
@@ -58,7 +59,7 @@
   }
 
   // --------------------------------------------------
-  // Element: action button (bell) — positioned for badge overlay
+  // Element: action button (bell)
   // --------------------------------------------------
   &__action {
     @include button-reset;
@@ -66,13 +67,13 @@
     width: 36px;
     height: 36px;
     border-radius: $border-radius-md;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     transition: background-color $transition-fast, color $transition-fast;
     position: relative;
 
     &:hover {
-      background-color: $color-surface-hover;
-      color: $color-text-primary;
+      background-color: var(--color-surface-hover, $color-surface-hover);
+      color: var(--color-text-primary, $color-text-primary);
     }
   }
 
@@ -82,7 +83,7 @@
   }
 
   // --------------------------------------------------
-  // Element: notification unread badge — red pill on bell icon
+  // Element: notification unread badge
   // --------------------------------------------------
   &__notif-badge {
     position: absolute;
@@ -107,7 +108,7 @@
   &__divider {
     width: 1px;
     height: 24px;
-    background-color: $color-border;
+    background-color: var(--color-border, $color-border);
     margin: 0 $spacing-xs;
   }
 
@@ -146,14 +147,14 @@
   &__user-name {
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     @include text-truncate;
     max-width: 140px;
   }
 
   &__user-email {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     @include text-truncate;
     max-width: 140px;
   }
@@ -166,9 +167,9 @@
     padding: 6px $spacing-md;
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     border-radius: $border-radius-md;
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border, $color-border);
     transition: background-color $transition-fast, color $transition-fast, border-color $transition-fast;
 
     &:hover {

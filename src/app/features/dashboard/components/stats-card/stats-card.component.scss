@@ -10,8 +10,8 @@
   @include flex(row, center);
   gap: $spacing-md;
   padding: 20px 24px;
-  background-color: $color-surface;
-  border: 1px solid $color-border;
+  background-color: var(--color-surface, $color-surface);
+  border: 1px solid var(--color-border, $color-border);
   border-radius: $border-radius-lg;
   transition: transform $transition-fast, box-shadow $transition-fast;
   cursor: default;
@@ -45,14 +45,14 @@
   &__value {
     font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     line-height: $line-height-tight;
   }
 
   &__label {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 
   // --------------------------------------------------
