@@ -1,95 +1,216 @@
-<!-- Project Detail Page -->
+<!-- Project Detail Page — redesigned -->
 <ng-container *ngIf="project$ | async as project">
   <div class="project-detail">
 
-    <!-- Top bar: back button + actions -->
+    <!-- ── Top bar ───────────────────────────────────────────── -->
     <div class="project-detail__top-bar">
       <button class="project-detail__back-btn" (click)="onGoBack()">
-        &larr; Back to Projects
+        &#8592; Back to Projects
       </button>
       <div class="project-detail__actions">
-        <!-- Show current user's project role -->
-        <span class="project-detail__role-badge project-detail__role-badge--{{ currentUserProjectRole }}">
-          {{ currentUserProjectRole }}
-        </span>
-        <button class="project-detail__btn project-detail__btn--primary" (click)="onOpenBoard()">
+        <button
+          class="project-detail__btn project-detail__btn--primary"
+          (click)="onOpenBoard()">
           Open Board
         </button>
-        <button class="project-detail__btn project-detail__btn--secondary" (click)="onGoToSettings()">
+        <button
+          class="project-detail__btn project-detail__btn--secondary"
+          (click)="onGoToSettings()">
           Settings
         </button>
       </div>
     </div>
 
-    <!-- Project header: color accent + name + status -->
+    <!-- ── Header ────────────────────────────────────────────── -->
     <div class="project-detail__header">
-      <div class="project-detail__color-dot" [style.background-color]="project.color"></div>
-      <div class="project-detail__header-info">
+      <div class="project-detail__header-top">
+        <span
+          class="project-detail__color-dot"
+          [style.background-color]="project.color"></span>
         <h1 class="project-detail__name">{{ project.name }}</h1>
-        <span class="project-detail__status project-detail__status--{{ project.status }}">
-          {{ project.status }}
+        <span
+          class="project-detail__status project-detail__status--{{ project.status }}">
+          {{ getStatusLabel(project.status) }}
         </span>
+      </div>
+      <p
+        *ngIf="project.description"
+        class="project-detail__description">
+        {{ project.description }}
+      </p>
+    </div>
+
+    <!-- ── Stats row ─────────────────────────────────────────── -->
+    <div class="project-detail__stats">
+      <div class="project-detail__stat-card">
+        <span class="project-detail__stat-icon">&#128203;</span>
+        <div class="project-detail__stat-body">
+          <span class="project-detail__stat-label">Total Tasks</span>
+          <span class="project-detail__stat-value">{{ totalTasks }}</span>
+        </div>
+      </div>
+      <div class="project-detail__stat-card">
+        <span class="project-detail__stat-icon">&#9989;</span>
+        <div class="project-detail__stat-body">
+          <span class="project-detail__stat-label">Completed</span>
+          <span class="project-detail__stat-value">
+            {{ completedTasks }}
+            <small class="project-detail__stat-pct" *ngIf="totalTasks > 0">
+              {{ completedPercent }}%
+            </small>
+          </span>
+        </div>
+      </div>
+      <div class="project-detail__stat-card">
+        <span class="project-detail__stat-icon">&#9200;</span>
+        <div class="project-detail__stat-body">
+          <span class="project-detail__stat-label">Overdue</span>
+          <span
+            class="project-detail__stat-value"
+            [class.project-detail__stat-value--danger]="overdueTasks > 0">
+            {{ overdueTasks }}
+          </span>
+        </div>
+      </div>
+      <div class="project-detail__stat-card">
+        <span class="project-detail__stat-icon">&#128101;</span>
+        <div class="project-detail__stat-body">
+          <span class="project-detail__stat-label">Members</span>
+          <span class="project-detail__stat-value">{{ members.length }}</span>
+        </div>
       </div>
     </div>
 
-    <!-- Content grid -->
-    <div class="project-detail__content">
+    <!-- ── Main content (2 columns) ─────────────────────────── -->
+    <div class="project-detail__main">
 
-      <!-- Left: description + progress -->
-      <div class="project-detail__main">
+      <!-- LEFT COLUMN -->
+      <div class="project-detail__left">
 
-        <!-- Description -->
-        <section class="project-detail__section">
-          <h2 class="project-detail__section-title">Description</h2>
-          <p class="project-detail__description">{{ project.description }}</p>
-        </section>
-
-        <!-- Progress — computed from board tasks once available -->
-        <section class="project-detail__section">
-          <h2 class="project-detail__section-title">Progress</h2>
+        <!-- Progress section -->
+        <section class="project-detail__card">
+          <h3 class="project-detail__section-title">Progress</h3>
           <div class="project-detail__progress">
             <div class="project-detail__progress-bar">
               <div
                 class="project-detail__progress-fill"
-                [style.width.%]="progressPercent"
+                [style.width.%]="completedPercent"
                 [style.background-color]="project.color">
               </div>
             </div>
-            <span class="project-detail__progress-label">{{ progressPercent }}%</span>
           </div>
+          <span class="project-detail__progress-label">
+            {{ completedTasks }} of {{ totalTasks }} tasks completed
+          </span>
+        </section>
+
+        <!-- Recent tasks section -->
+        <section class="project-detail__card">
+          <h3 class="project-detail__section-title">Recent Tasks</h3>
+
+          <div
+            class="project-detail__tasks-list"
+            *ngIf="recentTasks.length > 0; else noTasks">
+            <div
+              class="project-detail__task-row"
+              *ngFor="let task of recentTasks; trackBy: trackTask">
+              <!-- Priority dot -->
+              <span
+                class="project-detail__task-priority"
+                [style.background-color]="priorityConfig[task.priority].color">
+              </span>
+              <!-- Title -->
+              <span class="project-detail__task-title">{{ task.title }}</span>
+              <!-- Status badge -->
+              <span
+                class="project-detail__task-status project-detail__task-status--{{ task.status }}">
+                {{ getStatusLabel(task.status) }}
+              </span>
+              <!-- Deadline -->
+              <span
+                class="project-detail__task-deadline"
+                *ngIf="task.deadline">
+                {{ task.deadline }}
+              </span>
+            </div>
+          </div>
+
+          <ng-template #noTasks>
+            <p class="project-detail__empty">No tasks yet. Open the board to create some.</p>
+          </ng-template>
+
+          <a
+            *ngIf="recentTasks.length > 0"
+            class="project-detail__link"
+            (click)="onOpenBoard()">
+            View all on Board &#8594;
+          </a>
         </section>
       </div>
 
-      <!-- Right: sidebar info -->
-      <aside class="project-detail__sidebar">
+      <!-- RIGHT COLUMN -->
+      <div class="project-detail__right">
 
-        <!-- Deadline -->
-        <div class="project-detail__info-block">
-          <h3 class="project-detail__info-label">Deadline</h3>
-          <p class="project-detail__info-value">
-            {{ project.deadline ? project.deadline : 'No deadline set' }}
-          </p>
-        </div>
+        <!-- Project Info card -->
+        <section class="project-detail__card">
+          <h3 class="project-detail__section-title">Project Info</h3>
 
-        <!-- Members Panel -->
-        <app-members-panel
-          [members]="members"
-          [currentUserRole]="currentUserProjectRole"
-          [currentUserId]="currentUserId"
-          (openInviteModal)="onOpenInviteModal()"
-          (removeMember)="onRemoveMember($event)"
-          (changeRole)="onChangeRole($event)">
-        </app-members-panel>
+          <div class="project-detail__info-row">
+            <span class="project-detail__info-label">Created</span>
+            <span class="project-detail__info-value">
+              {{ project.createdAt | date:'mediumDate' }}
+            </span>
+          </div>
+          <div class="project-detail__info-row">
+            <span class="project-detail__info-label">Deadline</span>
+            <span class="project-detail__info-value">
+              {{ project.deadline || 'Not set' }}
+            </span>
+          </div>
+          <div class="project-detail__info-row">
+            <span class="project-detail__info-label">Status</span>
+            <span
+              class="project-detail__status project-detail__status--{{ project.status }}">
+              {{ getStatusLabel(project.status) }}
+            </span>
+          </div>
+        </section>
 
-        <!-- Created -->
-        <div class="project-detail__info-block">
-          <h3 class="project-detail__info-label">Created</h3>
-          <p class="project-detail__info-value">
-            {{ project.createdAt | date:'mediumDate' }}
-          </p>
-        </div>
+        <!-- Members card -->
+        <section class="project-detail__card">
+          <h3 class="project-detail__section-title">Members</h3>
 
-      </aside>
+          <div class="project-detail__avatars" *ngIf="members.length > 0; else noMembers">
+            <span
+              *ngFor="let m of visibleMembers; trackBy: trackMember"
+              class="project-detail__avatar"
+              [style.background-color]="m.avatarUrl ? 'transparent' : project.color"
+              [title]="m.displayName || m.email">
+              <img
+                *ngIf="m.avatarUrl"
+                class="project-detail__avatar-img"
+                [src]="m.avatarUrl"
+                [alt]="m.displayName" />
+              <span *ngIf="!m.avatarUrl">
+                {{ getInitials(m.displayName || m.email) }}
+              </span>
+            </span>
+            <span
+              *ngIf="overflowCount > 0"
+              class="project-detail__avatar project-detail__avatar--overflow">
+              +{{ overflowCount }}
+            </span>
+          </div>
+
+          <ng-template #noMembers>
+            <p class="project-detail__empty">No members yet.</p>
+          </ng-template>
+
+          <a class="project-detail__link" (click)="onGoToMembersSettings()">
+            Manage Members &#8594;
+          </a>
+        </section>
+      </div>
     </div>
 
   </div>
@@ -97,10 +218,10 @@
 
 <!-- Loading state -->
 <div class="project-detail__loading" *ngIf="loading$ | async">
-  Loading project...
+  <app-loading-spinner></app-loading-spinner>
 </div>
 
-<!-- Invite modal (rendered conditionally) -->
+<!-- Invite modal -->
 <app-invite-modal
   *ngIf="showInviteModal"
   (inviteMember)="onInviteMember($event)"
