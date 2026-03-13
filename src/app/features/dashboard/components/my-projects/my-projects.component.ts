@@ -1,6 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { Project, ProjectStatus } from '../../../../shared/models/project.model';
+import { ProjectTaskCounts } from '../../../projects/store/projects.reducer';
+import { selectProjectTaskCounts } from '../../../projects/store/projects.selectors';
 
 /**
  * MyProjectsComponent — sidebar widget showing up to 4 projects
@@ -12,11 +16,20 @@ import { Project, ProjectStatus } from '../../../../shared/models/project.model'
   templateUrl: './my-projects.component.html',
   styleUrls: ['./my-projects.component.scss'],
 })
-export class MyProjectsComponent {
+export class MyProjectsComponent implements OnInit {
   /** Projects to display (pre-sorted by parent, we show first 4) */
   @Input() projects: Project[] = [];
 
-  constructor(private router: Router) {}
+  taskCounts$!: Observable<{ [projectId: string]: ProjectTaskCounts }>;
+
+  constructor(
+    private router: Router,
+    private store: Store
+  ) {}
+
+  ngOnInit(): void {
+    this.taskCounts$ = this.store.select(selectProjectTaskCounts);
+  }
 
   /** Navigate to a project's detail page */
   onClick(project: Project): void {
@@ -45,13 +58,10 @@ export class MyProjectsComponent {
     return project.id;
   }
 
-  /** Compute a mock progress percentage based on project status */
-  getProgress(project: Project): number {
-    switch (project.status) {
-      case 'completed': return 100;
-      case 'archived': return 100;
-      case 'on-hold': return 35;
-      default: return 60; // Placeholder — will use real task data in Phase 6
-    }
+  /** Compute progress percentage from task counts */
+  getProgress(projectId: string, counts: { [id: string]: ProjectTaskCounts }): number {
+    const c = counts[projectId];
+    if (!c || c.total === 0) return 0;
+    return Math.round((c.completed / c.total) * 100);
   }
 }

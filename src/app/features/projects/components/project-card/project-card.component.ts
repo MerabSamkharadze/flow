@@ -16,19 +16,8 @@ import { Project } from '../../../../shared/models/project.model';
 export class ProjectCardComponent {
   @Input() project!: Project;
 
-  /** Calculate a mock progress percentage based on status */
-  get progress(): number {
-    switch (this.project.status) {
-      case 'completed':
-        return 100;
-      case 'archived':
-        return 100;
-      case 'on-hold':
-        return 35;
-      default:
-        return 60; // Placeholder — will be calculated from real task data in Phase 6
-    }
-  }
+  /** Real progress percentage (0-100) from task data */
+  @Input() progress: number = 0;
 
   /** Format deadline for display */
   get formattedDeadline(): string | null {

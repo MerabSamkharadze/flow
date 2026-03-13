@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ProjectsState, projectsAdapter } from './projects.reducer';
+import { ProjectsState, ProjectTaskCounts, projectsAdapter } from './projects.reducer';
 
 /**
  * Projects Selectors — memoized selectors for reading projects state.
@@ -63,3 +63,9 @@ export const selectProjectById = (projectId: string) =>
     selectProjectEntities,
     (entities) => entities[projectId] ?? null
   );
+
+/** Task counts dictionary keyed by project ID */
+export const selectProjectTaskCounts = createSelector(
+  selectProjectsState,
+  (state): { [projectId: string]: ProjectTaskCounts } => state.taskCounts
+);

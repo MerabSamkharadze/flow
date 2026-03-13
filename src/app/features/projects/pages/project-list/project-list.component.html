@@ -30,10 +30,13 @@
     <ng-container *ngIf="projects$ | async as projects">
 
       <div class="project-list__grid" *ngIf="projects.length > 0; else emptyState">
-        <app-project-card
-          *ngFor="let project of projects; trackBy: trackByProjectId"
-          [project]="project">
-        </app-project-card>
+        <ng-container *ngIf="taskCounts$ | async as counts">
+          <app-project-card
+            *ngFor="let project of projects; trackBy: trackByProjectId"
+            [project]="project"
+            [progress]="getProgress(project.id, counts)">
+          </app-project-card>
+        </ng-container>
       </div>
 
       <!-- Empty state when no projects exist -->

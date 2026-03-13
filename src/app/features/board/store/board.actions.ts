@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { Column } from '../../../shared/models/column.model';
-import { Task } from '../../../shared/models/task.model';
+import { Column } from '@shared/models/column.model';
+import { Task } from '@shared/models/task.model';
 import { BoardFilters } from '../models/board-filters.model';
 
 /**

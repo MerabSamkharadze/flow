@@ -4,11 +4,13 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { Project } from '../../../../shared/models/project.model';
+import { ProjectTaskCounts } from '../../store/projects.reducer';
 import * as ProjectsActions from '../../store/projects.actions';
 import {
   selectAllProjects,
   selectProjectsLoading,
   selectProjectsError,
+  selectProjectTaskCounts,
 } from '../../store';
 
 /**
@@ -27,6 +29,7 @@ import {
 })
 export class ProjectListComponent implements OnInit {
   projects$!: Observable<Project[]>;
+  taskCounts$!: Observable<{ [projectId: string]: ProjectTaskCounts }>;
   loading$!: Observable<boolean>;
   error$!: Observable<string | null>;
 
@@ -38,6 +41,7 @@ export class ProjectListComponent implements OnInit {
   ngOnInit(): void {
     // Bind store selectors
     this.projects$ = this.store.select(selectAllProjects);
+    this.taskCounts$ = this.store.select(selectProjectTaskCounts);
     this.loading$ = this.store.select(selectProjectsLoading);
     this.error$ = this.store.select(selectProjectsError);
 
@@ -47,6 +51,13 @@ export class ProjectListComponent implements OnInit {
 
   onNewProject(): void {
     this.router.navigate(['/projects/new']);
+  }
+
+  /** Compute progress percentage for a project from task counts */
+  getProgress(projectId: string, counts: { [id: string]: ProjectTaskCounts }): number {
+    const c = counts[projectId];
+    if (!c || c.total === 0) return 0;
+    return Math.round((c.completed / c.total) * 100);
   }
 
   /** TrackBy for project cards — improves ngFor performance */

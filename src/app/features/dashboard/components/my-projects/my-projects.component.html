@@ -9,42 +9,44 @@
 
   <!-- Project cards -->
   <div class="my-projects__list" *ngIf="visibleProjects.length > 0; else emptyState">
-    <div *ngFor="let project of visibleProjects; trackBy: trackByProjectId"
-         class="my-projects__card"
-         [style.border-left-color]="project.color"
-         (click)="onClick(project)">
+    <ng-container *ngIf="taskCounts$ | async as counts">
+      <div *ngFor="let project of visibleProjects; trackBy: trackByProjectId"
+           class="my-projects__card"
+           [style.border-left-color]="project.color"
+           (click)="onClick(project)">
 
-      <!-- Row 1: name + status -->
-      <div class="my-projects__card-header">
-        <span class="my-projects__card-name">{{ project.name }}</span>
-        <span class="my-projects__card-status"
-              [class.my-projects__card-status--active]="project.status === 'active'"
-              [class.my-projects__card-status--on-hold]="project.status === 'on-hold'"
-              [class.my-projects__card-status--completed]="project.status === 'completed'"
-              [class.my-projects__card-status--archived]="project.status === 'archived'">
-          {{ formatStatus(project.status) }}
-        </span>
-      </div>
-
-      <!-- Row 2: members + progress -->
-      <div class="my-projects__card-footer">
-        <span class="my-projects__card-members">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-          </svg>
-          {{ project.memberIds.length }}
-        </span>
-        <div class="my-projects__progress">
-          <div class="my-projects__progress-bar"
-               [style.width.%]="getProgress(project)"
-               [style.background-color]="project.color">
-          </div>
+        <!-- Row 1: name + status -->
+        <div class="my-projects__card-header">
+          <span class="my-projects__card-name">{{ project.name }}</span>
+          <span class="my-projects__card-status"
+                [class.my-projects__card-status--active]="project.status === 'active'"
+                [class.my-projects__card-status--on-hold]="project.status === 'on-hold'"
+                [class.my-projects__card-status--completed]="project.status === 'completed'"
+                [class.my-projects__card-status--archived]="project.status === 'archived'">
+            {{ formatStatus(project.status) }}
+          </span>
         </div>
-        <span class="my-projects__progress-text">{{ getProgress(project) }}%</span>
+
+        <!-- Row 2: members + progress -->
+        <div class="my-projects__card-footer">
+          <span class="my-projects__card-members">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+            </svg>
+            {{ project.memberIds.length }}
+          </span>
+          <div class="my-projects__progress">
+            <div class="my-projects__progress-bar"
+                 [style.width.%]="getProgress(project.id, counts)"
+                 [style.background-color]="project.color">
+            </div>
+          </div>
+          <span class="my-projects__progress-text">{{ getProgress(project.id, counts) }}%</span>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 
   <!-- New project button -->

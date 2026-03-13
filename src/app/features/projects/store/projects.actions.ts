@@ -159,3 +159,17 @@ export const updateMemberRoleFailure = createAction(
   '[Projects API] Update Member Role Failure',
   props<{ error: string }>()
 );
+
+// ---------------------------------------------------------------------------
+// Project progress (task counts)
+// ---------------------------------------------------------------------------
+
+export const loadProjectsProgress = createAction(
+  '[Projects Page] Load Projects Progress',
+  props<{ projectIds: string[] }>()
+);
+
+export const setProjectProgress = createAction(
+  '[Projects API] Set Project Progress',
+  props<{ projectId: string; total: number; completed: number }>()
+);

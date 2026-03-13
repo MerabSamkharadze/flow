@@ -15,10 +15,16 @@ import * as ProjectsActions from './projects.actions';
  *   - loading: true while a Firestore operation is in progress
  *   - error: error message from the last failed operation
  */
+export interface ProjectTaskCounts {
+  total: number;
+  completed: number;
+}
+
 export interface ProjectsState extends EntityState<Project> {
   selectedProjectId: string | null;
   loading: boolean;
   error: string | null;
+  taskCounts: { [projectId: string]: ProjectTaskCounts };
 }
 
 /**
@@ -35,6 +41,7 @@ export const initialProjectsState: ProjectsState = projectsAdapter.getInitialSta
   selectedProjectId: null,
   loading: false,
   error: null,
+  taskCounts: {},
 });
 
 export const projectsReducer = createReducer(
@@ -200,5 +207,17 @@ export const projectsReducer = createReducer(
     );
   }),
 
-  on(ProjectsActions.updateMemberRoleSuccess, (state) => state)
+  on(ProjectsActions.updateMemberRoleSuccess, (state) => state),
+
+  // ---------------------------------------------------------------------------
+  // Project progress (task counts)
+  // ---------------------------------------------------------------------------
+
+  on(ProjectsActions.setProjectProgress, (state, { projectId, total, completed }) => ({
+    ...state,
+    taskCounts: {
+      ...state.taskCounts,
+      [projectId]: { total, completed },
+    },
+  }))
 );

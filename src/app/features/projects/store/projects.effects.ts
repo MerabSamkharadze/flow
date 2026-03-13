@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { of, merge } from 'rxjs';
+import { catchError, exhaustMap, map, switchMap, tap, withLatestFrom, take, mergeMap } from 'rxjs/operators';
 
 import { ProjectsService } from '../services/projects.service';
+import { BoardService } from '../../board/services/board.service';
 import { NotificationsService } from '../../../core/services/notifications.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { selectUser } from '../../auth/store';
@@ -25,6 +26,7 @@ export class ProjectsEffects {
   constructor(
     private actions$: Actions,
     private projectsService: ProjectsService,
+    private boardService: BoardService,
     private notificationsService: NotificationsService,
     private toastService: ToastService,
     private router: Router,
@@ -230,6 +232,56 @@ export class ProjectsEffects {
         this.projectsService.updateMemberRole(projectId, userId, newRole).then(
           () => ProjectsActions.updateMemberRoleSuccess({ projectId, userId, newRole }),
           (error) => ProjectsActions.updateMemberRoleFailure({ error: error.message })
+        )
+      )
+    )
+  );
+
+  // ---------------------------------------------------------------------------
+  // Project progress — load task counts for each project
+  // ---------------------------------------------------------------------------
+
+  /** When projects load, automatically fetch task counts for each */
+  loadProgressOnProjectsLoad$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProjectsActions.loadProjectsSuccess),
+      switchMap(({ projects }) =>
+        merge(
+          ...projects.map((project) =>
+            this.boardService.getTasks(project.id).pipe(
+              take(1),
+              map((tasks) =>
+                ProjectsActions.setProjectProgress({
+                  projectId: project.id,
+                  total: tasks.length,
+                  completed: tasks.filter((t) => t.status === 'done').length,
+                })
+              )
+            )
+          )
+        )
+      )
+    )
+  );
+
+  /** Explicit load for specific project IDs */
+  loadProjectsProgress$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProjectsActions.loadProjectsProgress),
+      switchMap(({ projectIds }) =>
+        merge(
+          ...projectIds.map((projectId) =>
+            this.boardService.getTasks(projectId).pipe(
+              take(1),
+              map((tasks) =>
+                ProjectsActions.setProjectProgress({
+                  projectId,
+                  total: tasks.length,
+                  completed: tasks.filter((t) => t.status === 'done').length,
+                })
+              )
+            )
+          )
         )
       )
     )
