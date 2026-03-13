@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap } from 'rxjs/operators';
+import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
 
 import { NotificationsService } from '../../../core/services/notifications.service';
+import { ToastService } from '../../../core/services/toast.service';
 import * as NotificationsActions from './notifications.actions';
 
 /**
@@ -16,7 +17,8 @@ import * as NotificationsActions from './notifications.actions';
 export class NotificationsEffects {
   constructor(
     private actions$: Actions,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private toastService: ToastService
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -71,5 +73,15 @@ export class NotificationsEffects {
         )
       )
     )
+  );
+
+  /** Show toast when all notifications are marked as read */
+  toastMarkAllAsRead$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(NotificationsActions.markAllAsReadSuccess),
+        tap(() => this.toastService.show('All notifications marked as read.', 'success'))
+      ),
+    { dispatch: false }
   );
 }

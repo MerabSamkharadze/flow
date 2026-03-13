@@ -7,6 +7,7 @@ import { catchError, exhaustMap, map, switchMap, tap, withLatestFrom } from 'rxj
 
 import { ProjectsService } from '../services/projects.service';
 import { NotificationsService } from '../../../core/services/notifications.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { selectUser } from '../../auth/store';
 import * as ProjectsActions from './projects.actions';
 
@@ -25,6 +26,7 @@ export class ProjectsEffects {
     private actions$: Actions,
     private projectsService: ProjectsService,
     private notificationsService: NotificationsService,
+    private toastService: ToastService,
     private router: Router,
     private store: Store
   ) {}
@@ -84,12 +86,25 @@ export class ProjectsEffects {
     )
   );
 
-  /** On successful creation, navigate to the project list */
+  /** On successful creation, show toast and navigate to the project list */
   createProjectSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(ProjectsActions.createProjectSuccess),
-        tap(() => this.router.navigate(['/projects']))
+        tap(({ project }) => {
+          this.toastService.show(`Project "${project.name}" created!`, 'success');
+          this.router.navigate(['/projects']);
+        })
+      ),
+    { dispatch: false }
+  );
+
+  /** Show toast on create project failure */
+  createProjectFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ProjectsActions.createProjectFailure),
+        tap(({ error }) => this.toastService.show(error || 'Failed to create project.', 'error', 5000))
       ),
     { dispatch: false }
   );
@@ -158,6 +173,16 @@ export class ProjectsEffects {
         )
       )
     )
+  );
+
+  /** Show toast when a member is added */
+  toastMemberAdded$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ProjectsActions.addMemberSuccess),
+        tap(({ member }) => this.toastService.show(`${member.displayName || member.email} added to project.`, 'success'))
+      ),
+    { dispatch: false }
   );
 
   /** Notify the newly added member */

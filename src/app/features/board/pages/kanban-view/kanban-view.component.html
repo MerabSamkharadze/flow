@@ -26,9 +26,11 @@
   <app-board-filters (filtersChanged)="onFiltersChanged($event)"></app-board-filters>
 
   <!-- Loading spinner -->
-  <div *ngIf="loading$ | async" class="kanban-view__loading">
-    Loading board...
-  </div>
+  <app-loading-spinner
+    *ngIf="loading$ | async"
+    size="lg"
+    message="Loading board...">
+  </app-loading-spinner>
 
   <!-- Error message -->
   <div *ngIf="error$ | async as error" class="kanban-view__error">

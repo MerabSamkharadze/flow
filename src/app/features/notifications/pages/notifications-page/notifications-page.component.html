@@ -19,9 +19,10 @@
     </div>
 
     <!-- Loading spinner -->
-    <div *ngIf="loading$ | async" class="notifications-page__loading">
-      Loading notifications...
-    </div>
+    <app-loading-spinner
+      *ngIf="loading$ | async"
+      message="Loading notifications...">
+    </app-loading-spinner>
 
     <!-- Notification list -->
     <div class="notifications-page__list"
@@ -37,19 +38,11 @@
 
       <!-- Empty state -->
       <ng-template #emptyState>
-        <div class="notifications-page__empty">
-          <div class="notifications-page__empty-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-          </div>
-          <p class="notifications-page__empty-text">You're all caught up!</p>
-          <p class="notifications-page__empty-hint">
-            No new notifications. We'll let you know when something happens.
-          </p>
-        </div>
+        <app-empty-state
+          icon="notifications"
+          title="You're all caught up!"
+          subtitle="No new notifications. We'll let you know when something happens.">
+        </app-empty-state>
       </ng-template>
 
     </div>

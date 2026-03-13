@@ -8,6 +8,9 @@ import { LayoutComponent } from './layout/layout.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { HeaderComponent } from './layout/header/header.component';
 
+// Core UI components
+import { ToastContainerComponent } from './components/toast-container/toast-container.component';
+
 // Interceptors
 import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
 import { ErrorInterceptor } from './auth/interceptors/error.interceptor';
@@ -24,6 +27,7 @@ import { ErrorInterceptor } from './auth/interceptors/error.interceptor';
     LayoutComponent,
     SidebarComponent,
     HeaderComponent,
+    ToastContainerComponent,
   ],
   imports: [
     CommonModule,

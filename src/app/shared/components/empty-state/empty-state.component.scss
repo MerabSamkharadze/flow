@@ -1,0 +1,63 @@
+// ==========================================================================
+// Empty State Component — BEM
+// Block: .empty-state
+// ==========================================================================
+
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+.empty-state {
+  @include flex-center;
+  @include flex-column;
+  gap: $spacing-sm;
+  padding: $spacing-3xl $spacing-lg;
+  text-align: center;
+
+  // --------------------------------------------------
+  // Element: icon wrapper
+  // --------------------------------------------------
+  &__icon {
+    color: $color-gray-300;
+    margin-bottom: $spacing-sm;
+  }
+
+  // --------------------------------------------------
+  // Element: title
+  // --------------------------------------------------
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+  }
+
+  // --------------------------------------------------
+  // Element: subtitle
+  // --------------------------------------------------
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+    max-width: 320px;
+  }
+
+  // --------------------------------------------------
+  // Element: action button
+  // --------------------------------------------------
+  &__action {
+    @include button-reset;
+    @include focus-ring;
+    margin-top: $spacing-sm;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+}

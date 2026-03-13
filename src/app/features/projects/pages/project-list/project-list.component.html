@@ -20,10 +20,10 @@
   </div>
 
   <!-- Loading spinner -->
-  <div class="project-list__loading" *ngIf="loading$ | async">
-    <div class="project-list__spinner"></div>
-    <span>Loading projects...</span>
-  </div>
+  <app-loading-spinner
+    *ngIf="loading$ | async"
+    message="Loading projects...">
+  </app-loading-spinner>
 
   <!-- Project cards grid -->
   <ng-container *ngIf="!(loading$ | async)">
@@ -38,13 +38,13 @@
 
       <!-- Empty state when no projects exist -->
       <ng-template #emptyState>
-        <div class="project-list__empty">
-          <h3 class="project-list__empty-title">No projects yet</h3>
-          <p class="project-list__empty-text">Create your first project to get started.</p>
-          <button class="project-list__new-btn" (click)="onNewProject()">
-            + New Project
-          </button>
-        </div>
+        <app-empty-state
+          icon="projects"
+          title="No projects yet"
+          subtitle="Create your first project to get started."
+          actionLabel="+ New Project"
+          (actionClicked)="onNewProject()">
+        </app-empty-state>
       </ng-template>
 
     </ng-container>

@@ -1,0 +1,26 @@
+<!-- Confirm Dialog: modal overlay with confirm/cancel actions -->
+<div class="confirm-dialog__overlay" (click)="onOverlayClick($event)">
+  <div class="confirm-dialog"
+       [class.confirm-dialog--danger]="variant === 'danger'"
+       [class.confirm-dialog--warning]="variant === 'warning'"
+       role="alertdialog"
+       aria-modal="true">
+
+    <!-- Header -->
+    <h3 class="confirm-dialog__title">{{ title }}</h3>
+
+    <!-- Body -->
+    <p class="confirm-dialog__message" *ngIf="message">{{ message }}</p>
+
+    <!-- Actions -->
+    <div class="confirm-dialog__actions">
+      <button class="confirm-dialog__cancel-btn" type="button" (click)="onCancel()">
+        {{ cancelLabel }}
+      </button>
+      <button class="confirm-dialog__confirm-btn" type="button" (click)="onConfirm()">
+        {{ confirmLabel }}
+      </button>
+    </div>
+
+  </div>
+</div>

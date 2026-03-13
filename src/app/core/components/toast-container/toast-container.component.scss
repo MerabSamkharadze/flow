@@ -1,0 +1,133 @@
+// ==========================================================================
+// Toast Container + Toast — BEM
+// Block: .toast-container, .toast
+// ==========================================================================
+
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+// --------------------------------------------------
+// Container: fixed bottom-right stack
+// --------------------------------------------------
+.toast-container {
+  position: fixed;
+  bottom: $spacing-lg;
+  right: $spacing-lg;
+  z-index: $z-toast;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  pointer-events: none;
+  max-width: 380px;
+  width: 100%;
+
+  // On mobile, center horizontally
+  @include respond-below('sm') {
+    right: $spacing-sm;
+    left: $spacing-sm;
+    max-width: none;
+  }
+}
+
+// --------------------------------------------------
+// Individual toast
+// --------------------------------------------------
+.toast {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-lg;
+  background-color: $color-surface;
+  border-left: 4px solid $color-info;
+  pointer-events: auto;
+  animation: toast-slide-in 0.3s ease forwards;
+
+  // --------------------------------------------------
+  // Type variants
+  // --------------------------------------------------
+  &--success {
+    border-left-color: $color-success;
+  }
+
+  &--error {
+    border-left-color: $color-error;
+  }
+
+  &--warning {
+    border-left-color: $color-warning;
+  }
+
+  &--info {
+    border-left-color: $color-info;
+  }
+
+  // --------------------------------------------------
+  // Element: icon
+  // --------------------------------------------------
+  &__icon {
+    flex-shrink: 0;
+    @include flex-center;
+  }
+
+  &--success &__icon {
+    color: $color-success;
+  }
+
+  &--error &__icon {
+    color: $color-error;
+  }
+
+  &--warning &__icon {
+    color: $color-warning;
+  }
+
+  &--info &__icon {
+    color: $color-info;
+  }
+
+  // --------------------------------------------------
+  // Element: message
+  // --------------------------------------------------
+  &__message {
+    flex: 1;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    line-height: $line-height-base;
+  }
+
+  // --------------------------------------------------
+  // Element: close button
+  // --------------------------------------------------
+  &__close {
+    @include button-reset;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    @include flex-center;
+    font-size: $font-size-lg;
+    color: $color-text-disabled;
+    border-radius: $border-radius-sm;
+    transition: color $transition-fast, background-color $transition-fast;
+
+    &:hover {
+      color: $color-text-primary;
+      background-color: $color-surface-hover;
+    }
+  }
+}
+
+// --------------------------------------------------
+// Slide-in animation
+// --------------------------------------------------
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

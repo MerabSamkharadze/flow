@@ -27,7 +27,21 @@
     <div class="project-settings__section project-settings__section--danger">
       <h2 class="project-settings__section-title">Danger Zone</h2>
       <p class="project-settings__section-text">Archive or delete this project.</p>
+      <button class="project-settings__delete-btn" (click)="onDeleteProject()">
+        Delete Project
+      </button>
     </div>
   </div>
+
+  <!-- Confirm delete project dialog -->
+  <app-confirm-dialog
+    *ngIf="showDeleteConfirm"
+    title="Delete Project"
+    message="Are you sure you want to delete this project? All tasks, columns, and data will be permanently removed. This action cannot be undone."
+    confirmLabel="Delete Project"
+    variant="danger"
+    (confirmed)="onConfirmDelete()"
+    (cancelled)="onCancelDelete()">
+  </app-confirm-dialog>
 
 </div>

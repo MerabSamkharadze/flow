@@ -66,4 +66,21 @@
     color: $color-text-secondary;
     margin-bottom: 0;
   }
+
+  &__delete-btn {
+    @include button-reset;
+    @include focus-ring;
+    margin-top: $spacing-md;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-error;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: darken(#ef4444, 10%);
+    }
+  }
 }

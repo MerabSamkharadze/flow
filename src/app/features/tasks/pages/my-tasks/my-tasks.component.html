@@ -40,10 +40,10 @@
   </div>
 
   <!-- Loading state -->
-  <div class="my-tasks__loading" *ngIf="loading$ | async">
-    <div class="my-tasks__spinner"></div>
-    <span>Loading tasks...</span>
-  </div>
+  <app-loading-spinner
+    *ngIf="loading$ | async"
+    message="Loading tasks...">
+  </app-loading-spinner>
 
   <!-- Content: grouped view -->
   <ng-container *ngIf="!(loading$ | async) && viewMode === 'grouped'">
@@ -141,12 +141,12 @@
 
     <!-- Empty state (when all groups are empty) -->
     <ng-container *ngIf="filteredTasks$ | async as filteredTasks">
-      <div class="my-tasks__empty" *ngIf="filteredTasks.length === 0">
-        <h3 class="my-tasks__empty-title">No tasks found</h3>
-        <p class="my-tasks__empty-text">
-          Try adjusting your filters or check back later.
-        </p>
-      </div>
+      <app-empty-state
+        *ngIf="filteredTasks.length === 0"
+        icon="tasks"
+        title="No tasks found"
+        subtitle="Try adjusting your filters or check back later.">
+      </app-empty-state>
     </ng-container>
 
   </ng-container>
@@ -163,12 +163,12 @@
       </div>
 
       <!-- Empty state -->
-      <div class="my-tasks__empty" *ngIf="filteredTasks.length === 0">
-        <h3 class="my-tasks__empty-title">No tasks found</h3>
-        <p class="my-tasks__empty-text">
-          Try adjusting your filters or check back later.
-        </p>
-      </div>
+      <app-empty-state
+        *ngIf="filteredTasks.length === 0"
+        icon="tasks"
+        title="No tasks found"
+        subtitle="Try adjusting your filters or check back later.">
+      </app-empty-state>
     </ng-container>
   </ng-container>
 

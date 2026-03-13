@@ -7,6 +7,7 @@ import { catchError, exhaustMap, map, switchMap, tap, withLatestFrom } from 'rxj
 import { TasksService } from '../services/tasks.service';
 import { CommentsService } from '../services/comments.service';
 import { NotificationsService } from '../../../core/services/notifications.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { selectAllTasks } from '../../board/store/board.selectors';
 import * as TasksActions from './tasks.actions';
 
@@ -24,6 +25,7 @@ export class TasksEffects {
     private tasksService: TasksService,
     private commentsService: CommentsService,
     private notificationsService: NotificationsService,
+    private toastService: ToastService,
     private store: Store
   ) {}
 
@@ -75,6 +77,16 @@ export class TasksEffects {
         )
       )
     )
+  );
+
+  /** Show toast on task status update success */
+  toastUpdateTaskStatus$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TasksActions.updateTaskStatusSuccess),
+        tap(({ status }) => this.toastService.show(`Task marked as ${status}.`, 'success'))
+      ),
+    { dispatch: false }
   );
 
   // ---------------------------------------------------------------------------
@@ -181,6 +193,16 @@ export class TasksEffects {
         )
       )
     )
+  );
+
+  /** Show toast when a comment is added */
+  toastCommentAdded$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TasksActions.addCommentSuccess),
+        tap(() => this.toastService.show('Comment added.', 'success'))
+      ),
+    { dispatch: false }
   );
 
   /** Notify the task assignee when a new comment is added */

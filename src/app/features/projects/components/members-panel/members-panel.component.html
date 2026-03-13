@@ -72,4 +72,15 @@
     </li>
   </ul>
 
+  <!-- Confirm remove member dialog -->
+  <app-confirm-dialog
+    *ngIf="confirmRemoveUserId"
+    title="Remove Member"
+    message="Are you sure you want to remove this member from the project? They will lose access immediately."
+    confirmLabel="Remove"
+    variant="danger"
+    (confirmed)="onConfirmRemove()"
+    (cancelled)="onCancelRemove()">
+  </app-confirm-dialog>
+
 </div>

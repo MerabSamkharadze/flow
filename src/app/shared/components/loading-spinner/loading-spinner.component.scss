@@ -1,0 +1,69 @@
+// ==========================================================================
+// Loading Spinner Component — BEM
+// Block: .spinner
+// ==========================================================================
+
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+.spinner {
+  @include flex-center;
+  @include flex-column;
+  gap: $spacing-sm;
+  padding: $spacing-2xl;
+
+  // --------------------------------------------------
+  // Modifier: overlay mode — centered full-area backdrop
+  // --------------------------------------------------
+  &--overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: $z-overlay;
+  }
+
+  // --------------------------------------------------
+  // Element: spinning circle
+  // --------------------------------------------------
+  &__circle {
+    width: 24px;
+    height: 24px;
+    border: 3px solid $color-gray-200;
+    border-top-color: $color-primary;
+    border-radius: $border-radius-full;
+    animation: spinner-rotate 0.8s linear infinite;
+  }
+
+  // --------------------------------------------------
+  // Size modifiers
+  // --------------------------------------------------
+  &--sm &__circle {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+  }
+
+  &--sm {
+    padding: $spacing-md;
+  }
+
+  &--lg &__circle {
+    width: 36px;
+    height: 36px;
+    border-width: 4px;
+  }
+
+  // --------------------------------------------------
+  // Element: optional message text
+  // --------------------------------------------------
+  &__message {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}

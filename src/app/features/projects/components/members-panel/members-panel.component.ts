@@ -56,8 +56,25 @@ export class MembersPanelComponent {
     this.openInviteModal.emit();
   }
 
+  /** ID of member pending removal confirmation (null = dialog hidden) */
+  confirmRemoveUserId: string | null = null;
+
+  /** Show confirm dialog before removing */
   onRemove(userId: string): void {
-    this.removeMember.emit(userId);
+    this.confirmRemoveUserId = userId;
+  }
+
+  /** User confirmed removal */
+  onConfirmRemove(): void {
+    if (this.confirmRemoveUserId) {
+      this.removeMember.emit(this.confirmRemoveUserId);
+    }
+    this.confirmRemoveUserId = null;
+  }
+
+  /** User cancelled removal */
+  onCancelRemove(): void {
+    this.confirmRemoveUserId = null;
   }
 
   onRoleChange(userId: string, newRole: MemberRole): void {

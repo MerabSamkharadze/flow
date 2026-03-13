@@ -43,8 +43,24 @@ export class CommentThreadComponent {
     this.editContent = '';
   }
 
-  /** Delete a comment */
+  /** ID of comment pending delete confirmation (null = dialog hidden) */
+  confirmDeleteId: string | null = null;
+
+  /** Show confirm dialog before deleting */
   onDelete(commentId: string): void {
-    this.deleteComment.emit(commentId);
+    this.confirmDeleteId = commentId;
+  }
+
+  /** User confirmed deletion */
+  onConfirmDelete(): void {
+    if (this.confirmDeleteId) {
+      this.deleteComment.emit(this.confirmDeleteId);
+    }
+    this.confirmDeleteId = null;
+  }
+
+  /** User cancelled deletion */
+  onCancelDelete(): void {
+    this.confirmDeleteId = null;
   }
 }

@@ -59,4 +59,16 @@
       </div>
     </div>
   </div>
+
+  <!-- Confirm delete comment dialog -->
+  <app-confirm-dialog
+    *ngIf="confirmDeleteId"
+    title="Delete Comment"
+    message="Are you sure you want to delete this comment? This action cannot be undone."
+    confirmLabel="Delete"
+    variant="danger"
+    (confirmed)="onConfirmDelete()"
+    (cancelled)="onCancelDelete()">
+  </app-confirm-dialog>
+
 </div>
