@@ -16,13 +16,13 @@ export const selectBoardState = createFeatureSelector<BoardState>('board');
 /** All columns sorted by order */
 export const selectColumns = createSelector(
   selectBoardState,
-  (state) => state.columns
+  (state) => state?.columns ?? []
 );
 
 /** Tasks dictionary keyed by columnId */
 export const selectTasksMap = createSelector(
   selectBoardState,
-  (state) => state.tasks
+  (state) => state?.tasks ?? {}
 );
 
 /** Tasks for a specific column (factory selector) */
@@ -35,7 +35,7 @@ export const selectTasksByColumn = (columnId: string) =>
 /** The currently active/selected task ID */
 export const selectActiveTaskId = createSelector(
   selectBoardState,
-  (state) => state.activeTaskId
+  (state) => state?.activeTaskId ?? null
 );
 
 /** The currently active task object (searches all columns) */
@@ -55,19 +55,19 @@ export const selectActiveTask = createSelector(
 /** Current board filters */
 export const selectBoardFilters = createSelector(
   selectBoardState,
-  (state) => state.filters
+  (state) => state?.filters ?? { search: '', priority: [], assigneeId: '' }
 );
 
 /** Whether a board operation is in progress */
 export const selectBoardLoading = createSelector(
   selectBoardState,
-  (state) => state.loading
+  (state) => state?.loading ?? false
 );
 
 /** The last board error message (or null) */
 export const selectBoardError = createSelector(
   selectBoardState,
-  (state) => state.error
+  (state) => state?.error ?? null
 );
 
 /** All tasks as a flat array (useful for search, counts, etc.) */

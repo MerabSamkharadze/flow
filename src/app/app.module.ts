@@ -5,10 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Eagerly declared pages (not in a feature module)
-import { NotFoundComponent } from './features/not-found/not-found.component';
+import { NotFoundComponent } from '@features/not-found/not-found.component';
 
 // Core module — singleton services and layout components
-import { CoreModule } from './core/core.module';
+import { CoreModule } from '@core/core.module';
 
 // Firebase — AngularFire compat modules for Angular 15
 import { AngularFireModule } from '@angular/fire/compat';
@@ -22,11 +22,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 // Auth state — registered at root level because guards and interceptors
 // need it before the lazy-loaded AuthModule is loaded
-import { authReducer } from './features/auth/store/auth.reducer';
-import { AuthEffects } from './features/auth/store/auth.effects';
+import { authReducer } from '@features/auth/store';
+import { AuthEffects } from '@features/auth/store';
 
 // Environment config
-import { environment } from '../environments/environment';
+import { environment } from '@env/environment';
 
 /**
  * AppModule — root module of the FLOW application.
