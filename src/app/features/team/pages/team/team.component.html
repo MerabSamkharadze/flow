@@ -1,25 +1,112 @@
-<!-- Team: empty-state placeholder until team management is built -->
-<div class="team">
-  <div class="team__wrapper">
-    <h1 class="team__title">Team</h1>
-    <p class="team__subtitle">Manage your team members, roles, and project assignments.</p>
+<!-- Team Page — shows all teammates across shared projects -->
+<div class="team-page">
 
-    <!-- Empty-state illustration -->
-    <div class="team__empty">
-      <div class="team__icon">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-      </div>
-      <p class="team__empty-text">No team members yet</p>
-      <p class="team__empty-hint">
-        Invite collaborators to join your workspace and start assigning tasks together.
-      </p>
-      <a class="team__cta" routerLink="/projects">Go to Projects</a>
+  <!-- Header -->
+  <div class="team-page__header">
+    <div class="team-page__title-row">
+      <h1 class="team-page__title">Team</h1>
+      <span
+        class="team-page__count"
+        *ngIf="!loading && (filteredTeammates$ | async) as teammates">
+        {{ teammates.length }}
+      </span>
     </div>
+    <p class="team-page__subtitle">People you collaborate with across your projects.</p>
   </div>
+
+  <!-- Search bar -->
+  <div class="team-page__search" *ngIf="!loading">
+    <svg class="team-page__search-icon" width="16" height="16" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input
+      class="team-page__search-input"
+      type="text"
+      placeholder="Search by name or email..."
+      [formControl]="searchControl" />
+  </div>
+
+  <!-- Loading spinner -->
+  <app-loading-spinner
+    *ngIf="loading"
+    size="lg"
+    message="Loading team members...">
+  </app-loading-spinner>
+
+  <!-- Content -->
+  <ng-container *ngIf="!loading">
+    <ng-container *ngIf="filteredTeammates$ | async as teammates">
+
+      <!-- Empty state -->
+      <app-empty-state
+        *ngIf="teammates.length === 0 && !searchControl.value"
+        icon="projects"
+        title="No teammates yet"
+        subtitle="Create a project and invite members to start collaborating."
+        actionLabel="Go to Projects"
+        (actionClicked)="searchControl.value">
+      </app-empty-state>
+
+      <!-- No search results -->
+      <app-empty-state
+        *ngIf="teammates.length === 0 && searchControl.value"
+        icon="search"
+        title="No results"
+        subtitle="No team members match your search.">
+      </app-empty-state>
+
+      <!-- Member cards grid -->
+      <div class="team-page__grid" *ngIf="teammates.length > 0">
+        <div
+          class="team-card"
+          *ngFor="let member of teammates; trackBy: trackByUserId">
+
+          <!-- Avatar -->
+          <div
+            class="team-card__avatar"
+            [style.background-color]="member.avatarUrl ? 'transparent' : getAvatarColor(member.displayName)">
+            <img
+              *ngIf="member.avatarUrl"
+              class="team-card__avatar-img"
+              [src]="member.avatarUrl"
+              [alt]="member.displayName" />
+            <span *ngIf="!member.avatarUrl">
+              {{ getInitials(member.displayName) }}
+            </span>
+          </div>
+
+          <!-- Info -->
+          <div class="team-card__info">
+            <span class="team-card__name">{{ member.displayName }}</span>
+            <span class="team-card__email">{{ member.email }}</span>
+          </div>
+
+          <!-- Role badge -->
+          <span class="team-card__role team-card__role--{{ member.role }}">
+            {{ member.role }}
+          </span>
+
+          <!-- Shared projects -->
+          <div class="team-card__projects">
+            <span
+              class="team-card__chip"
+              *ngFor="let project of getVisibleProjects(member.projects); trackBy: trackByProject">
+              {{ project }}
+            </span>
+            <span
+              class="team-card__chip team-card__chip--more"
+              *ngIf="getOverflowCount(member.projects) > 0">
+              +{{ getOverflowCount(member.projects) }} more
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+    </ng-container>
+  </ng-container>
+
 </div>
