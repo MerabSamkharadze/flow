@@ -18,7 +18,7 @@
 
   &:hover {
     transform: translateY(-1px);
-    box-shadow: $shadow-md;
+    box-shadow: var(--shadow-md, $shadow-md);
   }
 
   // --------------------------------------------------

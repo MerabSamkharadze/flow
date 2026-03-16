@@ -38,7 +38,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: $spacing-md;
-    max-width: 480px;
+    max-width: 520px;
   }
 
   &__theme-card {
@@ -51,16 +51,15 @@
     background-color: var(--color-surface, $color-surface);
 
     &:hover {
-      border-color: $color-gray-400;
+      border-color: var(--color-gray-400, $color-gray-400);
     }
 
-    // Modifier: selected card
     &--selected {
-      border-color: $color-primary;
+      border-color: var(--color-primary, $color-primary);
       box-shadow: 0 0 0 3px rgba($color-primary, 0.12);
 
       &:hover {
-        border-color: $color-primary;
+        border-color: var(--color-primary, $color-primary);
       }
     }
   }
@@ -69,27 +68,123 @@
   // Element: theme preview (mini mockup)
   // --------------------------------------------------
   &__theme-preview {
-    @include flex-column;
-    height: 80px;
-    padding: 0;
-  }
+    display: flex;
+    height: 88px;
+    overflow: hidden;
+    border-radius: 0;
 
-  &__preview-bar {
-    height: 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  }
+    // ---- Light preview ----
+    &--light {
+      .appearance-settings__preview-sidebar {
+        width: 28%;
+        background-color: #1f2937;
+      }
 
-  &__preview-body {
-    flex: 1;
-    padding: $spacing-sm;
-    @include flex-column;
-    justify-content: flex-end;
-  }
+      .appearance-settings__preview-main {
+        flex: 1;
+        @include flex-column;
+        background-color: #f9fafb;
+      }
 
-  &__preview-accent {
-    width: 60%;
-    height: 8px;
-    border-radius: $border-radius-sm;
+      .appearance-settings__preview-header {
+        height: 14px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .appearance-settings__preview-content {
+        flex: 1;
+        padding: 6px 8px;
+        @include flex-column;
+        gap: 4px;
+        justify-content: center;
+      }
+
+      .appearance-settings__preview-line {
+        height: 4px;
+        border-radius: 2px;
+        background-color: #d1d5db;
+
+        &--short { width: 60%; }
+        &--accent {
+          width: 40%;
+          background-color: #4f46e5;
+        }
+      }
+    }
+
+    // ---- Dark preview ----
+    &--dark {
+      .appearance-settings__preview-sidebar {
+        width: 28%;
+        background-color: #0d1117;
+      }
+
+      .appearance-settings__preview-main {
+        flex: 1;
+        @include flex-column;
+        background-color: #0f1117;
+      }
+
+      .appearance-settings__preview-header {
+        height: 14px;
+        background-color: #1c2128;
+        border-bottom: 1px solid #30363d;
+      }
+
+      .appearance-settings__preview-content {
+        flex: 1;
+        padding: 6px 8px;
+        @include flex-column;
+        gap: 4px;
+        justify-content: center;
+      }
+
+      .appearance-settings__preview-line {
+        height: 4px;
+        border-radius: 2px;
+        background-color: #30363d;
+
+        &--short { width: 60%; }
+        &--accent {
+          width: 40%;
+          background-color: #818cf8;
+        }
+      }
+    }
+
+    // ---- System preview (diagonal split) ----
+    &--system {
+      position: relative;
+      background: linear-gradient(135deg, #f9fafb 50%, #0f1117 50%);
+      display: flex;
+
+      .appearance-settings__preview-half {
+        flex: 1;
+        @include flex-column;
+        justify-content: center;
+        padding: 6px 8px;
+        gap: 4px;
+
+        &--light {
+          .appearance-settings__preview-line {
+            height: 4px;
+            border-radius: 2px;
+            background-color: #d1d5db;
+            &--short { width: 60%; }
+          }
+        }
+
+        &--dark {
+          .appearance-settings__preview-line {
+            height: 4px;
+            border-radius: 2px;
+            background-color: #30363d;
+            &--short { width: 60%; }
+          }
+        }
+      }
+    }
   }
 
   // --------------------------------------------------
@@ -108,9 +203,8 @@
   }
 
   &__checkmark {
-    color: $color-primary;
+    color: var(--color-primary, $color-primary);
   }
-
 }
 
 // Responsive: stack theme cards on small screens
@@ -118,7 +212,7 @@
   .appearance-settings {
     &__theme-grid {
       grid-template-columns: 1fr;
+      max-width: 280px;
     }
-
   }
 }

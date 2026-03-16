@@ -43,7 +43,7 @@
     flex-shrink: 0;
     background-color: var(--color-surface, $color-surface);
     border-radius: $border-radius-lg;
-    box-shadow: $shadow-sm;
+    box-shadow: var(--shadow-sm, $shadow-sm);
     padding: $spacing-sm;
   }
 
@@ -106,7 +106,7 @@
   &__panel {
     background-color: var(--color-surface, $color-surface);
     border-radius: $border-radius-lg;
-    box-shadow: $shadow-sm;
+    box-shadow: var(--shadow-sm, $shadow-sm);
     padding: $spacing-lg;
   }
 

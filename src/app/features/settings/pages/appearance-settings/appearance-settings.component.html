@@ -5,32 +5,31 @@
   <section class="appearance-settings__section">
     <h2 class="appearance-settings__heading">Theme</h2>
     <p class="appearance-settings__description">
-      Choose how FLOW looks to you. Dark mode CSS is a work in progress.
+      Choose how FLOW looks to you. Select a theme or let the system decide.
     </p>
 
     <div class="appearance-settings__theme-grid">
-      <button
-        *ngFor="let t of themes; trackBy: trackByTheme"
-        class="appearance-settings__theme-card"
-        [class.appearance-settings__theme-card--selected]="theme === t.value"
-        (click)="onThemeChange(t.value)"
-        type="button">
 
-        <!-- Mini preview -->
-        <div class="appearance-settings__theme-preview">
-          <div class="appearance-settings__preview-bar"
-               [style.background-color]="t.colors[0]"></div>
-          <div class="appearance-settings__preview-body"
-               [style.background-color]="t.colors[1]">
-            <div class="appearance-settings__preview-accent"
-                 [style.background-color]="t.colors[2]"></div>
+      <!-- Light card -->
+      <button
+        class="appearance-settings__theme-card"
+        [class.appearance-settings__theme-card--selected]="theme === 'light'"
+        (click)="onThemeChange('light')"
+        type="button">
+        <div class="appearance-settings__theme-preview appearance-settings__theme-preview--light">
+          <div class="appearance-settings__preview-sidebar"></div>
+          <div class="appearance-settings__preview-main">
+            <div class="appearance-settings__preview-header"></div>
+            <div class="appearance-settings__preview-content">
+              <div class="appearance-settings__preview-line"></div>
+              <div class="appearance-settings__preview-line appearance-settings__preview-line--short"></div>
+              <div class="appearance-settings__preview-line appearance-settings__preview-line--accent"></div>
+            </div>
           </div>
         </div>
-
-        <!-- Label + checkmark -->
         <div class="appearance-settings__theme-footer">
-          <span class="appearance-settings__theme-label">{{ t.label }}</span>
-          <svg *ngIf="theme === t.value"
+          <span class="appearance-settings__theme-label">Light</span>
+          <svg *ngIf="theme === 'light'"
                class="appearance-settings__checkmark"
                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -38,8 +37,63 @@
           </svg>
         </div>
       </button>
+
+      <!-- Dark card -->
+      <button
+        class="appearance-settings__theme-card"
+        [class.appearance-settings__theme-card--selected]="theme === 'dark'"
+        (click)="onThemeChange('dark')"
+        type="button">
+        <div class="appearance-settings__theme-preview appearance-settings__theme-preview--dark">
+          <div class="appearance-settings__preview-sidebar"></div>
+          <div class="appearance-settings__preview-main">
+            <div class="appearance-settings__preview-header"></div>
+            <div class="appearance-settings__preview-content">
+              <div class="appearance-settings__preview-line"></div>
+              <div class="appearance-settings__preview-line appearance-settings__preview-line--short"></div>
+              <div class="appearance-settings__preview-line appearance-settings__preview-line--accent"></div>
+            </div>
+          </div>
+        </div>
+        <div class="appearance-settings__theme-footer">
+          <span class="appearance-settings__theme-label">Dark</span>
+          <svg *ngIf="theme === 'dark'"
+               class="appearance-settings__checkmark"
+               width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+      </button>
+
+      <!-- System card -->
+      <button
+        class="appearance-settings__theme-card"
+        [class.appearance-settings__theme-card--selected]="theme === 'system'"
+        (click)="onThemeChange('system')"
+        type="button">
+        <div class="appearance-settings__theme-preview appearance-settings__theme-preview--system">
+          <div class="appearance-settings__preview-half appearance-settings__preview-half--light">
+            <div class="appearance-settings__preview-line"></div>
+            <div class="appearance-settings__preview-line appearance-settings__preview-line--short"></div>
+          </div>
+          <div class="appearance-settings__preview-half appearance-settings__preview-half--dark">
+            <div class="appearance-settings__preview-line"></div>
+            <div class="appearance-settings__preview-line appearance-settings__preview-line--short"></div>
+          </div>
+        </div>
+        <div class="appearance-settings__theme-footer">
+          <span class="appearance-settings__theme-label">System</span>
+          <svg *ngIf="theme === 'system'"
+               class="appearance-settings__checkmark"
+               width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+      </button>
+
     </div>
   </section>
-
 
 </div>

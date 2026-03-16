@@ -59,10 +59,10 @@ strong {
 
 // Links
 a {
-  color: $color-primary;
+  color: var(--color-primary, $color-primary);
   transition: color $transition-fast;
 
   &:hover {
-    color: $color-primary-dark;
+    color: var(--color-primary-dark, $color-primary-dark);
   }
 }

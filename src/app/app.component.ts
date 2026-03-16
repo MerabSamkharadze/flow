@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { loadUser } from './features/auth/store/auth.actions';
@@ -10,7 +10,10 @@ import { KeyboardShortcutsService } from './core/services/keyboard-shortcuts.ser
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  private systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  private systemThemeListener = (e: MediaQueryListEvent) => this.onSystemThemeChange(e);
+
   constructor(
     private store: Store,
     private keyboardShortcuts: KeyboardShortcutsService
@@ -27,15 +30,34 @@ export class AppComponent implements OnInit {
     this.initializeTheme();
   }
 
+  ngOnDestroy(): void {
+    this.systemThemeQuery.removeEventListener('change', this.systemThemeListener);
+  }
+
   private initializeTheme(): void {
     const savedTheme = localStorage.getItem('flow-theme') || 'light';
-    document.body.classList.remove('theme-light', 'theme-dark');
+    this.applyTheme(savedTheme);
 
+    // Listen for OS theme changes when 'system' is selected
     if (savedTheme === 'system') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.body.classList.add(prefersDark ? 'theme-dark' : 'theme-light');
+      this.systemThemeQuery.addEventListener('change', this.systemThemeListener);
+    }
+  }
+
+  private applyTheme(theme: string): void {
+    const root = document.documentElement;
+    if (theme === 'system') {
+      const prefersDark = this.systemThemeQuery.matches;
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     } else {
-      document.body.classList.add(`theme-${savedTheme}`);
+      root.setAttribute('data-theme', theme);
+    }
+  }
+
+  private onSystemThemeChange(e: MediaQueryListEvent): void {
+    const savedTheme = localStorage.getItem('flow-theme');
+    if (savedTheme === 'system') {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
     }
   }
 }

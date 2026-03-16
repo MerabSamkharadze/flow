@@ -1,20 +1,23 @@
 // ==========================================================================
 // FLOW — Theme System
 // CSS custom properties for light/dark theme switching
+// Applied via [data-theme] attribute on <html> element
 // ==========================================================================
 
 // --------------------------------------------------------------------------
 // Light theme (default)
 // --------------------------------------------------------------------------
 :root,
-.theme-light {
+[data-theme="light"] {
   --color-bg: #f9fafb;
+  --color-bg-secondary: #f3f4f6;
   --color-surface: #ffffff;
   --color-surface-hover: #f3f4f6;
 
   --color-text-primary: #111827;
   --color-text-secondary: #6b7280;
   --color-text-disabled: #9ca3af;
+  --color-text-muted: #9ca3af;
   --color-text-inverse: #ffffff;
 
   --color-border: #e5e7eb;
@@ -42,33 +45,36 @@
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 // --------------------------------------------------------------------------
 // Dark theme
 // --------------------------------------------------------------------------
-.theme-dark {
+[data-theme="dark"] {
   --color-bg: #0f1117;
-  --color-surface: #1a1d27;
-  --color-surface-hover: #242836;
+  --color-bg-secondary: #161b22;
+  --color-surface: #1c2128;
+  --color-surface-hover: #242c38;
 
-  --color-text-primary: #f1f3f5;
-  --color-text-secondary: #9ca3af;
-  --color-text-disabled: #6b7280;
+  --color-text-primary: #e6edf3;
+  --color-text-secondary: #8b949e;
+  --color-text-disabled: #6e7681;
+  --color-text-muted: #6e7681;
   --color-text-inverse: #ffffff;
 
-  --color-border: #2d3140;
+  --color-border: #30363d;
 
-  --color-gray-50: #1a1d27;
-  --color-gray-100: #242836;
-  --color-gray-200: #2d3140;
-  --color-gray-300: #3d4255;
-  --color-gray-400: #6b7280;
-  --color-gray-500: #9ca3af;
-  --color-gray-600: #d1d5db;
-  --color-gray-700: #e5e7eb;
-  --color-gray-800: #f3f4f6;
-  --color-gray-900: #f9fafb;
+  --color-gray-50: #161b22;
+  --color-gray-100: #1c2128;
+  --color-gray-200: #30363d;
+  --color-gray-300: #484f58;
+  --color-gray-400: #6e7681;
+  --color-gray-500: #8b949e;
+  --color-gray-600: #c9d1d9;
+  --color-gray-700: #d1d5db;
+  --color-gray-800: #e6edf3;
+  --color-gray-900: #f0f6fc;
 
   --color-primary: #818cf8;
   --color-primary-light: #a5b4fc;
@@ -80,6 +86,7 @@
   --color-error: #f87171;
   --color-info: #60a5fa;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5);
 }

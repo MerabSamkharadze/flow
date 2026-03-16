@@ -18,7 +18,7 @@
   &__title {
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -58,7 +58,7 @@
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-gray-50;
+      background-color: var(--color-gray-50, $color-gray-50);
     }
   }
 
@@ -98,19 +98,19 @@
   &__name {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     @include text-truncate;
   }
 
   &__you {
     font-weight: $font-weight-regular;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     font-size: $font-size-xs;
   }
 
   &__email {
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     @include text-truncate;
   }
 
@@ -139,18 +139,18 @@
     }
 
     &--member {
-      background-color: $color-gray-100;
-      color: $color-text-secondary;
+      background-color: var(--color-gray-100, $color-gray-100);
+      color: var(--color-text-secondary, $color-text-secondary);
     }
   }
 
   &__role-select {
     font-size: $font-size-xs;
     padding: 2px $spacing-xs;
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-sm;
-    background-color: $color-surface;
-    color: $color-text-primary;
+    background-color: var(--color-surface, $color-surface);
+    color: var(--color-text-primary, $color-text-primary);
     cursor: pointer;
 
     &:focus {
@@ -169,7 +169,7 @@
     height: 24px;
     border-radius: $border-radius-sm;
     font-size: $font-size-lg;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     flex-shrink: 0;
     transition: background-color $transition-fast, color $transition-fast;
 

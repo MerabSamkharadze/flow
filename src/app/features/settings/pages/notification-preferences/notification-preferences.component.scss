@@ -107,7 +107,7 @@
     height: 18px;
     border-radius: $border-radius-full;
     background-color: $color-text-inverse;
-    box-shadow: $shadow-sm;
+    box-shadow: var(--shadow-sm, $shadow-sm);
     transition: transform $transition-fast;
   }
 }

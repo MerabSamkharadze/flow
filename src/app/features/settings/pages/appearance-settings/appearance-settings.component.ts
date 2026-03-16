@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 /** Supported theme options */
 type Theme = 'light' | 'dark' | 'system';
@@ -6,7 +6,8 @@ type Theme = 'light' | 'dark' | 'system';
 /**
  * AppearanceSettingsComponent — theme preferences.
  *
- * Saves selection to localStorage and applies theme class to document.body.
+ * Saves selection to localStorage and applies data-theme attribute
+ * on the <html> element. System theme listens for OS changes.
  */
 @Component({
   standalone: false,
@@ -14,43 +15,66 @@ type Theme = 'light' | 'dark' | 'system';
   templateUrl: './appearance-settings.component.html',
   styleUrls: ['./appearance-settings.component.scss'],
 })
-export class AppearanceSettingsComponent implements OnInit {
+export class AppearanceSettingsComponent implements OnInit, OnDestroy {
   /** Current theme selection */
   theme: Theme = 'light';
 
   /** Theme options for the card grid */
-  themes: { value: Theme; label: string; colors: string[] }[] = [
-    { value: 'light', label: 'Light', colors: ['#ffffff', '#f9fafb', '#4f46e5'] },
-    { value: 'dark', label: 'Dark', colors: ['#111827', '#1f2937', '#818cf8'] },
-    { value: 'system', label: 'System', colors: ['#ffffff', '#111827', '#4f46e5'] },
+  themes: { value: Theme; label: string }[] = [
+    { value: 'light', label: 'Light' },
+    { value: 'dark', label: 'Dark' },
+    { value: 'system', label: 'System' },
   ];
+
+  private systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  private systemThemeListener = (e: MediaQueryListEvent) => this.onSystemThemeChange(e);
 
   trackByTheme(_index: number, t: { value: Theme }): string {
     return t.value;
   }
 
   ngOnInit(): void {
-    // Load saved preferences from localStorage
     this.theme = (localStorage.getItem('flow-theme') as Theme) || 'light';
     this.applyTheme(this.theme);
+
+    if (this.theme === 'system') {
+      this.systemThemeQuery.addEventListener('change', this.systemThemeListener);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.systemThemeQuery.removeEventListener('change', this.systemThemeListener);
   }
 
   /** Handle theme card selection */
   onThemeChange(theme: Theme): void {
+    // Remove previous system listener
+    this.systemThemeQuery.removeEventListener('change', this.systemThemeListener);
+
     this.theme = theme;
     localStorage.setItem('flow-theme', theme);
     this.applyTheme(theme);
+
+    // Add system listener if needed
+    if (theme === 'system') {
+      this.systemThemeQuery.addEventListener('change', this.systemThemeListener);
+    }
   }
 
-  /** Apply theme class to document.body */
+  /** Apply theme via data-theme attribute on <html> */
   private applyTheme(theme: Theme): void {
-    document.body.classList.remove('theme-light', 'theme-dark');
-
+    const root = document.documentElement;
     if (theme === 'system') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.body.classList.add(prefersDark ? 'theme-dark' : 'theme-light');
+      const prefersDark = this.systemThemeQuery.matches;
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     } else {
-      document.body.classList.add(`theme-${theme}`);
+      root.setAttribute('data-theme', theme);
+    }
+  }
+
+  private onSystemThemeChange(e: MediaQueryListEvent): void {
+    if (this.theme === 'system') {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
     }
   }
 }

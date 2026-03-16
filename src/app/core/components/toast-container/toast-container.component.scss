@@ -39,7 +39,7 @@
   padding: $spacing-md;
   border-radius: $border-radius-md;
   box-shadow: $shadow-lg;
-  background-color: $color-surface;
+  background-color: var(--color-surface, $color-surface);
   border-left: 4px solid $color-info;
   pointer-events: auto;
   animation: toast-slide-in 0.3s ease forwards;
@@ -93,7 +93,7 @@
   &__message {
     flex: 1;
     font-size: $font-size-sm;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     line-height: $line-height-base;
   }
 
@@ -107,13 +107,13 @@
     height: 24px;
     @include flex-center;
     font-size: $font-size-lg;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     border-radius: $border-radius-sm;
     transition: color $transition-fast, background-color $transition-fast;
 
     &:hover {
-      color: $color-text-primary;
-      background-color: $color-surface-hover;
+      color: var(--color-text-primary, $color-text-primary);
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
   }
 }

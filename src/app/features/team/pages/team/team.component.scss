@@ -65,7 +65,7 @@
     left: $spacing-md;
     top: 50%;
     transform: translateY(-50%);
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     pointer-events: none;
   }
 
@@ -82,7 +82,7 @@
     transition: border-color $transition-fast, box-shadow $transition-fast;
 
     &::placeholder {
-      color: $color-text-disabled;
+      color: var(--color-text-disabled, $color-text-disabled);
     }
 
     &:focus {
@@ -124,7 +124,7 @@
   transition: box-shadow $transition-fast, transform $transition-fast;
 
   &:hover {
-    box-shadow: $shadow-md;
+    box-shadow: var(--shadow-md, $shadow-md);
     transform: translateY(-2px);
   }
 
@@ -201,7 +201,7 @@
 
     &--member {
       background-color: var(--color-gray-100, $color-gray-100);
-      color: $color-gray-600;
+      color: var(--color-gray-600, $color-gray-600);
     }
   }
 

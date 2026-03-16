@@ -59,7 +59,7 @@
 
     &:hover {
       background-color: var(--color-surface-hover, $color-surface-hover);
-      box-shadow: $shadow-sm;
+      box-shadow: var(--shadow-sm, $shadow-sm);
     }
   }
 
@@ -104,7 +104,7 @@
 
     &--archived {
       background-color: rgba($color-gray-400, 0.15);
-      color: $color-gray-600;
+      color: var(--color-gray-600, $color-gray-600);
     }
   }
 

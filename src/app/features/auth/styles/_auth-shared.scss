@@ -12,7 +12,7 @@
   min-height: 100vh;
   min-height: 100dvh;
   padding: $spacing-md;
-  background-color: $color-bg;
+  background-color: var(--color-bg, $color-bg);
 
   // --------------------------------------------------
   // Element: card container
@@ -21,7 +21,7 @@
     width: 100%;
     max-width: 420px;
     padding: $spacing-xl;
-    background-color: $color-surface;
+    background-color: var(--color-surface, $color-surface);
     border-radius: $border-radius-lg;
     box-shadow: $shadow-lg;
   }
@@ -37,13 +37,13 @@
   &__title {
     font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     margin-bottom: $spacing-xs;
   }
 
   &__subtitle {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     margin-bottom: 0;
   }
 
@@ -79,21 +79,21 @@
   &__label {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
   }
 
   &__input {
     width: 100%;
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-base;
-    color: $color-text-primary;
-    background-color: $color-surface;
-    border: 1px solid $color-border;
+    color: var(--color-text-primary, $color-text-primary);
+    background-color: var(--color-surface, $color-surface);
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     transition: border-color $transition-fast, box-shadow $transition-fast;
 
     &::placeholder {
-      color: $color-text-disabled;
+      color: var(--color-text-disabled, $color-text-disabled);
     }
 
     &:focus {
@@ -153,7 +153,7 @@
     text-align: center;
     margin-top: $spacing-lg;
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 
   &__link {

@@ -33,7 +33,11 @@
       "Bash(grep -rn \"disabled\\\\|DISABLED\\\\|will later\\\\|will be\\\\|in the future\\\\|future use\\\\|dark mode\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" --include=\"*.html\" 2>/dev/null | head -20)",
       "Bash(grep -rn \"disabled\\\\|DISABLED\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.html\" 2>/dev/null | grep -v \"\\\\[disabled\\\\]\" | head -20)",
       "Bash(grep -rn \"Contact admin\\\\|disabled\\\\|not yet\\\\|placeholder\\\\|Placeholder\\\\|not implemented\" /c/Users/msamkharadze/Desktop/personal\\\\flow/src --include=\"*.html\" 2>/dev/null | head -20)",
-      "Bash(grep -rn \"stub\\\\|mock\\\\|test\\\\|dummy\\\\|temporary\\\\|temp\\\\|debug\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -v node_modules | head -30)"
+      "Bash(grep -rn \"stub\\\\|mock\\\\|test\\\\|dummy\\\\|temporary\\\\|temp\\\\|debug\" /c/Users/msamkharadze/Desktop/personal/flow/src --include=\"*.ts\" 2>/dev/null | grep -v node_modules | head -30)",
+      "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'background-color: \\\\$color-surface;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)",
+      "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'background-color: \\\\$color-bg;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)",
+      "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'color: \\\\$color-text-primary;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)",
+      "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'color: \\\\$color-text-disabled;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)"
     ]
   }
 }

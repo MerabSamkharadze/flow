@@ -9,13 +9,13 @@
 .project-card {
   background-color: var(--color-surface, $color-surface);
   border-radius: $border-radius-lg;
-  box-shadow: $shadow-sm;
+  box-shadow: var(--shadow-sm, $shadow-sm);
   cursor: pointer;
   transition: box-shadow $transition-fast, transform $transition-fast;
   overflow: hidden;
 
   &:hover {
-    box-shadow: $shadow-md;
+    box-shadow: var(--shadow-md, $shadow-md);
     transform: translateY(-2px);
   }
 

@@ -15,7 +15,7 @@
   // --------------------------------------------------
   &__empty {
     font-size: $font-size-sm;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     text-align: center;
     padding: $spacing-lg 0;
   }
@@ -61,23 +61,23 @@
   &__author {
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
   }
 
   &__time {
     font-size: $font-size-xs;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
   }
 
   &__edited {
     font-size: $font-size-xs;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     font-style: italic;
   }
 
   &__body {
     font-size: $font-size-sm;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     line-height: $line-height-relaxed;
     white-space: pre-wrap;
     word-break: break-word;
@@ -93,7 +93,7 @@
     padding: $spacing-xs $spacing-sm;
     font-size: $font-size-sm;
     font-family: $font-family-base;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     resize: vertical;
     outline: none;
     min-height: 50px;
@@ -124,12 +124,12 @@
     @include button-reset;
     padding: 2px $spacing-sm;
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     border-radius: $border-radius-sm;
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
   }
 
@@ -154,12 +154,12 @@
     width: 24px;
     height: 24px;
     border-radius: $border-radius-sm;
-    color: $color-text-disabled;
+    color: var(--color-text-disabled, $color-text-disabled);
     transition: color $transition-fast, background-color $transition-fast;
 
     &:hover {
-      color: $color-text-primary;
-      background-color: $color-surface-hover;
+      color: var(--color-text-primary, $color-text-primary);
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
 
     &--delete:hover {

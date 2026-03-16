@@ -7,11 +7,11 @@
 @use '../../../../../styles/abstracts/mixins' as *;
 
 .task-form {
-  background-color: $color-surface;
+  background-color: var(--color-surface, $color-surface);
   border-radius: $border-radius-md;
   padding: $spacing-sm;
-  box-shadow: $shadow-md;
-  border: 1px solid $color-border;
+  box-shadow: var(--shadow-md, $shadow-md);
+  border: 1px solid var(--color-border, $color-border);
 
   form {
     @include flex-column;
@@ -23,12 +23,12 @@
   // --------------------------------------------------
   &__title-input {
     width: 100%;
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-sm;
     padding: $spacing-sm;
     font-size: $font-size-sm;
     font-family: $font-family-base;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     outline: none;
     transition: border-color $transition-fast;
 
@@ -37,7 +37,7 @@
     }
 
     &::placeholder {
-      color: $color-text-disabled;
+      color: var(--color-text-disabled, $color-text-disabled);
     }
   }
 
@@ -51,13 +51,13 @@
 
   &__select {
     flex: 1;
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-sm;
     padding: $spacing-xs $spacing-sm;
     font-size: $font-size-xs;
     font-family: $font-family-base;
-    color: $color-text-primary;
-    background-color: $color-surface;
+    color: var(--color-text-primary, $color-text-primary);
+    background-color: var(--color-surface, $color-surface);
     cursor: pointer;
     outline: none;
     transition: border-color $transition-fast;
@@ -69,12 +69,12 @@
 
   &__assignee-input {
     flex: 1;
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-sm;
     padding: $spacing-xs $spacing-sm;
     font-size: $font-size-xs;
     font-family: $font-family-base;
-    color: $color-text-primary;
+    color: var(--color-text-primary, $color-text-primary);
     outline: none;
     transition: border-color $transition-fast;
 
@@ -83,7 +83,7 @@
     }
 
     &::placeholder {
-      color: $color-text-disabled;
+      color: var(--color-text-disabled, $color-text-disabled);
     }
   }
 
@@ -123,12 +123,12 @@
     padding: $spacing-xs $spacing-md;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
     border-radius: $border-radius-sm;
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-surface-hover;
+      background-color: var(--color-surface-hover, $color-surface-hover);
     }
   }
 }

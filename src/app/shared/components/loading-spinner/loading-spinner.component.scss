@@ -58,7 +58,7 @@
   // --------------------------------------------------
   &__message {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary, $color-text-secondary);
   }
 }
 
