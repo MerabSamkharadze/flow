@@ -10,7 +10,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "predeploy": "npm run build:prod",
-    "deploy": "firebase deploy --only hosting,firestore:rules"
+    "deploy": "firebase deploy --only hosting,firestore:rules,storage"
   },
   "private": true,
   "dependencies": {
