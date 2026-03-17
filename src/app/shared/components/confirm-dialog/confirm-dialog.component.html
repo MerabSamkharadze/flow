@@ -17,8 +17,12 @@
       <button class="confirm-dialog__cancel-btn" type="button" (click)="onCancel()">
         {{ cancelLabel }}
       </button>
-      <button class="confirm-dialog__confirm-btn" type="button" (click)="onConfirm()">
-        {{ confirmLabel }}
+      <button class="confirm-dialog__confirm-btn"
+              type="button"
+              (click)="onConfirm()"
+              [disabled]="isLoading">
+        <span class="confirm-dialog__spinner" *ngIf="isLoading"></span>
+        {{ isLoading ? 'Please wait…' : confirmLabel }}
       </button>
     </div>
 
