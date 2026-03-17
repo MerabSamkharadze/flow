@@ -113,6 +113,9 @@
   // Element: error banner
   // --------------------------------------------------
   &__error {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
     padding: $spacing-sm $spacing-md;
     margin-bottom: $spacing-md;
     background-color: rgba($color-error, 0.1);
@@ -141,6 +144,23 @@
     color: var(--color-text-primary, $color-text-primary);
   }
 
+  // --------------------------------------------------
+  // Element: input wrapper (for icon + toggle positioning)
+  // --------------------------------------------------
+  &__input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__input-icon {
+    position: absolute;
+    left: $spacing-sm + 2px;
+    color: var(--color-text-disabled, $color-text-disabled);
+    pointer-events: none;
+    z-index: 1;
+  }
+
   &__input {
     width: 100%;
     padding: $spacing-sm $spacing-md;
@@ -161,6 +181,14 @@
       box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
     }
 
+    &--has-icon {
+      padding-left: $spacing-xl + 4px;
+    }
+
+    &--has-toggle {
+      padding-right: $spacing-xl + 4px;
+    }
+
     &--error {
       border-color: $color-error;
 
@@ -168,6 +196,25 @@
         border-color: $color-error;
         box-shadow: 0 0 0 3px rgba($color-error, 0.15);
       }
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: show/hide password toggle
+  // --------------------------------------------------
+  &__toggle {
+    @include button-reset;
+    position: absolute;
+    right: $spacing-sm + 2px;
+    @include flex-center;
+    width: 24px;
+    height: 24px;
+    color: var(--color-text-disabled, $color-text-disabled);
+    border-radius: $border-radius-sm;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: var(--color-text-secondary, $color-text-secondary);
     }
   }
 
@@ -259,6 +306,40 @@
     ::ng-deep .spinner {
       padding: 0;
     }
+  }
+
+  // --------------------------------------------------
+  // Element: divider
+  // --------------------------------------------------
+  &__divider {
+    display: flex;
+    align-items: center;
+    margin: $spacing-lg 0;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--color-border, $color-border);
+    }
+  }
+
+  &__divider-text {
+    padding: 0 $spacing-md;
+    font-size: $font-size-xs;
+    color: var(--color-text-disabled, $color-text-disabled);
+    text-transform: lowercase;
+  }
+
+  // --------------------------------------------------
+  // Element: footer link
+  // --------------------------------------------------
+  &__footer-link {
+    text-align: center;
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary, $color-text-secondary);
+    margin: 0;
   }
 }
 

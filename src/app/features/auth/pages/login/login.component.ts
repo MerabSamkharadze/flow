@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   loading$!: Observable<boolean>;
   error$!: Observable<string | null>;
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -54,6 +55,11 @@ export class LoginComponent implements OnInit {
 
     const { email, password } = this.loginForm.value;
     this.store.dispatch(AuthActions.login({ email, password }));
+  }
+
+  /** Toggle password visibility */
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 
   /** Navigate to the register page */

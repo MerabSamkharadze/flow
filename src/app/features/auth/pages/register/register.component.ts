@@ -24,6 +24,8 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   loading$!: Observable<boolean>;
   error$!: Observable<string | null>;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -95,6 +97,16 @@ export class RegisterComponent implements OnInit {
 
     const { name, email, password } = this.registerForm.value;
     this.store.dispatch(AuthActions.register({ name, email, password }));
+  }
+
+  /** Toggle password visibility */
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  /** Toggle confirm password visibility */
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   /** Navigate to the login page */
