@@ -39,7 +39,9 @@ export class ToastService {
    */
   show(message: string, type: Toast['type'] = 'info', duration = 3000): void {
     const toast: Toast = { id: ++this.nextId, type, message, duration };
-    this.toastsSubject.next([...this.toastsSubject.value, toast]);
+    const current = [...this.toastsSubject.value, toast];
+    // Keep only the last 5 toasts visible
+    this.toastsSubject.next(current.slice(-5));
 
     // Auto-dismiss after duration
     if (duration > 0) {
@@ -50,5 +52,20 @@ export class ToastService {
   /** Remove a toast by id */
   dismiss(id: number): void {
     this.toastsSubject.next(this.toastsSubject.value.filter((t) => t.id !== id));
+  }
+
+  /** Shorthand: show a success toast */
+  success(message: string, duration = 3000): void {
+    this.show(message, 'success', duration);
+  }
+
+  /** Shorthand: show an error toast */
+  error(message: string, duration = 5000): void {
+    this.show(message, 'error', duration);
+  }
+
+  /** Shorthand: show an info toast */
+  info(message: string, duration = 3000): void {
+    this.show(message, 'info', duration);
   }
 }

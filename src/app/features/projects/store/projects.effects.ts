@@ -132,6 +132,16 @@ export class ProjectsEffects {
     )
   );
 
+  /** Show toast on project update success */
+  updateProjectSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ProjectsActions.updateProjectSuccess),
+        tap(() => this.toastService.show('Project saved.', 'success'))
+      ),
+    { dispatch: false }
+  );
+
   // ---------------------------------------------------------------------------
   // Delete project
   // ---------------------------------------------------------------------------
@@ -150,12 +160,15 @@ export class ProjectsEffects {
     )
   );
 
-  /** On successful deletion, navigate back to the project list */
+  /** On successful deletion, show toast and navigate back to the project list */
   deleteProjectSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(ProjectsActions.deleteProjectSuccess),
-        tap(() => this.router.navigate(['/projects']))
+        tap(() => {
+          this.toastService.show('Project deleted.', 'success');
+          this.router.navigate(['/projects']);
+        })
       ),
     { dispatch: false }
   );

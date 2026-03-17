@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { catchError, exhaustMap, map, take, tap } from 'rxjs/operators';
 
 import { FirebaseService } from '../../../core/services/firebase.service';
+import { ToastService } from '../../../core/services/toast.service';
 import * as AuthActions from './auth.actions';
 import { AuthUser } from './auth.actions';
 
@@ -22,6 +23,7 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private firebaseService: FirebaseService,
+    private toastService: ToastService,
     private router: Router
   ) {}
 
@@ -80,6 +82,16 @@ export class AuthEffects {
     { dispatch: false }
   );
 
+  /** Show toast on login failure */
+  loginFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.loginFailure),
+        tap(() => this.toastService.show('Invalid email or password.', 'error', 5000))
+      ),
+    { dispatch: false }
+  );
+
   // ---------------------------------------------------------------------------
   // Register
   // ---------------------------------------------------------------------------
@@ -109,6 +121,16 @@ export class AuthEffects {
           )
       )
     )
+  );
+
+  /** Show toast on registration failure */
+  registerFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.registerFailure),
+        tap(({ error }) => this.toastService.show(error || 'Registration failed.', 'error', 5000))
+      ),
+    { dispatch: false }
   );
 
   /** On successful registration, navigate to the dashboard */

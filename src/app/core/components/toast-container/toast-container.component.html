@@ -46,5 +46,10 @@
     <button class="toast__close" type="button" (click)="onDismiss(toast.id)" aria-label="Dismiss">
       &times;
     </button>
+
+    <!-- Auto-dismiss progress bar -->
+    <div class="toast__progress"
+         [style.animation-duration.ms]="toast.duration">
+    </div>
   </div>
 </div>

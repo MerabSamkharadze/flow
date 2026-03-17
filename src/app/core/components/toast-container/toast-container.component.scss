@@ -37,12 +37,15 @@
   align-items: center;
   gap: $spacing-sm;
   padding: $spacing-md;
+  padding-bottom: $spacing-md + 3px;
   border-radius: $border-radius-md;
   box-shadow: $shadow-lg;
   background-color: var(--color-surface, $color-surface);
   border-left: 4px solid $color-info;
   pointer-events: auto;
   animation: toast-slide-in 0.3s ease forwards;
+  position: relative;
+  overflow: hidden;
 
   // --------------------------------------------------
   // Type variants
@@ -116,6 +119,36 @@
       background-color: var(--color-surface-hover, $color-surface-hover);
     }
   }
+
+  // --------------------------------------------------
+  // Element: progress bar (auto-dismiss indicator)
+  // --------------------------------------------------
+  &__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background-color: $color-info;
+    animation: toast-progress linear forwards;
+    transform-origin: left;
+  }
+
+  &--success &__progress {
+    background-color: $color-success;
+  }
+
+  &--error &__progress {
+    background-color: $color-error;
+  }
+
+  &--warning &__progress {
+    background-color: $color-warning;
+  }
+
+  &--info &__progress {
+    background-color: $color-info;
+  }
 }
 
 // --------------------------------------------------
@@ -129,5 +162,14 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
   }
 }
