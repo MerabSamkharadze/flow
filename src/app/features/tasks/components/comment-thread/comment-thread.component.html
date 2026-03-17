@@ -11,7 +11,14 @@
 
     <!-- Avatar -->
     <div class="comment-thread__avatar">
-      {{ comment.authorName.charAt(0) | uppercase }}
+      <img
+        *ngIf="comment.authorAvatar"
+        class="comment-thread__avatar-img"
+        [src]="comment.authorAvatar"
+        [alt]="comment.authorName" />
+      <span *ngIf="!comment.authorAvatar">
+        {{ comment.authorName.charAt(0) | uppercase }}
+      </span>
     </div>
 
     <!-- Content area -->

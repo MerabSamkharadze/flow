@@ -40,11 +40,33 @@
     border-radius: $border-radius-full;
     background: linear-gradient(135deg, $color-primary, $color-primary-light);
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: $border-radius-full;
   }
 
   &__avatar-initials {
     font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
+    color: $color-text-inverse;
+  }
+
+  &__avatar-overlay {
+    position: absolute;
+    inset: 0;
+    @include flex-center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: $border-radius-full;
+  }
+
+  &__spinner {
+    animation: spin 1s linear infinite;
     color: $color-text-inverse;
   }
 
@@ -73,9 +95,50 @@
     }
   }
 
+  &__file-input {
+    display: none;
+  }
+
   &__upload-hint {
     font-size: $font-size-xs;
     color: var(--color-text-disabled, $color-text-disabled);
+  }
+
+  &__upload-error {
+    font-size: $font-size-xs;
+    color: $color-error;
+    font-weight: $font-weight-medium;
+  }
+
+  // --------------------------------------------------
+  // Element: upload progress bar
+  // --------------------------------------------------
+  &__progress {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__progress-bar {
+    flex: 1;
+    height: 6px;
+    background-color: var(--color-gray-100, $color-gray-100);
+    border-radius: 3px;
+    overflow: hidden;
+    min-width: 100px;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background-color: $color-primary;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  &__progress-text {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    min-width: 32px;
   }
 
   // --------------------------------------------------
@@ -203,4 +266,9 @@
       cursor: not-allowed;
     }
   }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

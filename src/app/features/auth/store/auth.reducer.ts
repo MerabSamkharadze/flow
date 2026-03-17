@@ -98,5 +98,14 @@ export const authReducer = createReducer(
     ...state,
     user,
     loading: false,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Update User Photo
+  // ---------------------------------------------------------------------------
+
+  on(AuthActions.updateUserPhoto, (state, { photoURL }) => ({
+    ...state,
+    user: state.user ? { ...state.user, photoURL } : null,
   }))
 );

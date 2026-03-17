@@ -75,3 +75,12 @@ export const loadUserSuccess = createAction(
   '[Auth API] Load User Success',
   props<{ user: AuthUser | null }>()
 );
+
+// ---------------------------------------------------------------------------
+// Update User Photo
+// ---------------------------------------------------------------------------
+
+export const updateUserPhoto = createAction(
+  '[Profile Settings] Update User Photo',
+  props<{ photoURL: string }>()
+);

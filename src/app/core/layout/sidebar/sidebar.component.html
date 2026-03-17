@@ -105,7 +105,14 @@
     <div class="sidebar__profile-row" [title]="isCollapsed ? (user.displayName || user.email || '') : ''">
       <!-- Avatar -->
       <span class="sidebar__profile-avatar">
-        {{ getInitials(user.displayName || user.email) }}
+        <img
+          *ngIf="user.photoURL"
+          class="sidebar__profile-avatar-img"
+          [src]="user.photoURL"
+          [alt]="user.displayName || 'User'" />
+        <span *ngIf="!user.photoURL">
+          {{ getInitials(user.displayName || user.email) }}
+        </span>
       </span>
 
       <!-- Name + email (expanded only) -->

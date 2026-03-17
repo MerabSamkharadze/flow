@@ -7,14 +7,57 @@
   <!-- Avatar section -->
   <div class="profile-settings__avatar-section">
     <div class="profile-settings__avatar">
-      <span class="profile-settings__avatar-initials">{{ initials }}</span>
+      <!-- Photo or initials -->
+      <img
+        *ngIf="avatarUrl && !uploading"
+        class="profile-settings__avatar-img"
+        [src]="avatarUrl"
+        alt="Profile photo" />
+      <span
+        *ngIf="!avatarUrl && !uploading"
+        class="profile-settings__avatar-initials">
+        {{ initials }}
+      </span>
+      <!-- Upload spinner overlay -->
+      <div class="profile-settings__avatar-overlay" *ngIf="uploading">
+        <svg class="profile-settings__spinner" width="28" height="28" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+      </div>
     </div>
     <div class="profile-settings__avatar-actions">
-      <button class="profile-settings__upload-btn" type="button" disabled
-              title="Photo upload coming soon">
-        Change photo
+      <button
+        class="profile-settings__upload-btn"
+        type="button"
+        [disabled]="uploading"
+        (click)="onChangePhotoClick()">
+        {{ uploading ? 'Uploading...' : 'Change photo' }}
       </button>
-      <span class="profile-settings__upload-hint">Photo upload coming soon</span>
+      <!-- Hidden file input -->
+      <input
+        #fileInput
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        class="profile-settings__file-input"
+        (change)="onFileSelected($event)" />
+      <!-- Upload progress bar -->
+      <div class="profile-settings__progress" *ngIf="uploading">
+        <div class="profile-settings__progress-bar">
+          <div
+            class="profile-settings__progress-fill"
+            [style.width.%]="uploadProgress">
+          </div>
+        </div>
+        <span class="profile-settings__progress-text">{{ uploadProgress }}%</span>
+      </div>
+      <!-- Upload hint or error -->
+      <span class="profile-settings__upload-hint" *ngIf="!uploadError && !uploading">
+        Max 2MB. JPEG, PNG, or WebP.
+      </span>
+      <span class="profile-settings__upload-error" *ngIf="uploadError">
+        {{ uploadError }}
+      </span>
     </div>
   </div>
 

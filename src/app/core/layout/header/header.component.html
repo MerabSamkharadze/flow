@@ -29,7 +29,14 @@
 
     <div class="header__profile" *ngIf="user$ | async as user">
       <div class="header__avatar">
-        <span class="header__avatar-initials">
+        <img
+          *ngIf="user.photoURL"
+          class="header__avatar-img"
+          [src]="user.photoURL"
+          [alt]="user.displayName || 'User'" />
+        <span
+          *ngIf="!user.photoURL"
+          class="header__avatar-initials">
           {{ (user.displayName || user.email || 'U').charAt(0) | uppercase }}
         </span>
       </div>

@@ -202,6 +202,13 @@
     font-weight: $font-weight-bold;
     flex-shrink: 0;
     letter-spacing: 0.5px;
+    overflow: hidden;
+  }
+
+  &__profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   &__profile-info {

@@ -14,6 +14,7 @@ import { CoreModule } from '@core/core.module';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 // NgRx — global state management
 import { StoreModule } from '@ngrx/store';
@@ -55,6 +56,7 @@ import { environment } from '@env/environment';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    AngularFireStorageModule,
 
     // NgRx — auth state registered at root because AuthGuard and interceptors
     // run before the lazy-loaded AuthModule is loaded

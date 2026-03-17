@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { Observable, from } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 /**
  * FirebaseService — centralized access to Firebase backend.
@@ -17,7 +23,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 export class FirebaseService {
   constructor(
     private firestore: AngularFirestore,
-    private auth: AngularFireAuth
+    private auth: AngularFireAuth,
+    private storage: AngularFireStorage
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -105,5 +112,74 @@ export class FirebaseService {
 
     // Update to new password
     await user.updatePassword(newPassword);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Profile photo upload
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Upload a profile photo to Firebase Storage.
+   *
+   * - Validates file size (max 2MB) and type (jpeg, png, webp).
+   * - Uploads to `avatars/{userId}/{timestamp}_{filename}`.
+   * - After upload, updates Firebase Auth photoURL and Firestore user doc.
+   * - Returns Observable that emits upload progress (0-100) then the final download URL.
+   */
+  uploadProfilePhoto(userId: string, file: File): Observable<number | string> {
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error('File size exceeds 2MB limit.');
+    }
+    // Validate file type
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      throw new Error('Invalid file type. Allowed: JPEG, PNG, WebP.');
+    }
+
+    const filePath = `avatars/${userId}/${Date.now()}_${file.name}`;
+    const ref = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+
+    return new Observable<number | string>((observer) => {
+      // Emit progress 0-100
+      const progressSub = task.percentageChanges().subscribe((pct) => {
+        if (pct !== undefined) {
+          observer.next(Math.round(pct));
+        }
+      });
+
+      // On complete, get download URL and update profile
+      task.snapshotChanges().pipe(
+        switchMap((snapshot) => {
+          if (snapshot?.state === 'success') {
+            return from(ref.getDownloadURL());
+          }
+          return new Observable<never>();
+        })
+      ).subscribe({
+        next: async (downloadURL: string) => {
+          progressSub.unsubscribe();
+          try {
+            // Update Firebase Auth + Firestore
+            const user = await this.auth.currentUser;
+            if (user) {
+              await user.updateProfile({ photoURL: downloadURL });
+              await this.firestore.doc(`users/${user.uid}`).set(
+                { photoURL: downloadURL, avatarUrl: downloadURL, updatedAt: Date.now() },
+                { merge: true }
+              );
+            }
+            observer.next(downloadURL);
+            observer.complete();
+          } catch (err) {
+            observer.error(err);
+          }
+        },
+        error: (err) => {
+          progressSub.unsubscribe();
+          observer.error(err);
+        },
+      });
+    });
   }
 }
