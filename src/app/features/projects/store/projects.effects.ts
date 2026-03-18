@@ -6,6 +6,7 @@ import { of, merge } from 'rxjs';
 import { catchError, exhaustMap, map, switchMap, tap, withLatestFrom, take, mergeMap } from 'rxjs/operators';
 
 import { ProjectsService } from '../services/projects.service';
+import { Project } from '../../../shared/models/project.model';
 import { BoardService } from '../../board/services/board.service';
 import { NotificationsService } from '../../../core/services/notifications.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -123,7 +124,7 @@ export class ProjectsEffects {
         this.projectsService.updateProject(projectId, changes).then(
           () =>
             ProjectsActions.updateProjectSuccess({
-              project: { id: projectId, ...changes } as any,
+              project: { id: projectId, ...changes } as Project,
             }),
           (error) =>
             ProjectsActions.updateProjectFailure({ error: error.message })

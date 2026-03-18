@@ -78,8 +78,8 @@ export class AccountSettingsComponent {
       await this.firebaseService.changePassword(currentPassword, newPassword);
       this.successMessage = 'Password updated successfully.';
       this.form.reset();
-    } catch (err: any) {
-      this.errorMessage = err.message || 'Failed to update password.';
+    } catch (err: unknown) {
+      this.errorMessage = err instanceof Error ? err.message : 'Failed to update password.';
     } finally {
       this.saving = false;
     }

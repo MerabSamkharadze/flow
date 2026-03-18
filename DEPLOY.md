@@ -1,35 +1,21 @@
 # FLOW — Deployment Guide
 
 ## Prerequisites
-
-- Node.js 16+ and npm
+- Node.js 16+
 - Firebase CLI: `npm install -g firebase-tools`
-- Firebase project: `flow-8eacb`
 
-## Deploy Steps
+## First Time Setup
+1. `firebase login`
+2. `firebase use flow-8eacb`
 
-1. Install Firebase CLI (if not already installed):
-   ```bash
-   npm install -g firebase-tools
-   ```
+## Deploy
+```bash
+npm run deploy
+```
 
-2. Authenticate with Firebase:
-   ```bash
-   firebase login
-   ```
-
-3. Deploy hosting + Firestore rules:
-   ```bash
-   npm run deploy
-   ```
-
-   This will:
-   - Run `ng build --configuration production`
-   - Deploy the `dist/flow` output to Firebase Hosting
-   - Deploy `firestore.rules` to Cloud Firestore
+This runs `build:prod` automatically (via `predeploy`), then deploys hosting, Firestore rules, and Storage rules.
 
 ## Individual Deploys
-
 ```bash
 # Hosting only
 firebase deploy --only hosting
@@ -37,22 +23,32 @@ firebase deploy --only hosting
 # Firestore rules only
 firebase deploy --only firestore:rules
 
+# Storage rules only
+firebase deploy --only storage
+
 # Production build without deploying
 npm run build:prod
 ```
 
 ## Bundle Analysis
-
 ```bash
 npm run analyze
 ```
 
-This generates a `stats.json` and opens the webpack bundle analyzer in your browser.
+## Manual Steps (one-time)
+- Enable **Firebase Authentication** (Email/Password) in Firebase Console
+- Set Firestore to **production mode** (rules are in `firestore.rules`)
+- Enable **Firebase Storage**
+- Rotate API keys if they were ever committed to git
+- Configure Firebase Authentication email templates (verification, password reset)
+- Set up custom domain in Firebase Hosting settings if needed
 
-## Manual Steps (Post-Deploy)
+## Environment Files
+```bash
+cp src/environments/environment.example.ts src/environments/environment.ts
+cp src/environments/environment.example.ts src/environments/environment.prod.ts
+```
 
-- **Rotate Firebase API keys** if they were exposed in old git commits
-- **Enable Firebase App Check** in the Firebase Console for production
-- **Configure Firebase Authentication email templates** (verification, password reset)
-- **Set up custom domain** in Firebase Hosting settings if needed
-- **Enable Firestore backups** for production data
+Fill in your Firebase config in both files. Set `production: true` in `environment.prod.ts`.
+
+**Never commit environment.ts files** — they are in `.gitignore`.

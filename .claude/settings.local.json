@@ -37,7 +37,9 @@
       "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'background-color: \\\\$color-surface;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)",
       "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'background-color: \\\\$color-bg;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)",
       "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'color: \\\\$color-text-primary;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)",
-      "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'color: \\\\$color-text-disabled;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)"
+      "Bash(cd \"C:\\\\Users\\\\msamkharadze\\\\Desktop\\\\personal\\\\flow\" && grep -rn 'color: \\\\$color-text-disabled;' src/app/ --include=\"*.scss\" | grep -v sidebar | grep -v _variables | grep -v _themes | grep -v _reset | grep -v _typography)",
+      "Bash(firebase deploy:*)",
+      "Bash(npx firebase:*)"
     ]
   }
 }

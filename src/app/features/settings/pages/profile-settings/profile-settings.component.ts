@@ -153,10 +153,10 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
           this.uploadError = err.message || 'Failed to upload photo.';
         },
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       this.uploading = false;
       this.previewUrl = null;
-      this.uploadError = err.message || 'Failed to upload photo.';
+      this.uploadError = err instanceof Error ? err.message : 'Failed to upload photo.';
     }
 
     // Reset input so same file can be re-selected
@@ -175,8 +175,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       const { displayName, avatarUrl } = this.form.getRawValue();
       await this.firebaseService.updateProfile(displayName, avatarUrl || undefined);
       this.successMessage = 'Profile updated successfully.';
-    } catch (err: any) {
-      this.errorMessage = err.message || 'Failed to update profile.';
+    } catch (err: unknown) {
+      this.errorMessage = err instanceof Error ? err.message : 'Failed to update profile.';
     } finally {
       this.saving = false;
     }
