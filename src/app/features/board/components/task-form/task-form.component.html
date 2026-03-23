@@ -40,6 +40,13 @@
         placeholder="Assignee..." />
     </div>
 
+    <!-- Labels (tag input) -->
+    <app-tag-input
+      [tags]="labels"
+      [suggestions]="labelSuggestions"
+      (tagsChange)="labels = $event">
+    </app-tag-input>
+
     <!-- Action buttons -->
     <div class="task-form__actions">
       <button

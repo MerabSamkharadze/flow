@@ -12,6 +12,7 @@ export interface BoardFilters {
   priority: TaskPriority[];      // filter by one or more priority levels
   assigneeId: string | null;     // filter by assignee (null = show all)
   issueType: IssueType[];        // filter by one or more issue types
+  labels: string[];              // filter by one or more labels (ANY match)
 }
 
 /** Default empty filters — shows all tasks */
@@ -20,4 +21,5 @@ export const EMPTY_FILTERS: BoardFilters = {
   priority: [],
   assigneeId: null,
   issueType: [],
+  labels: [],
 };

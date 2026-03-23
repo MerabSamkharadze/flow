@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Task, TaskPriority, IssueType, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 
+
 /**
  * TaskFormComponent — inline quick-create form shown inside a board column.
  *
@@ -33,6 +34,12 @@ export class TaskFormComponent implements OnInit {
 
   /** Currently selected issue type */
   selectedIssueType: IssueType = 'task';
+
+  /** Labels for the new task */
+  labels: string[] = [];
+
+  /** Suggested labels from existing tasks */
+  @Input() labelSuggestions: string[] = [];
 
   trackByPriority(_index: number, p: TaskPriority): string {
     return p;
@@ -69,11 +76,13 @@ export class TaskFormComponent implements OnInit {
       issueType: this.selectedIssueType,
       assigneeId: assigneeId?.trim() || null,
       columnId: this.columnId,
+      labels: [...this.labels],
     });
 
     // Reset form after submission
     this.form.reset({ title: '', priority: 'medium', assigneeId: '' });
     this.selectedIssueType = 'task';
+    this.labels = [];
   }
 
   /** Cancel and hide the form */

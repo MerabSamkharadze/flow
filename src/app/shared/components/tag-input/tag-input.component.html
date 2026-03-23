@@ -1,0 +1,47 @@
+<!-- Tag Input — chip-based label editor with suggestions -->
+<div class="tag-input" (click)="onContainerClick()">
+
+  <!-- Existing chips -->
+  <span
+    *ngFor="let tag of tags; let i = index; trackBy: trackByTag"
+    class="tag-input__chip"
+    [style.background-color]="getLabelColor(tag) + '1a'"
+    [style.color]="getLabelColor(tag)"
+    [style.border-color]="getLabelColor(tag) + '33'">
+    {{ tag }}
+    <button
+      class="tag-input__chip-remove"
+      type="button"
+      [style.color]="getLabelColor(tag)"
+      (click)="removeTag(i); $event.stopPropagation()">
+      &times;
+    </button>
+  </span>
+
+  <!-- Text input -->
+  <input
+    class="tag-input__input"
+    type="text"
+    #inputEl
+    [value]="inputValue"
+    (input)="onInput($any($event.target).value)"
+    (keydown)="onKeyDown($event)"
+    (focus)="onFocus()"
+    [placeholder]="tags.length === 0 ? 'Add labels...' : ''"
+    [disabled]="tags.length >= maxTags" />
+
+  <!-- Suggestions dropdown -->
+  <ul class="tag-input__suggestions" *ngIf="showSuggestions && filteredSuggestions.length > 0">
+    <li
+      class="tag-input__suggestion"
+      *ngFor="let s of filteredSuggestions; trackBy: trackBySuggestion"
+      (mousedown)="selectSuggestion(s)">
+      <span
+        class="tag-input__suggestion-dot"
+        [style.background-color]="getLabelColor(s)">
+      </span>
+      {{ s }}
+    </li>
+  </ul>
+
+</div>

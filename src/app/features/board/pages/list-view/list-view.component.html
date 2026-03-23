@@ -20,7 +20,10 @@
   </div>
 
   <!-- Filters bar (shared with kanban view) -->
-  <app-board-filters (filtersChanged)="onFiltersChanged($event)"></app-board-filters>
+  <app-board-filters
+    [availableLabels]="(uniqueLabels$ | async) || []"
+    (filtersChanged)="onFiltersChanged($event)">
+  </app-board-filters>
 
   <!-- Loading spinner -->
   <app-loading-spinner
@@ -70,6 +73,9 @@
                 <th class="board-list-view__th board-list-view__th--assignee"
                     (click)="onSort('assigneeId')">
                   Assignee{{ getSortIcon('assigneeId') }}
+                </th>
+                <th class="board-list-view__th board-list-view__th--labels">
+                  Labels
                 </th>
                 <th class="board-list-view__th board-list-view__th--deadline"
                     (click)="onSort('deadline')">
@@ -125,6 +131,21 @@
                     <span class="board-list-view__assignee-name">{{ task.assigneeId }}</span>
                   </div>
                   <span class="board-list-view__muted" *ngIf="!task.assigneeId">&mdash;</span>
+                </td>
+
+                <!-- Labels -->
+                <td class="board-list-view__cell">
+                  <div class="board-list-view__labels" *ngIf="task.labels && task.labels.length > 0">
+                    <span
+                      class="board-list-view__label-chip"
+                      *ngFor="let label of task.labels"
+                      [style.background-color]="getLabelColor(label) + '1a'"
+                      [style.color]="getLabelColor(label)"
+                      [style.border-color]="getLabelColor(label) + '33'">
+                      {{ label }}
+                    </span>
+                  </div>
+                  <span class="board-list-view__muted" *ngIf="!task.labels || task.labels.length === 0">&mdash;</span>
                 </td>
 
                 <!-- Deadline -->

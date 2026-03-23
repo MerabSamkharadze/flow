@@ -13,6 +13,7 @@ import {
   selectBoardLoading,
   selectBoardError,
   selectActiveTask,
+  selectUniqueLabels,
 } from '../../store/board.selectors';
 import { selectCommentCounts } from '../../../tasks/store/tasks.selectors';
 
@@ -47,6 +48,9 @@ export class KanbanViewComponent implements OnInit {
   /** Comment counts keyed by task ID — passed through to board-column → task-card */
   commentCounts$!: Observable<{ [taskId: string]: number }>;
 
+  /** Unique labels from all tasks — passed to board-filters and task-form */
+  uniqueLabels$!: Observable<string[]>;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -64,6 +68,7 @@ export class KanbanViewComponent implements OnInit {
     this.error$ = this.store.select(selectBoardError);
     this.activeTask$ = this.store.select(selectActiveTask);
     this.commentCounts$ = this.store.select(selectCommentCounts);
+    this.uniqueLabels$ = this.store.select(selectUniqueLabels);
 
     // Dispatch loadBoard to fetch columns + tasks from Firestore
     this.store.dispatch(BoardActions.loadBoard({ projectId: this.projectId }));
@@ -180,7 +185,7 @@ export class KanbanViewComponent implements OnInit {
           updatedAt: Date.now(),
           deadline: null,
           order: 0,
-          labels: [],
+          labels: taskData.labels || [],
           subtasks: [],
         },
       })

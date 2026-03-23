@@ -55,7 +55,7 @@ export const selectActiveTask = createSelector(
 /** Current board filters */
 export const selectBoardFilters = createSelector(
   selectBoardState,
-  (state) => state?.filters ?? { search: '', priority: [], assigneeId: '', issueType: [] }
+  (state) => state?.filters ?? { search: '', priority: [], assigneeId: '', issueType: [], labels: [] }
 );
 
 /** Whether a board operation is in progress */
@@ -79,6 +79,20 @@ export const selectAllTasks = createSelector(
       all.push(...columnTasks);
     }
     return all;
+  }
+);
+
+/** All unique labels from board tasks — used for filter dropdown */
+export const selectUniqueLabels = createSelector(
+  selectAllTasks,
+  (tasks): string[] => {
+    const labelSet = new Set<string>();
+    for (const task of tasks) {
+      for (const label of task.labels || []) {
+        labelSet.add(label);
+      }
+    }
+    return Array.from(labelSet).sort();
   }
 );
 
@@ -119,6 +133,14 @@ function applyFilters(tasks: Task[], filters: BoardFilters): Task[] {
     if (filters.issueType && filters.issueType.length > 0) {
       const taskType = task.issueType || 'task'; // default for legacy tasks
       if (!filters.issueType.includes(taskType)) {
+        return false;
+      }
+    }
+
+    // Label filter — task must have at least one of the selected labels
+    if (filters.labels && filters.labels.length > 0) {
+      const taskLabels = task.labels || [];
+      if (!filters.labels.some((l) => taskLabels.includes(l))) {
         return false;
       }
     }

@@ -44,6 +44,34 @@
     </div>
   </div>
 
+  <!-- Label filter dropdown -->
+  <div class="board-filters__group board-filters__group--labels" *ngIf="availableLabels.length > 0">
+    <span class="board-filters__label">Label:</span>
+    <div class="board-filters__label-dropdown">
+      <button
+        class="board-filters__label-trigger"
+        [class.board-filters__label-trigger--active]="selectedLabels.length > 0"
+        type="button"
+        (click)="toggleLabelDropdown()">
+        {{ selectedLabels.length > 0 ? selectedLabels.length + ' selected' : 'All' }}
+        <span class="board-filters__label-arrow">&#9662;</span>
+      </button>
+      <div class="board-filters__label-menu" *ngIf="showLabelDropdown">
+        <label
+          class="board-filters__label-option"
+          *ngFor="let label of availableLabels; trackBy: trackByLabel"
+          (click)="toggleLabel(label)">
+          <span
+            class="board-filters__label-dot"
+            [style.background-color]="getLabelColor(label)">
+          </span>
+          <span class="board-filters__label-text">{{ label }}</span>
+          <span class="board-filters__label-check" *ngIf="isLabelSelected(label)">&#10003;</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
   <!-- Assignee filter -->
   <div class="board-filters__group">
     <span class="board-filters__label">Assignee:</span>

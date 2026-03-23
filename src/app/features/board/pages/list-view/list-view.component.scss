@@ -125,13 +125,14 @@
       color: $color-primary;
     }
 
-    &--type     { width: 9%; }
-    &--title    { width: 24%; }
-    &--status   { width: 12%; }
-    &--priority { width: 12%; }
-    &--assignee { width: 17%; }
-    &--deadline { width: 13%; }
-    &--column   { width: 13%; }
+    &--type     { width: 8%; }
+    &--title    { width: 20%; }
+    &--status   { width: 10%; }
+    &--priority { width: 10%; }
+    &--assignee { width: 14%; }
+    &--labels   { width: 14%; }
+    &--deadline { width: 12%; }
+    &--column   { width: 12%; }
   }
 
   // --------------------------------------------------
@@ -213,6 +214,25 @@
   &__type-icon {
     font-size: $font-size-sm;
     line-height: 1;
+  }
+
+  // --------------------------------------------------
+  // Element: labels
+  // --------------------------------------------------
+  &__labels {
+    @include flex(row, center);
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+
+  &__label-chip {
+    display: inline-block;
+    padding: 1px $spacing-xs;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-sm;
+    border: 1px solid;
+    white-space: nowrap;
   }
 
   // --------------------------------------------------

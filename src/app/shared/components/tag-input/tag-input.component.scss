@@ -1,0 +1,121 @@
+// ==========================================================================
+// Tag Input Component — BEM
+// Block: .tag-input
+// ==========================================================================
+
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+.tag-input {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-xs;
+  min-height: 36px;
+  padding: $spacing-xs $spacing-sm;
+  border: 1px solid var(--color-border, $color-border);
+  border-radius: $border-radius-md;
+  background-color: var(--color-surface, $color-surface);
+  cursor: text;
+  transition: border-color $transition-fast;
+
+  &:focus-within {
+    border-color: $color-primary;
+  }
+
+  // --------------------------------------------------
+  // Element: chip
+  // --------------------------------------------------
+  &__chip {
+    @include flex(row, center);
+    gap: 2px;
+    padding: 1px $spacing-xs;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-sm;
+    border: 1px solid;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+
+  &__chip-remove {
+    @include button-reset;
+    @include flex-center;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 50%;
+    opacity: 0.7;
+    transition: opacity $transition-fast;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: input
+  // --------------------------------------------------
+  &__input {
+    flex: 1;
+    min-width: 80px;
+    border: none;
+    outline: none;
+    font-size: $font-size-sm;
+    font-family: $font-family-base;
+    color: var(--color-text-primary, $color-text-primary);
+    background: transparent;
+    padding: 2px 0;
+
+    &::placeholder {
+      color: var(--color-text-disabled, $color-text-disabled);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: suggestions dropdown
+  // --------------------------------------------------
+  &__suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: $spacing-xs 0 0;
+    padding: $spacing-xs 0;
+    list-style: none;
+    background-color: var(--color-surface, $color-surface);
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-md;
+    box-shadow: var(--shadow-md, $shadow-md);
+    z-index: $z-dropdown;
+    max-height: 160px;
+    @include scrollable(y);
+  }
+
+  &__suggestion {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-sm;
+    color: var(--color-text-primary, $color-text-primary);
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+    }
+  }
+
+  &__suggestion-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+}

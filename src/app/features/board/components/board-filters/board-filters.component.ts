@@ -1,5 +1,6 @@
 import {
   Component,
+  Input,
   Output,
   EventEmitter,
   OnInit,
@@ -10,6 +11,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { TaskPriority, IssueType, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 import { BoardFilters, EMPTY_FILTERS } from '../../models/board-filters.model';
+import { hashLabelColor } from '../../../../shared/components/tag-input/tag-input.component';
 
 /**
  * BoardFiltersComponent — filter bar above the Kanban board.
@@ -28,6 +30,9 @@ import { BoardFilters, EMPTY_FILTERS } from '../../models/board-filters.model';
   styleUrls: ['./board-filters.component.scss'],
 })
 export class BoardFiltersComponent implements OnInit, OnDestroy {
+  /** Unique labels from all board tasks — provided by parent */
+  @Input() availableLabels: string[] = [];
+
   @Output() filtersChanged = new EventEmitter<BoardFilters>();
 
   /** Reactive form controls */
@@ -39,6 +44,10 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
 
   /** Currently selected issue type filters */
   selectedIssueTypes: IssueType[] = [];
+
+  /** Currently selected label filters */
+  selectedLabels: string[] = [];
+  showLabelDropdown = false;
 
   /** All available priorities for the toggle buttons */
   readonly priorities: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
@@ -53,6 +62,10 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
 
   trackByIssueType(_index: number, t: IssueType): string {
     return t;
+  }
+
+  trackByLabel(_index: number, l: string): string {
+    return l;
   }
 
   /** Whether the filter panel is expanded (for mobile / compact view) */
@@ -117,12 +130,40 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
     return this.selectedIssueTypes.includes(type);
   }
 
+  /** Toggle a label filter on/off */
+  toggleLabel(label: string): void {
+    const index = this.selectedLabels.indexOf(label);
+    if (index === -1) {
+      this.selectedLabels = [...this.selectedLabels, label];
+    } else {
+      this.selectedLabels = this.selectedLabels.filter((l) => l !== label);
+    }
+    this.emitFilters();
+  }
+
+  /** Check if a label is currently selected */
+  isLabelSelected(label: string): boolean {
+    return this.selectedLabels.includes(label);
+  }
+
+  /** Get consistent color for a label */
+  getLabelColor(label: string): string {
+    return hashLabelColor(label);
+  }
+
+  /** Toggle label dropdown visibility */
+  toggleLabelDropdown(): void {
+    this.showLabelDropdown = !this.showLabelDropdown;
+  }
+
   /** Clear all filters and reset to defaults */
   clearFilters(): void {
     this.searchControl.setValue('', { emitEvent: false });
     this.assigneeControl.setValue('', { emitEvent: false });
     this.selectedPriorities = [];
     this.selectedIssueTypes = [];
+    this.selectedLabels = [];
+    this.showLabelDropdown = false;
     this.emitFilters();
   }
 
@@ -132,6 +173,7 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
       !!this.searchControl.value ||
       this.selectedPriorities.length > 0 ||
       this.selectedIssueTypes.length > 0 ||
+      this.selectedLabels.length > 0 ||
       !!this.assigneeControl.value
     );
   }
@@ -143,6 +185,7 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
       priority: [...this.selectedPriorities],
       assigneeId: (this.assigneeControl.value || '').trim() || null,
       issueType: [...this.selectedIssueTypes],
+      labels: [...this.selectedLabels],
     };
     this.filtersChanged.emit(filters);
   }

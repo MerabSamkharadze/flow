@@ -14,10 +14,18 @@
       {{ issueTypeConfig.icon }}
     </span>
 
-    <!-- Labels -->
-    <div class="task-card__labels" *ngIf="task.labels.length > 0">
-      <span class="task-card__label" *ngFor="let label of task.labels; trackBy: trackByLabel">
+    <!-- Labels (max 2 visible + "+N") -->
+    <div class="task-card__labels" *ngIf="task.labels && task.labels.length > 0">
+      <span
+        class="task-card__label"
+        *ngFor="let label of visibleLabels; trackBy: trackByLabel"
+        [style.background-color]="getLabelColor(label) + '1a'"
+        [style.color]="getLabelColor(label)"
+        [style.border-color]="getLabelColor(label) + '33'">
         {{ label }}
+      </span>
+      <span class="task-card__label task-card__label--more" *ngIf="extraLabelCount > 0">
+        +{{ extraLabelCount }}
       </span>
     </div>
   </div>

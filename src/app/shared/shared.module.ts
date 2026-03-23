@@ -9,6 +9,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from './components/empty-state/empty-state.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { TagInputComponent } from './components/tag-input/tag-input.component';
 
 /**
  * SharedModule — reusable components, directives, and pipes.
@@ -23,6 +24,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     LoadingSpinnerComponent,
     EmptyStateComponent,
     ConfirmDialogComponent,
+    TagInputComponent,
   ],
   imports: [
     CommonModule,
@@ -42,6 +44,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     LoadingSpinnerComponent,
     EmptyStateComponent,
     ConfirmDialogComponent,
+    TagInputComponent,
   ],
 })
 export class SharedModule {}

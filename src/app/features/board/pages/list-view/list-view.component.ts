@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, combineLatest, map } from 'rxjs';
 import { Column } from '../../../../shared/models/column.model';
 import { Task, TaskPriority, TaskStatus, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
+import { hashLabelColor } from '../../../../shared/components/tag-input/tag-input.component';
 import { BoardFilters } from '../../models/board-filters.model';
 import * as BoardActions from '../../store/board.actions';
 import {
@@ -12,6 +13,7 @@ import {
   selectBoardLoading,
   selectBoardError,
   selectActiveTask,
+  selectUniqueLabels,
 } from '../../store/board.selectors';
 
 type SortField = 'title' | 'issueType' | 'status' | 'priority' | 'assigneeId' | 'deadline' | 'columnId';
@@ -56,6 +58,9 @@ export class ListViewComponent implements OnInit {
   /** Column lookup map for displaying column names */
   columnMap$!: Observable<Record<string, Column>>;
 
+  /** Unique labels from all tasks — passed to board-filters */
+  uniqueLabels$!: Observable<string[]>;
+
   /** Sorted tasks — combines store tasks with local sort state */
   sortedTasks$!: Observable<Task[]>;
 
@@ -79,6 +84,7 @@ export class ListViewComponent implements OnInit {
     this.loading$ = this.store.select(selectBoardLoading);
     this.error$ = this.store.select(selectBoardError);
     this.activeTask$ = this.store.select(selectActiveTask);
+    this.uniqueLabels$ = this.store.select(selectUniqueLabels);
 
     this.columnMap$ = this.columns$.pipe(
       map(cols => {
@@ -238,6 +244,10 @@ export class ListViewComponent implements OnInit {
 
   onGoBack(): void {
     this.router.navigate(['/projects', this.projectId]);
+  }
+
+  getLabelColor(label: string): string {
+    return hashLabelColor(label);
   }
 
   trackByTaskId(_index: number, task: Task): string {

@@ -15,6 +15,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Task, Subtask, TaskPriority, TaskStatus, IssueType, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
+import { selectAllTasks } from '../../store/board.selectors';
 import { Comment } from '../../../../shared/models/comment.model';
 import { Member } from '../../../../shared/models/member.model';
 import { ProjectsService } from '../../../projects/services/projects.service';
@@ -71,6 +72,10 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
   currentUserName = '';
   currentUserAvatar: string | null = null;
 
+  /** Labels (tag chip model) */
+  taskLabels: string[] = [];
+  labelSuggestions: string[] = [];
+
   /** Assignee autocomplete */
   members: Member[] = [];
   filteredMembers: Member[] = [];
@@ -125,9 +130,26 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
       issueType: [this.task.issueType || 'task'],
       assigneeId: [this.task.assigneeId || ''],
       deadline: [this.task.deadline || ''],
-      labels: [this.task.labels.join(', ')],
     });
+    this.taskLabels = [...(this.task.labels || [])];
     this.subtasks = this.task.subtasks.map((s) => ({ ...s }));
+    this.loadLabelSuggestions();
+  }
+
+  /** Load unique labels from all tasks in this project */
+  private loadLabelSuggestions(): void {
+    this.store
+      .select(selectAllTasks)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((tasks) => {
+        const labelSet = new Set<string>();
+        for (const t of tasks) {
+          for (const l of t.labels || []) {
+            labelSet.add(l);
+          }
+        }
+        this.labelSuggestions = Array.from(labelSet).sort();
+      });
   }
 
   /** Toggle a subtask's completed state */
@@ -269,12 +291,6 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
 
     const formValue = this.form.value;
 
-    // Parse labels from comma-separated string
-    const labels = (formValue.labels as string)
-      .split(',')
-      .map((l: string) => l.trim())
-      .filter((l: string) => l.length > 0);
-
     const updatedTask: Task = {
       ...this.task,
       title: formValue.title,
@@ -284,7 +300,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
       issueType: formValue.issueType || 'task',
       assigneeId: formValue.assigneeId || null,
       deadline: formValue.deadline || null,
-      labels,
+      labels: [...this.taskLabels],
       subtasks: this.subtasks,
       updatedAt: Date.now(),
     };

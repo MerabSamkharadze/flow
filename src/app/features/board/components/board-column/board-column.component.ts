@@ -23,6 +23,7 @@ export class BoardColumnComponent {
   @Input() column!: Column;
   @Input() tasks: Task[] = [];
   @Input() commentCounts: { [taskId: string]: number } = {};
+  @Input() labelSuggestions: string[] = [];
 
   @Output() addTask = new EventEmitter<{ columnId: string; taskData: Partial<Task> }>();
   @Output() taskDropped = new EventEmitter<CdkDragDrop<Task[]>>();

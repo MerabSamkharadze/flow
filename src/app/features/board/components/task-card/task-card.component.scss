@@ -73,11 +73,17 @@
 
   &__label {
     font-size: 10px;
-    font-weight: $font-weight-medium;
+    font-weight: $font-weight-semibold;
     padding: 1px $spacing-xs;
     border-radius: $border-radius-sm;
-    background-color: $color-primary-bg;
-    color: $color-primary;
+    border: 1px solid;
+    white-space: nowrap;
+
+    &--more {
+      background-color: var(--color-gray-100, $color-gray-100);
+      color: var(--color-text-secondary, $color-text-secondary);
+      border-color: var(--color-border, $color-border);
+    }
   }
 
   // --------------------------------------------------

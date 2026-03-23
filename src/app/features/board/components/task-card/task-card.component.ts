@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Task, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
+import { hashLabelColor } from '../../../../shared/components/tag-input/tag-input.component';
 
 /**
  * TaskCardComponent — displays a single task as a card within a board column.
@@ -56,6 +57,20 @@ export class TaskCardComponent {
 
   get totalSubtasks(): number {
     return this.task.subtasks.length;
+  }
+
+  /** Max 2 visible labels, rest collapsed into "+N" */
+  get visibleLabels(): string[] {
+    return (this.task.labels || []).slice(0, 2);
+  }
+
+  get extraLabelCount(): number {
+    return Math.max(0, (this.task.labels || []).length - 2);
+  }
+
+  /** Get consistent color for a label */
+  getLabelColor(label: string): string {
+    return hashLabelColor(label);
   }
 
   trackByLabel(_index: number, label: string): string {

@@ -84,6 +84,7 @@
   <app-task-form
     *ngIf="showTaskForm"
     [columnId]="column.id"
+    [labelSuggestions]="labelSuggestions"
     (taskCreated)="onTaskCreated($event)"
     (cancelled)="onTaskFormCancelled()">
   </app-task-form>

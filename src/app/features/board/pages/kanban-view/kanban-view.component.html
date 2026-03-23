@@ -23,7 +23,10 @@
   </div>
 
   <!-- Board filters bar -->
-  <app-board-filters (filtersChanged)="onFiltersChanged($event)"></app-board-filters>
+  <app-board-filters
+    [availableLabels]="(uniqueLabels$ | async) || []"
+    (filtersChanged)="onFiltersChanged($event)">
+  </app-board-filters>
 
   <!-- Loading spinner -->
   <app-loading-spinner
@@ -44,6 +47,7 @@
       [column]="column"
       [tasks]="(filteredTasksMap$ | async)?.[column.id] || []"
       [commentCounts]="(commentCounts$ | async) || {}"
+      [labelSuggestions]="(uniqueLabels$ | async) || []"
       (addTask)="onAddTask($event)"
       (taskDropped)="onTaskDropped($event, column.id)"
       (taskClicked)="onTaskClicked($event)"
