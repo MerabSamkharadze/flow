@@ -11,6 +11,7 @@ import { TasksModule } from '../tasks/tasks.module';
 // Pages
 import { KanbanViewComponent } from './pages/kanban-view/kanban-view.component';
 import { ListViewComponent } from './pages/list-view/list-view.component';
+import { BacklogViewComponent } from './pages/backlog-view/backlog-view.component';
 
 // Components
 import { BoardColumnComponent } from './components/board-column/board-column.component';
@@ -23,6 +24,7 @@ import { TaskFormComponent } from './components/task-form/task-form.component';
   declarations: [
     KanbanViewComponent,
     ListViewComponent,
+    BacklogViewComponent,
     BoardColumnComponent,
     TaskCardComponent,
     BoardFiltersComponent,

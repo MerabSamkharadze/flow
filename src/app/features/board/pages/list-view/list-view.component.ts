@@ -242,6 +242,10 @@ export class ListViewComponent implements OnInit {
     this.router.navigate(['projects', this.projectId, 'board']);
   }
 
+  onSwitchToBacklog(): void {
+    this.router.navigate(['projects', this.projectId, 'board', 'backlog']);
+  }
+
   onGoBack(): void {
     this.router.navigate(['/projects', this.projectId]);
   }

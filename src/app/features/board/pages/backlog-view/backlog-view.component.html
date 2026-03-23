@@ -1,0 +1,159 @@
+<!-- Backlog View — prioritized flat list grouped by column -->
+<div class="backlog-view">
+
+  <!-- Header -->
+  <div class="backlog-view__header">
+    <div class="backlog-view__header-left">
+      <button class="backlog-view__back-btn" (click)="onGoBack()">
+        &larr; Back
+      </button>
+      <h1 class="backlog-view__title">Board</h1>
+    </div>
+    <div class="backlog-view__header-right">
+      <button class="backlog-view__view-btn" (click)="onSwitchToBoard()">
+        Board
+      </button>
+      <button class="backlog-view__view-btn" (click)="onSwitchToList()">
+        List
+      </button>
+      <button class="backlog-view__view-btn backlog-view__view-btn--active">
+        Backlog
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters bar -->
+  <app-board-filters
+    [availableLabels]="(uniqueLabels$ | async) || []"
+    (filtersChanged)="onFiltersChanged($event)">
+  </app-board-filters>
+
+  <!-- Loading spinner -->
+  <app-loading-spinner
+    *ngIf="loading$ | async"
+    size="lg"
+    message="Loading backlog...">
+  </app-loading-spinner>
+
+  <!-- Error message -->
+  <div *ngIf="error$ | async as error" class="backlog-view__error">
+    {{ error }}
+  </div>
+
+  <!-- Backlog sections -->
+  <div class="backlog-view__content" *ngIf="!(loading$ | async)">
+    <ng-container *ngIf="sections$ | async as sections">
+
+      <app-empty-state
+        *ngIf="sections.length === 0"
+        title="No columns"
+        message="Add columns to your board to see the backlog.">
+      </app-empty-state>
+
+      <div
+        class="backlog-view__section"
+        *ngFor="let section of sections; trackBy: trackByColumnId">
+
+        <!-- Section header -->
+        <button
+          class="backlog-view__section-header"
+          (click)="toggleSection(section)"
+          type="button">
+          <span
+            class="backlog-view__section-chevron"
+            [class.backlog-view__section-chevron--expanded]="section.expanded">
+            &#9656;
+          </span>
+          <span
+            class="backlog-view__section-color"
+            [style.background-color]="section.column.color">
+          </span>
+          <span class="backlog-view__section-name">{{ section.column.name }}</span>
+          <span class="backlog-view__section-count">{{ section.tasks.length }}</span>
+        </button>
+
+        <!-- Section body (collapsible) -->
+        <div class="backlog-view__section-body" *ngIf="section.expanded">
+
+          <!-- Empty column -->
+          <div class="backlog-view__empty" *ngIf="section.tasks.length === 0 && addingInSection !== section.column.id">
+            No tasks in this column
+          </div>
+
+          <!-- Task rows -->
+          <div
+            class="backlog-view__row"
+            *ngFor="let task of section.tasks; trackBy: trackByTaskId"
+            (click)="onTaskClicked(task)">
+
+            <!-- Issue type icon -->
+            <span
+              class="backlog-view__row-type"
+              [style.color]="issueTypeConfig[task.issueType || 'task'].color"
+              [title]="issueTypeConfig[task.issueType || 'task'].label">
+              {{ issueTypeConfig[task.issueType || 'task'].icon }}
+            </span>
+
+            <!-- Title -->
+            <span class="backlog-view__row-title">{{ task.title }}</span>
+
+            <!-- Spacer -->
+            <span class="backlog-view__row-spacer"></span>
+
+            <!-- Priority badge -->
+            <span
+              class="backlog-view__row-priority"
+              [style.background-color]="priorityConfig[task.priority].color + '1a'"
+              [style.color]="priorityConfig[task.priority].color">
+              {{ priorityConfig[task.priority].label }}
+            </span>
+
+            <!-- Assignee avatar -->
+            <span class="backlog-view__row-assignee" *ngIf="task.assigneeId">
+              {{ task.assigneeId.charAt(0) | uppercase }}
+            </span>
+            <span class="backlog-view__row-no-assignee" *ngIf="!task.assigneeId">
+              &mdash;
+            </span>
+
+            <!-- Deadline -->
+            <span
+              class="backlog-view__row-deadline"
+              *ngIf="formatDeadline(task.deadline) as dl"
+              [class.backlog-view__row-deadline--overdue]="isOverdue(task)">
+              {{ dl }}
+            </span>
+          </div>
+
+          <!-- Inline task form -->
+          <app-task-form
+            *ngIf="addingInSection === section.column.id"
+            [columnId]="section.column.id"
+            [labelSuggestions]="(uniqueLabels$ | async) || []"
+            (taskCreated)="onTaskCreated(section.column.id, $event)"
+            (cancelled)="onTaskFormCancelled()">
+          </app-task-form>
+
+          <!-- Add task button -->
+          <button
+            class="backlog-view__add-btn"
+            *ngIf="addingInSection !== section.column.id"
+            (click)="showAddForm(section.column.id); $event.stopPropagation()">
+            + Add Task
+          </button>
+        </div>
+      </div>
+
+    </ng-container>
+  </div>
+
+  <!-- Task detail modal -->
+  <app-task-detail-modal
+    *ngIf="activeTask$ | async as activeTask"
+    [task]="activeTask"
+    (closeModal)="onCloseModal()"
+    (taskUpdated)="onTaskUpdated($event)"
+    (taskDeleted)="onTaskDeleted($event)">
+  </app-task-detail-modal>
+
+</div>

@@ -1,0 +1,273 @@
+// ==========================================================================
+// Backlog View Page — BEM
+// Block: .backlog-view
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+.backlog-view {
+  @include flex-column;
+  height: 100%;
+
+  // --------------------------------------------------
+  // Element: header
+  // --------------------------------------------------
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+    flex-shrink: 0;
+  }
+
+  &__header-left {
+    @include flex(row, center);
+    gap: $spacing-md;
+  }
+
+  &__back-btn {
+    @include button-reset;
+    @include focus-ring;
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary, $color-text-secondary);
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+  }
+
+  &__header-right {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__view-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary, $color-text-secondary);
+    border-radius: $border-radius-sm;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+      color: var(--color-text-primary, $color-text-primary);
+    }
+
+    &--active {
+      background-color: $color-primary-bg;
+      color: $color-primary;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: error
+  // --------------------------------------------------
+  &__error {
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    background-color: rgba($color-error, 0.08);
+    color: $color-error;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+  }
+
+  // --------------------------------------------------
+  // Element: content (scrollable body)
+  // --------------------------------------------------
+  &__content {
+    flex: 1;
+    @include scrollable(y);
+    @include flex-column;
+    gap: $spacing-sm;
+  }
+
+  // --------------------------------------------------
+  // Element: section (one per column)
+  // --------------------------------------------------
+  &__section {
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-md;
+    background-color: var(--color-surface, $color-surface);
+    overflow: hidden;
+  }
+
+  &__section-header {
+    @include button-reset;
+    @include flex(row, center);
+    gap: $spacing-sm;
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background-color: var(--color-surface, $color-surface);
+    border-bottom: 1px solid var(--color-border, $color-border);
+    cursor: pointer;
+    transition: background-color $transition-fast;
+    text-align: left;
+
+    &:hover {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+    }
+  }
+
+  &__section-chevron {
+    display: inline-block;
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary, $color-text-secondary);
+    transition: transform 0.2s ease;
+
+    &--expanded {
+      transform: rotate(90deg);
+    }
+  }
+
+  &__section-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &__section-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-primary, $color-text-primary);
+  }
+
+  &__section-count {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary, $color-text-secondary);
+    background-color: var(--color-gray-100, $color-gray-100);
+    padding: 0 $spacing-xs;
+    border-radius: $border-radius-full;
+    min-width: 20px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  // --------------------------------------------------
+  // Element: section body
+  // --------------------------------------------------
+  &__section-body {
+    @include flex-column;
+  }
+
+  &__empty {
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+    color: var(--color-text-disabled, $color-text-disabled);
+    text-align: center;
+  }
+
+  // --------------------------------------------------
+  // Element: task row (compact, ~40px)
+  // --------------------------------------------------
+  &__row {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    height: 40px;
+    padding: 0 $spacing-md;
+    border-bottom: 1px solid var(--color-border, $color-border);
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+    }
+  }
+
+  &__row-type {
+    @include flex-center;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  &__row-title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-primary, $color-text-primary);
+    @include text-truncate;
+    min-width: 0;
+  }
+
+  &__row-spacer {
+    flex: 1;
+  }
+
+  &__row-priority {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    padding: 1px $spacing-xs;
+    border-radius: $border-radius-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  &__row-assignee {
+    @include flex-center;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: $border-radius-full;
+    background-color: $color-primary;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+  }
+
+  &__row-no-assignee {
+    width: 22px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: $font-size-xs;
+    color: var(--color-text-disabled, $color-text-disabled);
+  }
+
+  &__row-deadline {
+    flex-shrink: 0;
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary, $color-text-secondary);
+    white-space: nowrap;
+
+    &--overdue {
+      color: $color-error;
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  // --------------------------------------------------
+  // Element: add task button
+  // --------------------------------------------------
+  &__add-btn {
+    @include button-reset;
+    @include focus-ring;
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary, $color-text-secondary);
+    text-align: left;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+      color: $color-primary;
+    }
+  }
+}

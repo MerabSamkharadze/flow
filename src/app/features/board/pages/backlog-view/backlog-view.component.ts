@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Observable, combineLatest, map } from 'rxjs';
 import { Column } from '../../../../shared/models/column.model';
-import { Task } from '../../../../shared/models/task.model';
+import { Task, TaskPriority, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 import { BoardFilters } from '../../models/board-filters.model';
 import * as BoardActions from '../../store/board.actions';
 import {
@@ -15,41 +14,53 @@ import {
   selectActiveTask,
   selectUniqueLabels,
 } from '../../store/board.selectors';
-import { selectCommentCounts } from '../../../tasks/store/tasks.selectors';
+
+/** Priority weight for sorting (critical first) */
+const PRIORITY_WEIGHT: Record<TaskPriority, number> = {
+  critical: 0,
+  high: 1,
+  medium: 2,
+  low: 3,
+};
+
+/** A column section with its tasks for the backlog view */
+export interface BacklogSection {
+  column: Column;
+  tasks: Task[];
+  expanded: boolean;
+}
 
 /**
- * KanbanViewComponent — main Kanban board page.
+ * BacklogViewComponent — flat, prioritized list of all tasks grouped by column.
  *
- * Orchestrates:
- *   - Board filters at the top (search, priority, assignee)
- *   - Columns with CDK drag & drop
- *   - Inline task creation via TaskFormComponent
- *   - Task detail modal on card click
- *
- * Uses selectFilteredTasksMap to reactively filter displayed tasks
- * whenever the filters or underlying task data changes.
+ * Each column is a collapsible section. Tasks within each section are
+ * sorted by priority (critical → low), then by order field.
+ * Reuses board-filters, task-detail-modal, and task-form.
  */
 @Component({
-  selector: 'app-kanban-view',
-  templateUrl: './kanban-view.component.html',
-  styleUrls: ['./kanban-view.component.scss'],
-  standalone: false
+  selector: 'app-backlog-view',
+  templateUrl: './backlog-view.component.html',
+  styleUrls: ['./backlog-view.component.scss'],
+  standalone: false,
 })
-export class KanbanViewComponent implements OnInit {
+export class BacklogViewComponent implements OnInit {
   projectId = '';
 
-  /** Observable streams from NgRx store */
   columns$!: Observable<Column[]>;
   filteredTasksMap$!: Observable<{ [columnId: string]: Task[] }>;
   loading$!: Observable<boolean>;
   error$!: Observable<string | null>;
   activeTask$!: Observable<Task | null>;
-
-  /** Comment counts keyed by task ID — passed through to board-column → task-card */
-  commentCounts$!: Observable<{ [taskId: string]: number }>;
-
-  /** Unique labels from all tasks — passed to board-filters and task-form */
   uniqueLabels$!: Observable<string[]>;
+
+  /** Backlog sections — columns with their sorted tasks */
+  sections$!: Observable<BacklogSection[]>;
+
+  /** Inline task form state */
+  addingInSection: string | null = null;
+
+  readonly priorityConfig = PRIORITY_CONFIG;
+  readonly issueTypeConfig = ISSUE_TYPE_CONFIG;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,73 +69,65 @@ export class KanbanViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get project ID from the parent route (projects/:id/board)
     this.projectId = this.route.parent?.snapshot.paramMap.get('id') || '';
 
-    // Select state from the store — uses filtered tasks map
     this.columns$ = this.store.select(selectColumns);
     this.filteredTasksMap$ = this.store.select(selectFilteredTasksMap);
     this.loading$ = this.store.select(selectBoardLoading);
     this.error$ = this.store.select(selectBoardError);
     this.activeTask$ = this.store.select(selectActiveTask);
-    this.commentCounts$ = this.store.select(selectCommentCounts);
     this.uniqueLabels$ = this.store.select(selectUniqueLabels);
 
-    // Dispatch loadBoard to fetch columns + tasks from Firestore
     this.store.dispatch(BoardActions.loadBoard({ projectId: this.projectId }));
+
+    // Build sections: combine columns + filtered tasks, sort by priority
+    this.sections$ = combineLatest([this.columns$, this.filteredTasksMap$]).pipe(
+      map(([columns, tasksMap]) =>
+        columns.map((column, index) => ({
+          column,
+          tasks: this.sortByPriority(tasksMap[column.id] || []),
+          expanded: index === 0,
+        }))
+      )
+    );
+  }
+
+  /** Sort tasks by priority (critical first), then by order */
+  private sortByPriority(tasks: Task[]): Task[] {
+    return [...tasks].sort((a, b) => {
+      const pw = PRIORITY_WEIGHT[a.priority] - PRIORITY_WEIGHT[b.priority];
+      return pw !== 0 ? pw : a.order - b.order;
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Section collapse/expand
+  // ---------------------------------------------------------------------------
+
+  toggleSection(section: BacklogSection): void {
+    section.expanded = !section.expanded;
   }
 
   // ---------------------------------------------------------------------------
   // Filters
   // ---------------------------------------------------------------------------
 
-  /** Handle filter changes from the BoardFiltersComponent */
   onFiltersChanged(filters: BoardFilters): void {
     this.store.dispatch(BoardActions.setFilters({ filters }));
-  }
-
-  // ---------------------------------------------------------------------------
-  // Drag & drop
-  // ---------------------------------------------------------------------------
-
-  /** Handles CDK drop event — dispatches moveTask action */
-  onTaskDropped(event: CdkDragDrop<Task[]>, targetColumnId: string): void {
-    const task: Task = event.item.data;
-    const fromColumnId = task.columnId;
-    const toColumnId = targetColumnId;
-    const newOrder = event.currentIndex;
-
-    // Skip if nothing changed (same column, same position)
-    if (fromColumnId === toColumnId && event.previousIndex === event.currentIndex) {
-      return;
-    }
-
-    this.store.dispatch(
-      BoardActions.moveTask({
-        projectId: this.projectId,
-        taskId: task.id,
-        fromColumnId,
-        toColumnId,
-        newOrder,
-      })
-    );
   }
 
   // ---------------------------------------------------------------------------
   // Task detail modal
   // ---------------------------------------------------------------------------
 
-  /** Open task detail modal by setting the active task */
   onTaskClicked(task: Task): void {
     this.store.dispatch(BoardActions.setActiveTask({ taskId: task.id }));
   }
 
-  /** Close the task detail modal */
   onCloseModal(): void {
     this.store.dispatch(BoardActions.setActiveTask({ taskId: null }));
   }
 
-  /** Handle task update from the detail modal */
   onTaskUpdated(task: Task): void {
     this.store.dispatch(
       BoardActions.updateTask({
@@ -143,32 +146,29 @@ export class KanbanViewComponent implements OnInit {
         },
       })
     );
-    // Close the modal after saving
     this.store.dispatch(BoardActions.setActiveTask({ taskId: null }));
   }
 
-  /** Handle task deletion from the detail modal */
   onTaskDeleted(taskId: string): void {
-    // Find the task's columnId from the store for the delete action
     this.store.dispatch(BoardActions.setActiveTask({ taskId: null }));
-    // Note: We need the columnId; the effect/service handles it by taskId
     this.store.dispatch(
       BoardActions.deleteTask({
         projectId: this.projectId,
         taskId,
-        columnId: '', // Will be resolved in the reducer by searching all columns
+        columnId: '',
       })
     );
   }
 
   // ---------------------------------------------------------------------------
-  // Task creation (inline form from column)
+  // Inline task creation
   // ---------------------------------------------------------------------------
 
-  /** Handle task creation from the inline TaskFormComponent */
-  onAddTask(event: { columnId: string; taskData: Partial<Task> }): void {
-    const { columnId, taskData } = event;
+  showAddForm(columnId: string): void {
+    this.addingInSection = columnId;
+  }
 
+  onTaskCreated(columnId: string, taskData: Partial<Task>): void {
     this.store.dispatch(
       BoardActions.addTask({
         projectId: this.projectId,
@@ -190,61 +190,40 @@ export class KanbanViewComponent implements OnInit {
         },
       })
     );
+    this.addingInSection = null;
+  }
+
+  onTaskFormCancelled(): void {
+    this.addingInSection = null;
   }
 
   // ---------------------------------------------------------------------------
-  // Column actions
+  // Display helpers
   // ---------------------------------------------------------------------------
 
-  /** Handle column rename from board-column */
-  onRenameColumn(event: { columnId: string; name: string }): void {
-    this.store.dispatch(
-      BoardActions.updateColumn({
-        projectId: this.projectId,
-        columnId: event.columnId,
-        changes: { name: event.name },
-      })
-    );
+  formatDeadline(deadline: string | null): string | null {
+    if (!deadline) return null;
+    return new Date(deadline).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    });
   }
 
-  /** Handle column delete from board-column */
-  onDeleteColumn(columnId: string): void {
-    this.store.dispatch(
-      BoardActions.deleteColumn({
-        projectId: this.projectId,
-        columnId,
-      })
-    );
-  }
-
-  onAddColumn(): void {
-    const newOrder = 0; // Will be set properly by a dialog
-    this.store.dispatch(
-      BoardActions.addColumn({
-        projectId: this.projectId,
-        column: {
-          name: 'New Column',
-          projectId: this.projectId,
-          order: newOrder,
-          color: '#6b7280',
-          taskLimit: null,
-        },
-      })
-    );
+  isOverdue(task: Task): boolean {
+    if (!task.deadline) return false;
+    return new Date(task.deadline).getTime() < Date.now() && task.status !== 'done';
   }
 
   // ---------------------------------------------------------------------------
   // Navigation
   // ---------------------------------------------------------------------------
 
-  /** Navigate to list view */
-  onSwitchToList(): void {
-    this.router.navigate(['projects', this.projectId, 'board', 'list']);
+  onSwitchToBoard(): void {
+    this.router.navigate(['projects', this.projectId, 'board']);
   }
 
-  /** Navigate to backlog view */
-  onSwitchToBacklog(): void {
-    this.router.navigate(['projects', this.projectId, 'board', 'backlog']);
+  onSwitchToList(): void {
+    this.router.navigate(['projects', this.projectId, 'board', 'list']);
   }
 
   onGoBack(): void {
@@ -252,11 +231,14 @@ export class KanbanViewComponent implements OnInit {
   }
 
   // ---------------------------------------------------------------------------
-  // TrackBy functions for ngFor performance
+  // TrackBy
   // ---------------------------------------------------------------------------
 
-  /** TrackBy for column list */
-  trackByColumnId(_index: number, column: Column): string {
-    return column.id;
+  trackByColumnId(_index: number, section: BacklogSection): string {
+    return section.column.id;
+  }
+
+  trackByTaskId(_index: number, task: Task): string {
+    return task.id;
   }
 }
