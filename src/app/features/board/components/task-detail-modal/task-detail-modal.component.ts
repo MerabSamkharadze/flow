@@ -129,6 +129,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
       status: [this.task.status],
       issueType: [this.task.issueType || 'task'],
       assigneeId: [this.task.assigneeId || ''],
+      startDate: [this.task.startDate || ''],
       deadline: [this.task.deadline || ''],
     });
     this.taskLabels = [...(this.task.labels || [])];
@@ -299,6 +300,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
       status: formValue.status,
       issueType: formValue.issueType || 'task',
       assigneeId: formValue.assigneeId || null,
+      startDate: formValue.startDate || null,
       deadline: formValue.deadline || null,
       labels: [...this.taskLabels],
       subtasks: this.subtasks,

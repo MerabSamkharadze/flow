@@ -16,8 +16,9 @@ export interface Task {
   issueType: IssueType;    // task, bug, story, or epic
   createdAt: number;       // timestamp in milliseconds
   updatedAt: number;
-  deadline: string | null; // ISO date string or null
-  order: number;           // sort position within the column
+  deadline: string | null;   // ISO date string or null
+  startDate: string | null;  // ISO date string for timeline start (optional)
+  order: number;             // sort position within the column
   labels: string[];        // e.g. ['bug', 'frontend']
   subtasks: Subtask[];
 }

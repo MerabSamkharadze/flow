@@ -183,6 +183,7 @@ export class ListViewComponent implements OnInit {
           status: task.status,
           issueType: task.issueType || 'task',
           assigneeId: task.assigneeId,
+          startDate: task.startDate || null,
           deadline: task.deadline,
           labels: task.labels,
           subtasks: task.subtasks,
@@ -244,6 +245,10 @@ export class ListViewComponent implements OnInit {
 
   onSwitchToBacklog(): void {
     this.router.navigate(['projects', this.projectId, 'board', 'backlog']);
+  }
+
+  onSwitchToRoadmap(): void {
+    this.router.navigate(['projects', this.projectId, 'board', 'roadmap']);
   }
 
   onGoBack(): void {

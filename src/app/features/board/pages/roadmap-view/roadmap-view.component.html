@@ -1,0 +1,178 @@
+<!-- Roadmap / Timeline View — Gantt-style horizontal bars -->
+<div class="roadmap-view">
+
+  <!-- Mobile warning -->
+  <div class="roadmap-view__mobile-msg">
+    Roadmap view requires a screen width of at least 900px.
+  </div>
+
+  <!-- Header -->
+  <div class="roadmap-view__header">
+    <div class="roadmap-view__header-left">
+      <button class="roadmap-view__back-btn" (click)="onGoBack()">
+        &larr; Back
+      </button>
+      <h1 class="roadmap-view__title">Roadmap</h1>
+    </div>
+    <div class="roadmap-view__header-right">
+      <button class="roadmap-view__view-btn" (click)="onSwitchToBoard()">Board</button>
+      <button class="roadmap-view__view-btn" (click)="onSwitchToList()">List</button>
+      <button class="roadmap-view__view-btn" (click)="onSwitchToBacklog()">Backlog</button>
+      <button class="roadmap-view__view-btn roadmap-view__view-btn--active">Roadmap</button>
+    </div>
+  </div>
+
+  <!-- Controls bar -->
+  <div class="roadmap-view__controls">
+    <div class="roadmap-view__zoom">
+      <span class="roadmap-view__zoom-label">Zoom:</span>
+      <button
+        class="roadmap-view__zoom-btn"
+        [class.roadmap-view__zoom-btn--active]="zoomLevel === 'week'"
+        (click)="setZoom('week')">Week</button>
+      <button
+        class="roadmap-view__zoom-btn"
+        [class.roadmap-view__zoom-btn--active]="zoomLevel === 'month'"
+        (click)="setZoom('month')">Month</button>
+      <button
+        class="roadmap-view__zoom-btn"
+        [class.roadmap-view__zoom-btn--active]="zoomLevel === 'quarter'"
+        (click)="setZoom('quarter')">Quarter</button>
+    </div>
+    <button class="roadmap-view__today-btn" (click)="scrollToToday()">Today</button>
+    <label class="roadmap-view__dates-toggle">
+      <input
+        type="checkbox"
+        [(ngModel)]="showWithoutDates" />
+      Show tasks without dates
+    </label>
+  </div>
+
+  <!-- Loading spinner -->
+  <app-loading-spinner
+    *ngIf="loading$ | async"
+    size="lg"
+    message="Loading roadmap...">
+  </app-loading-spinner>
+
+  <!-- Error -->
+  <div *ngIf="error$ | async as error" class="roadmap-view__error">{{ error }}</div>
+
+  <!-- Main gantt area -->
+  <div class="roadmap-view__gantt" *ngIf="!(loading$ | async)">
+
+    <!-- LEFT: task list panel -->
+    <div class="roadmap-view__left">
+      <div class="roadmap-view__left-header">Tasks</div>
+
+      <div class="roadmap-view__left-body">
+        <ng-container *ngFor="let section of sections; trackBy: trackByColumnId">
+
+          <!-- Section header -->
+          <button
+            class="roadmap-view__section-header"
+            (click)="toggleSection(section)">
+            <span
+              class="roadmap-view__section-chevron"
+              [class.roadmap-view__section-chevron--expanded]="section.expanded">&#9656;</span>
+            <span
+              class="roadmap-view__section-dot"
+              [style.background-color]="section.column.color"></span>
+            <span class="roadmap-view__section-name">{{ section.column.name }}</span>
+            <span class="roadmap-view__section-count">{{ section.tasks.length }}</span>
+          </button>
+
+          <!-- Task rows -->
+          <ng-container *ngIf="section.expanded">
+            <div
+              class="roadmap-view__left-row"
+              *ngFor="let task of section.tasks; trackBy: trackByTaskId"
+              [class.roadmap-view__left-row--hidden]="!shouldShowTask(task)"
+              (click)="onTaskClicked(task)">
+              <span
+                class="roadmap-view__row-type"
+                [style.color]="issueTypeConfig[task.issueType || 'task'].color">
+                {{ issueTypeConfig[task.issueType || 'task'].icon }}
+              </span>
+              <span class="roadmap-view__row-title">{{ task.title }}</span>
+              <span class="roadmap-view__row-assignee" *ngIf="task.assigneeId">
+                {{ task.assigneeId.charAt(0) | uppercase }}
+              </span>
+            </div>
+          </ng-container>
+
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- RIGHT: timeline panel -->
+    <div class="roadmap-view__timeline" #timelineScroll>
+
+      <!-- Timeline header with month/week labels -->
+      <div class="roadmap-view__timeline-header">
+        <div
+          class="roadmap-view__timeline-col"
+          *ngFor="let col of timelineColumns; trackBy: trackByColLabel"
+          [style.width.%]="col.widthPercent">
+          {{ col.label }}
+        </div>
+      </div>
+
+      <!-- Timeline body with bars -->
+      <div class="roadmap-view__timeline-body">
+
+        <!-- Today marker -->
+        <div
+          class="roadmap-view__today-line"
+          [style.left.%]="todayPercent">
+        </div>
+
+        <!-- Grid columns (vertical lines) -->
+        <div class="roadmap-view__grid">
+          <div
+            class="roadmap-view__grid-col"
+            *ngFor="let col of timelineColumns; trackBy: trackByColLabel"
+            [style.width.%]="col.widthPercent">
+          </div>
+        </div>
+
+        <!-- Task bar rows matching left panel -->
+        <ng-container *ngFor="let section of sections; trackBy: trackByColumnId">
+
+          <!-- Section header placeholder row -->
+          <div class="roadmap-view__bar-section-header"></div>
+
+          <ng-container *ngIf="section.expanded">
+            <ng-container *ngFor="let task of section.tasks; trackBy: trackByTaskId">
+              <div
+                class="roadmap-view__bar-row"
+                [class.roadmap-view__bar-row--hidden]="!shouldShowTask(task)">
+                <div
+                  class="roadmap-view__bar"
+                  [class.roadmap-view__bar--no-deadline]="!task.deadline"
+                  [style.left.%]="getTaskBar(task).left"
+                  [style.width.%]="getTaskBar(task).width"
+                  [style.background-color]="priorityConfig[task.priority].color"
+                  [title]="task.title + ' | ' + formatDate(task.startDate || task.createdAt) + ' → ' + formatDate(task.deadline)"
+                  (click)="onTaskClicked(task)">
+                  <span class="roadmap-view__bar-label">{{ task.title }}</span>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task detail modal -->
+  <app-task-detail-modal
+    *ngIf="activeTask$ | async as activeTask"
+    [task]="activeTask"
+    (closeModal)="onCloseModal()"
+    (taskUpdated)="onTaskUpdated($event)"
+    (taskDeleted)="onTaskDeleted($event)">
+  </app-task-detail-modal>
+
+</div>

@@ -12,6 +12,7 @@ import { TasksModule } from '../tasks/tasks.module';
 import { KanbanViewComponent } from './pages/kanban-view/kanban-view.component';
 import { ListViewComponent } from './pages/list-view/list-view.component';
 import { BacklogViewComponent } from './pages/backlog-view/backlog-view.component';
+import { RoadmapViewComponent } from './pages/roadmap-view/roadmap-view.component';
 
 // Components
 import { BoardColumnComponent } from './components/board-column/board-column.component';
@@ -25,6 +26,7 @@ import { TaskFormComponent } from './components/task-form/task-form.component';
     KanbanViewComponent,
     ListViewComponent,
     BacklogViewComponent,
+    RoadmapViewComponent,
     BoardColumnComponent,
     TaskCardComponent,
     BoardFiltersComponent,

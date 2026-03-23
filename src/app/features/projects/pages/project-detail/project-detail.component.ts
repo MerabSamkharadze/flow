@@ -123,6 +123,10 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/projects', this.projectId, 'board']);
   }
 
+  onOpenRoadmap(): void {
+    this.router.navigate(['/projects', this.projectId, 'board', 'roadmap']);
+  }
+
   onGoToSettings(): void {
     this.router.navigate(['/projects', this.projectId, 'settings']);
   }

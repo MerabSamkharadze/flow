@@ -140,6 +140,7 @@ export class BacklogViewComponent implements OnInit {
           status: task.status,
           issueType: task.issueType || 'task',
           assigneeId: task.assigneeId,
+          startDate: task.startDate || null,
           deadline: task.deadline,
           labels: task.labels,
           subtasks: task.subtasks,
@@ -184,6 +185,7 @@ export class BacklogViewComponent implements OnInit {
           createdAt: Date.now(),
           updatedAt: Date.now(),
           deadline: null,
+          startDate: null,
           order: 0,
           labels: taskData.labels || [],
           subtasks: [],
@@ -224,6 +226,10 @@ export class BacklogViewComponent implements OnInit {
 
   onSwitchToList(): void {
     this.router.navigate(['projects', this.projectId, 'board', 'list']);
+  }
+
+  onSwitchToRoadmap(): void {
+    this.router.navigate(['projects', this.projectId, 'board', 'roadmap']);
   }
 
   onGoBack(): void {

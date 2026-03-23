@@ -137,6 +137,7 @@ export class KanbanViewComponent implements OnInit {
           status: task.status,
           issueType: task.issueType || 'task',
           assigneeId: task.assigneeId,
+          startDate: task.startDate || null,
           deadline: task.deadline,
           labels: task.labels,
           subtasks: task.subtasks,
@@ -184,6 +185,7 @@ export class KanbanViewComponent implements OnInit {
           createdAt: Date.now(),
           updatedAt: Date.now(),
           deadline: null,
+          startDate: null,
           order: 0,
           labels: taskData.labels || [],
           subtasks: [],
@@ -245,6 +247,11 @@ export class KanbanViewComponent implements OnInit {
   /** Navigate to backlog view */
   onSwitchToBacklog(): void {
     this.router.navigate(['projects', this.projectId, 'board', 'backlog']);
+  }
+
+  /** Navigate to roadmap view */
+  onSwitchToRoadmap(): void {
+    this.router.navigate(['projects', this.projectId, 'board', 'roadmap']);
   }
 
   onGoBack(): void {

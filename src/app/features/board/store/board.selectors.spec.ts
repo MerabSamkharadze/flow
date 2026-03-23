@@ -15,22 +15,22 @@ describe('Board Selectors', () => {
     {
       id: 'task-1', title: 'Build login', description: '', projectId: 'proj-1',
       columnId: 'col-1', assigneeId: 'user-1', priority: 'high', status: 'todo', issueType: 'task',
-      createdAt: 1000, updatedAt: 2000, deadline: null, order: 0, labels: [], subtasks: [],
+      createdAt: 1000, updatedAt: 2000, deadline: null, startDate: null, order: 0, labels: [], subtasks: [],
     },
     {
       id: 'task-2', title: 'Build signup', description: '', projectId: 'proj-1',
       columnId: 'col-1', assigneeId: 'user-2', priority: 'medium', status: 'todo', issueType: 'task',
-      createdAt: 1100, updatedAt: 2100, deadline: null, order: 1, labels: [], subtasks: [],
+      createdAt: 1100, updatedAt: 2100, deadline: null, startDate: null, order: 1, labels: [], subtasks: [],
     },
     {
       id: 'task-3', title: 'API integration', description: '', projectId: 'proj-1',
       columnId: 'col-2', assigneeId: 'user-1', priority: 'critical', status: 'in-progress', issueType: 'task',
-      createdAt: 1200, updatedAt: 2200, deadline: null, order: 0, labels: [], subtasks: [],
+      createdAt: 1200, updatedAt: 2200, deadline: null, startDate: null, order: 0, labels: [], subtasks: [],
     },
     {
       id: 'task-4', title: 'Deploy v1', description: '', projectId: 'proj-1',
       columnId: 'col-3', assigneeId: null, priority: 'low', status: 'done', issueType: 'task',
-      createdAt: 1300, updatedAt: 2300, deadline: null, order: 0, labels: [], subtasks: [],
+      createdAt: 1300, updatedAt: 2300, deadline: null, startDate: null, order: 0, labels: [], subtasks: [],
     },
   ];
 
