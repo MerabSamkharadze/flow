@@ -1,0 +1,199 @@
+// ==========================================================================
+// Burndown Chart — BEM
+// Block: .burndown-chart
+// ==========================================================================
+
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+.burndown-chart {
+  @include flex-column;
+  gap: $spacing-md;
+
+  // --------------------------------------------------
+  // Chart wrapper
+  // --------------------------------------------------
+  &__chart-wrap {
+    position: relative;
+    width: 100%;
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-md;
+    background-color: var(--color-surface, $color-surface);
+    overflow: hidden;
+  }
+
+  &__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  // --------------------------------------------------
+  // Grid + axes
+  // --------------------------------------------------
+  &__grid-line {
+    stroke: var(--color-gray-200, $color-gray-200);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+
+  &__axis {
+    stroke: var(--color-gray-300, $color-gray-300);
+    stroke-width: 1;
+  }
+
+  &__y-label,
+  &__x-label {
+    font-size: 11px;
+    fill: var(--color-text-secondary, $color-text-secondary);
+    font-family: $font-family-base;
+  }
+
+  // --------------------------------------------------
+  // Lines
+  // --------------------------------------------------
+  &__line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    &--ideal {
+      stroke: $color-primary;
+      stroke-dasharray: 8 4;
+      opacity: 0.6;
+    }
+
+    &--actual {
+      stroke: $color-success;
+    }
+  }
+
+  // --------------------------------------------------
+  // Area fill
+  // --------------------------------------------------
+  &__area {
+    fill: $color-success;
+    opacity: 0.1;
+  }
+
+  // --------------------------------------------------
+  // Today marker
+  // --------------------------------------------------
+  &__today {
+    stroke: $color-error;
+    stroke-width: 1.5;
+    stroke-dasharray: 6 3;
+  }
+
+  &__today-label {
+    font-size: 10px;
+    font-weight: 600;
+    fill: $color-error;
+    font-family: $font-family-base;
+  }
+
+  // --------------------------------------------------
+  // No-data overlay
+  // --------------------------------------------------
+  &__no-data {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: $font-size-sm;
+    color: var(--color-text-disabled, $color-text-disabled);
+    text-align: center;
+    padding: $spacing-md;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: $border-radius-md;
+  }
+
+  // --------------------------------------------------
+  // Legend
+  // --------------------------------------------------
+  &__legend {
+    @include flex(row, center);
+    gap: $spacing-lg;
+    justify-content: center;
+  }
+
+  &__legend-item {
+    @include flex(row, center);
+    gap: $spacing-xs;
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary, $color-text-secondary);
+  }
+
+  &__legend-line {
+    display: inline-block;
+    width: 24px;
+    height: 3px;
+    border-radius: 2px;
+
+    &--ideal {
+      background-color: $color-primary;
+      opacity: 0.6;
+      background-image: repeating-linear-gradient(
+        90deg,
+        $color-primary 0,
+        $color-primary 6px,
+        transparent 6px,
+        transparent 10px
+      );
+      background-color: transparent;
+    }
+
+    &--actual {
+      background-color: $color-success;
+    }
+  }
+
+  // --------------------------------------------------
+  // Stats cards
+  // --------------------------------------------------
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: $spacing-sm;
+
+    @media (max-width: 700px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__stat {
+    @include flex-column;
+    align-items: center;
+    gap: 2px;
+    padding: $spacing-sm;
+    background-color: var(--color-gray-50, $color-gray-50);
+    border-radius: $border-radius-md;
+    text-align: center;
+  }
+
+  &__stat-value {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--color-text-primary, $color-text-primary);
+    line-height: 1.2;
+  }
+
+  &__stat-pct {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary, $color-text-secondary);
+  }
+
+  &__stat-label {
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary, $color-text-secondary);
+  }
+}

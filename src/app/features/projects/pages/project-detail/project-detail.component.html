@@ -270,7 +270,7 @@
             <span
               *ngFor="let m of visibleMembers; trackBy: trackMember"
               class="project-detail__avatar"
-              [style.background-color]="m.avatarUrl ? 'transparent' : project.color"
+              [style.background-color]="m.avatarUrl ? 'transparent' : getMemberColor(m)"
               [title]="m.displayName || m.email">
               <img
                 *ngIf="m.avatarUrl"

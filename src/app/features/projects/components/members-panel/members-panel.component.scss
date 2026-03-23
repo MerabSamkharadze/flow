@@ -26,6 +26,8 @@
   &__invite-btn {
     @include button-reset;
     @include focus-ring;
+    @include flex(row, center);
+    gap: 4px;
     padding: $spacing-xs $spacing-sm;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
@@ -33,6 +35,10 @@
     background-color: $color-primary-bg;
     border-radius: $border-radius-sm;
     transition: background-color $transition-fast;
+
+    svg {
+      flex-shrink: 0;
+    }
 
     &:hover {
       background-color: rgba($color-primary, 0.2);
@@ -165,13 +171,17 @@
   &__remove-btn {
     @include button-reset;
     @include flex-center;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     border-radius: $border-radius-sm;
-    font-size: $font-size-lg;
     color: var(--color-text-disabled, $color-text-disabled);
     flex-shrink: 0;
     transition: background-color $transition-fast, color $transition-fast;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
 
     &:hover {
       background-color: rgba($color-error, 0.1);

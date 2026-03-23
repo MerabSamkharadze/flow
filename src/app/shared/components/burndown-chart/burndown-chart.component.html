@@ -1,0 +1,135 @@
+<!-- Burndown Chart — pure SVG -->
+<div class="burndown-chart">
+
+  <!-- Chart SVG -->
+  <div class="burndown-chart__chart-wrap">
+    <svg
+      class="burndown-chart__svg"
+      [attr.viewBox]="'0 0 ' + width + ' ' + height"
+      preserveAspectRatio="xMidYMid meet">
+
+      <!-- Grid lines (horizontal) -->
+      <line
+        *ngFor="let y of gridLines"
+        class="burndown-chart__grid-line"
+        [attr.x1]="padLeft"
+        [attr.y1]="y"
+        [attr.x2]="width - padRight"
+        [attr.y2]="y" />
+
+      <!-- Axes -->
+      <line
+        class="burndown-chart__axis"
+        [attr.x1]="padLeft"
+        [attr.y1]="padTop"
+        [attr.x2]="padLeft"
+        [attr.y2]="height - padBottom" />
+      <line
+        class="burndown-chart__axis"
+        [attr.x1]="padLeft"
+        [attr.y1]="height - padBottom"
+        [attr.x2]="width - padRight"
+        [attr.y2]="height - padBottom" />
+
+      <!-- Y-axis labels -->
+      <text
+        *ngFor="let yl of yLabels"
+        class="burndown-chart__y-label"
+        [attr.x]="padLeft - 8"
+        [attr.y]="yl.y + 4"
+        text-anchor="end">
+        {{ yl.label }}
+      </text>
+
+      <!-- X-axis labels -->
+      <text
+        *ngFor="let xl of xLabels"
+        class="burndown-chart__x-label"
+        [attr.x]="xl.x"
+        [attr.y]="height - padBottom + 20"
+        text-anchor="middle">
+        {{ xl.label }}
+      </text>
+
+      <!-- Area fill under actual line -->
+      <path
+        *ngIf="areaPath"
+        class="burndown-chart__area"
+        [attr.d]="areaPath" />
+
+      <!-- Ideal burndown line (blue, dashed) -->
+      <path
+        *ngIf="idealPath"
+        class="burndown-chart__line burndown-chart__line--ideal"
+        [attr.d]="idealPath" />
+
+      <!-- Actual burndown line (green, solid) -->
+      <path
+        *ngIf="actualPath"
+        class="burndown-chart__line burndown-chart__line--actual"
+        [attr.d]="actualPath" />
+
+      <!-- Today marker -->
+      <g *ngIf="todayX !== null">
+        <line
+          class="burndown-chart__today"
+          [attr.x1]="todayX"
+          [attr.y1]="padTop"
+          [attr.x2]="todayX"
+          [attr.y2]="height - padBottom" />
+        <text
+          class="burndown-chart__today-label"
+          [attr.x]="todayX"
+          [attr.y]="padTop - 6"
+          text-anchor="middle">
+          Today
+        </text>
+      </g>
+    </svg>
+
+    <!-- No-data overlay -->
+    <div class="burndown-chart__no-data" *ngIf="!hasData && stats.totalTasks > 0">
+      Not enough data yet — complete tasks to see the burndown
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="burndown-chart__legend">
+    <span class="burndown-chart__legend-item">
+      <span class="burndown-chart__legend-line burndown-chart__legend-line--ideal"></span>
+      Ideal
+    </span>
+    <span class="burndown-chart__legend-item">
+      <span class="burndown-chart__legend-line burndown-chart__legend-line--actual"></span>
+      Actual
+    </span>
+  </div>
+
+  <!-- Velocity stats cards -->
+  <div class="burndown-chart__stats" *ngIf="stats.totalTasks > 0">
+    <div class="burndown-chart__stat">
+      <span class="burndown-chart__stat-value">{{ stats.totalTasks }}</span>
+      <span class="burndown-chart__stat-label">Total Tasks</span>
+    </div>
+    <div class="burndown-chart__stat">
+      <span class="burndown-chart__stat-value">
+        {{ stats.completedTasks }}
+        <small class="burndown-chart__stat-pct">({{ stats.completedPercent }}%)</small>
+      </span>
+      <span class="burndown-chart__stat-label">Completed</span>
+    </div>
+    <div class="burndown-chart__stat">
+      <span class="burndown-chart__stat-value">{{ stats.remainingTasks }}</span>
+      <span class="burndown-chart__stat-label">Remaining</span>
+    </div>
+    <div class="burndown-chart__stat">
+      <span class="burndown-chart__stat-value">{{ stats.avgPerDay }}</span>
+      <span class="burndown-chart__stat-label">Avg / Day</span>
+    </div>
+    <div class="burndown-chart__stat">
+      <span class="burndown-chart__stat-value">{{ stats.estimatedCompletion || '—' }}</span>
+      <span class="burndown-chart__stat-label">Est. Completion</span>
+    </div>
+  </div>
+
+</div>
