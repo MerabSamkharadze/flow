@@ -208,6 +208,40 @@ $card-padding: $spacing-lg;
     margin-left: 4px;
   }
 
+  // ── Tabs ────────────────────────────────────────────────────────
+  &__tabs {
+    @include flex(row, center);
+    gap: 0;
+    margin-bottom: $spacing-lg;
+    border-bottom: 2px solid var(--color-gray-200, $color-gray-200);
+  }
+
+  &__tab {
+    @include button-reset;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-secondary, $color-text-secondary);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color $transition-fast, border-color $transition-fast;
+
+    &:hover {
+      color: var(--color-text-primary, $color-text-primary);
+    }
+
+    &--active {
+      color: $color-primary;
+      border-bottom-color: $color-primary;
+    }
+  }
+
+  // ── Analytics tab ──────────────────────────────────────────────
+  &__analytics {
+    @include flex-column;
+    gap: $spacing-lg;
+  }
+
   // ── Main content (2 columns) ────────────────────────────────────
   &__main {
     display: grid;

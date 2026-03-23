@@ -135,8 +135,40 @@
       </div>
     </div>
 
-    <!-- ── Main content (2 columns) ─────────────────────────── -->
-    <div class="project-detail__main">
+    <!-- ── Tabs ────────────────────────────────────────────────── -->
+    <div class="project-detail__tabs">
+      <button
+        class="project-detail__tab"
+        [class.project-detail__tab--active]="activeTab === 'general'"
+        (click)="activeTab = 'general'">
+        General
+      </button>
+      <button
+        class="project-detail__tab"
+        [class.project-detail__tab--active]="activeTab === 'analytics'"
+        (click)="activeTab = 'analytics'">
+        Analytics
+      </button>
+    </div>
+
+    <!-- ── Analytics tab ─────────────────────────────────────── -->
+    <div class="project-detail__analytics" *ngIf="activeTab === 'analytics'">
+      <section class="project-detail__card">
+        <h3 class="project-detail__section-title">Burndown Chart</h3>
+        <app-burndown-chart
+          *ngIf="allTasks.length > 0; else noBurndownData"
+          [tasks]="allTasks"
+          [startDate]="burndownStart"
+          [endDate]="burndownEnd">
+        </app-burndown-chart>
+        <ng-template #noBurndownData>
+          <p class="project-detail__empty">No tasks yet. Create tasks on the board to see burndown analytics.</p>
+        </ng-template>
+      </section>
+    </div>
+
+    <!-- ── Main content (2 columns) — General tab ─────────────── -->
+    <div class="project-detail__main" *ngIf="activeTab === 'general'">
 
       <!-- LEFT COLUMN -->
       <div class="project-detail__left">

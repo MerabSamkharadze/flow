@@ -186,6 +186,7 @@ export class KanbanViewComponent implements OnInit {
           updatedAt: Date.now(),
           deadline: null,
           startDate: null,
+          completedAt: null,
           order: 0,
           labels: taskData.labels || [],
           subtasks: [],

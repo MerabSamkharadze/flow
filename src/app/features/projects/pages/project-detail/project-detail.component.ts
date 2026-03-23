@@ -39,6 +39,13 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   recentTasks: Task[] = [];
   readonly priorityConfig = PRIORITY_CONFIG;
 
+  /** Tabs: General | Analytics */
+  activeTab: 'general' | 'analytics' = 'general';
+
+  /** Burndown chart date range */
+  burndownStart!: Date;
+  burndownEnd!: Date;
+
   /** Members display */
   readonly maxVisibleAvatars = 5;
 
@@ -81,6 +88,11 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
         this.currentUserProjectRole = currentMember?.role || 'member';
       });
 
+    // Subscribe to project for burndown end date
+    this.project$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((project) => this.setBurndownEnd(project));
+
     // Load tasks directly from Firestore (board state is lazy-loaded)
     this.boardService
       .getTasks(this.projectId)
@@ -115,6 +127,25 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     this.recentTasks = [...tasks]
       .sort((a, b) => b.updatedAt - a.updatedAt)
       .slice(0, 5);
+
+    // Burndown date range — earliest createdAt to project deadline (or +30 days)
+    if (tasks.length > 0) {
+      const earliest = Math.min(...tasks.map((t) => t.createdAt));
+      this.burndownStart = new Date(earliest);
+    } else {
+      this.burndownStart = new Date();
+    }
+  }
+
+  /** Set chart end date after project loads (needs project.deadline) */
+  private setBurndownEnd(project: Project | null | undefined): void {
+    if (project?.deadline) {
+      this.burndownEnd = new Date(project.deadline);
+    } else {
+      // Default: 30 days from start
+      const start = this.burndownStart || new Date();
+      this.burndownEnd = new Date(start.getTime() + 30 * 24 * 60 * 60 * 1000);
+    }
   }
 
   // ── Navigation ───────────────────────────────────────────────────

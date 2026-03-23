@@ -10,6 +10,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { EmptyStateComponent } from './components/empty-state/empty-state.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { TagInputComponent } from './components/tag-input/tag-input.component';
+import { BurndownChartComponent } from './components/burndown-chart/burndown-chart.component';
 
 /**
  * SharedModule — reusable components, directives, and pipes.
@@ -25,6 +26,7 @@ import { TagInputComponent } from './components/tag-input/tag-input.component';
     EmptyStateComponent,
     ConfirmDialogComponent,
     TagInputComponent,
+    BurndownChartComponent,
   ],
   imports: [
     CommonModule,
@@ -45,6 +47,7 @@ import { TagInputComponent } from './components/tag-input/tag-input.component';
     EmptyStateComponent,
     ConfirmDialogComponent,
     TagInputComponent,
+    BurndownChartComponent,
   ],
 })
 export class SharedModule {}

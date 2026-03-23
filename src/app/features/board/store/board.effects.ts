@@ -139,19 +139,27 @@ export class BoardEffects {
     { dispatch: false }
   );
 
-  /** Updates an existing task in Firestore */
+  /** Updates an existing task in Firestore. Auto-sets completedAt when status becomes 'done'. */
   updateTask$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BoardActions.updateTask),
-      exhaustMap(({ projectId, taskId, changes }) =>
-        this.boardService.updateTask(projectId, taskId, changes).then(
+      exhaustMap(({ projectId, taskId, changes }) => {
+        // Auto-set completedAt when task is marked done
+        const enriched = { ...changes };
+        if (enriched.status === 'done' && !enriched.completedAt) {
+          enriched.completedAt = Date.now();
+        } else if (enriched.status && enriched.status !== 'done') {
+          enriched.completedAt = null;
+        }
+
+        return this.boardService.updateTask(projectId, taskId, enriched).then(
           () =>
             BoardActions.updateTaskSuccess({
-              task: { id: taskId, projectId, ...changes } as Task,
+              task: { id: taskId, projectId, ...enriched } as Task,
             }),
           (error) => BoardActions.updateTaskFailure({ error: error.message })
-        )
-      )
+        );
+      })
     )
   );
 

@@ -18,6 +18,7 @@ export interface Task {
   updatedAt: number;
   deadline: string | null;   // ISO date string or null
   startDate: string | null;  // ISO date string for timeline start (optional)
+  completedAt: number | null; // timestamp when task was marked 'done'
   order: number;             // sort position within the column
   labels: string[];        // e.g. ['bug', 'frontend']
   subtasks: Subtask[];
