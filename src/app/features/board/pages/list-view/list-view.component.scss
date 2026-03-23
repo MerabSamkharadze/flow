@@ -125,10 +125,11 @@
       color: $color-primary;
     }
 
-    &--title    { width: 28%; }
-    &--status   { width: 13%; }
-    &--priority { width: 13%; }
-    &--assignee { width: 20%; }
+    &--type     { width: 9%; }
+    &--title    { width: 24%; }
+    &--status   { width: 12%; }
+    &--priority { width: 12%; }
+    &--assignee { width: 17%; }
     &--deadline { width: 13%; }
     &--column   { width: 13%; }
   }
@@ -196,6 +197,22 @@
       background-color: rgba($color-success, 0.1);
       color: $color-success;
     }
+  }
+
+  // --------------------------------------------------
+  // Element: type badge
+  // --------------------------------------------------
+  &__type-badge {
+    @include flex(row, center);
+    gap: $spacing-xs;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    white-space: nowrap;
+  }
+
+  &__type-icon {
+    font-size: $font-size-sm;
+    line-height: 1;
   }
 
   // --------------------------------------------------

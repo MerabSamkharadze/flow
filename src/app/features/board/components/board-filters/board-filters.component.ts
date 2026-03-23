@@ -8,7 +8,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { TaskPriority } from '../../../../shared/models/task.model';
+import { TaskPriority, IssueType, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 import { BoardFilters, EMPTY_FILTERS } from '../../models/board-filters.model';
 
 /**
@@ -37,11 +37,22 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
   /** Currently selected priority filters */
   selectedPriorities: TaskPriority[] = [];
 
+  /** Currently selected issue type filters */
+  selectedIssueTypes: IssueType[] = [];
+
   /** All available priorities for the toggle buttons */
   readonly priorities: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
 
+  /** All available issue types */
+  readonly issueTypes: IssueType[] = ['task', 'bug', 'story', 'epic'];
+  readonly issueTypeConfig = ISSUE_TYPE_CONFIG;
+
   trackByPriority(_index: number, p: TaskPriority): string {
     return p;
+  }
+
+  trackByIssueType(_index: number, t: IssueType): string {
+    return t;
   }
 
   /** Whether the filter panel is expanded (for mobile / compact view) */
@@ -90,11 +101,28 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
     return this.selectedPriorities.includes(priority);
   }
 
+  /** Toggle an issue type filter on/off */
+  toggleIssueType(type: IssueType): void {
+    const index = this.selectedIssueTypes.indexOf(type);
+    if (index === -1) {
+      this.selectedIssueTypes = [...this.selectedIssueTypes, type];
+    } else {
+      this.selectedIssueTypes = this.selectedIssueTypes.filter((t) => t !== type);
+    }
+    this.emitFilters();
+  }
+
+  /** Check if an issue type is currently selected */
+  isIssueTypeSelected(type: IssueType): boolean {
+    return this.selectedIssueTypes.includes(type);
+  }
+
   /** Clear all filters and reset to defaults */
   clearFilters(): void {
     this.searchControl.setValue('', { emitEvent: false });
     this.assigneeControl.setValue('', { emitEvent: false });
     this.selectedPriorities = [];
+    this.selectedIssueTypes = [];
     this.emitFilters();
   }
 
@@ -103,6 +131,7 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
     return (
       !!this.searchControl.value ||
       this.selectedPriorities.length > 0 ||
+      this.selectedIssueTypes.length > 0 ||
       !!this.assigneeControl.value
     );
   }
@@ -113,6 +142,7 @@ export class BoardFiltersComponent implements OnInit, OnDestroy {
       search: (this.searchControl.value || '').trim(),
       priority: [...this.selectedPriorities],
       assigneeId: (this.assigneeControl.value || '').trim() || null,
+      issueType: [...this.selectedIssueTypes],
     };
     this.filtersChanged.emit(filters);
   }

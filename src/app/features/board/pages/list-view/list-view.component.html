@@ -51,6 +51,10 @@
           <table class="board-list-view__table">
             <thead>
               <tr class="board-list-view__head-row">
+                <th class="board-list-view__th board-list-view__th--type"
+                    (click)="onSort('issueType')">
+                  Type{{ getSortIcon('issueType') }}
+                </th>
                 <th class="board-list-view__th board-list-view__th--title"
                     (click)="onSort('title')">
                   Title{{ getSortIcon('title') }}
@@ -81,6 +85,15 @@
               <tr *ngFor="let task of tasks; trackBy: trackByTaskId"
                   class="board-list-view__row"
                   (click)="onTaskClicked(task)">
+
+                <!-- Type -->
+                <td class="board-list-view__cell">
+                  <span class="board-list-view__type-badge"
+                        [style.color]="issueTypeConfig[task.issueType || 'task'].color">
+                    <span class="board-list-view__type-icon">{{ issueTypeConfig[task.issueType || 'task'].icon }}</span>
+                    {{ issueTypeConfig[task.issueType || 'task'].label }}
+                  </span>
+                </td>
 
                 <!-- Title -->
                 <td class="board-list-view__cell board-list-view__cell--title">

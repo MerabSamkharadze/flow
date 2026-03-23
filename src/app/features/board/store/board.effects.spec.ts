@@ -31,17 +31,17 @@ describe('BoardEffects', () => {
   const mockTasks: Task[] = [
     {
       id: 'task-1', title: 'Task One', description: '', projectId: 'proj-1',
-      columnId: 'col-1', assigneeId: 'user-1', priority: 'medium', status: 'todo',
+      columnId: 'col-1', assigneeId: 'user-1', priority: 'medium', status: 'todo', issueType: 'task',
       createdAt: 1000, updatedAt: 2000, deadline: null, order: 0, labels: [], subtasks: [],
     },
     {
       id: 'task-2', title: 'Task Two', description: '', projectId: 'proj-1',
-      columnId: 'col-1', assigneeId: null, priority: 'high', status: 'todo',
+      columnId: 'col-1', assigneeId: null, priority: 'high', status: 'todo', issueType: 'task',
       createdAt: 1100, updatedAt: 2100, deadline: null, order: 1, labels: [], subtasks: [],
     },
     {
       id: 'task-3', title: 'Task Three', description: '', projectId: 'proj-1',
-      columnId: 'col-2', assigneeId: 'user-2', priority: 'low', status: 'in-progress',
+      columnId: 'col-2', assigneeId: 'user-2', priority: 'low', status: 'in-progress', issueType: 'task',
       createdAt: 1200, updatedAt: 2200, deadline: null, order: 0, labels: [], subtasks: [],
     },
   ];
@@ -127,7 +127,7 @@ describe('BoardEffects', () => {
   describe('addTask$', () => {
     const newTaskInput: Omit<Task, 'id'> = {
       title: 'New Task', description: '', projectId: 'proj-1', columnId: 'col-1',
-      assigneeId: null, priority: 'medium', status: 'todo',
+      assigneeId: null, priority: 'medium', status: 'todo', issueType: 'task',
       createdAt: 3000, updatedAt: 3000, deadline: null, order: 2, labels: [], subtasks: [],
     };
 

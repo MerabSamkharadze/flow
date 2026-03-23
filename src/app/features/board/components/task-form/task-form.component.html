@@ -3,6 +3,20 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
+    <!-- Issue type selector -->
+    <div class="task-form__issue-types">
+      <button
+        *ngFor="let type of issueTypes; trackBy: trackByIssueType"
+        type="button"
+        class="task-form__issue-type-btn"
+        [class.task-form__issue-type-btn--active]="selectedIssueType === type"
+        [style.--issue-color]="issueTypeConfig[type].color"
+        (click)="selectIssueType(type)">
+        <span class="task-form__issue-type-icon">{{ issueTypeConfig[type].icon }}</span>
+        {{ issueTypeConfig[type].label }}
+      </button>
+    </div>
+
     <!-- Title input (auto-focused) -->
     <input
       class="task-form__title-input"

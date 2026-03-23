@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { Task, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
+import { Task, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 
 /**
  * TaskCardComponent — displays a single task as a card within a board column.
@@ -27,6 +27,11 @@ export class TaskCardComponent {
   /** Get display config for the task's priority */
   get priorityConfig() {
     return PRIORITY_CONFIG[this.task.priority];
+  }
+
+  /** Get display config for the task's issue type */
+  get issueTypeConfig() {
+    return ISSUE_TYPE_CONFIG[this.task.issueType || 'task'];
   }
 
   /** Format deadline for display */

@@ -55,7 +55,7 @@ export const selectActiveTask = createSelector(
 /** Current board filters */
 export const selectBoardFilters = createSelector(
   selectBoardState,
-  (state) => state?.filters ?? { search: '', priority: [], assigneeId: '' }
+  (state) => state?.filters ?? { search: '', priority: [], assigneeId: '', issueType: [] }
 );
 
 /** Whether a board operation is in progress */
@@ -111,6 +111,14 @@ function applyFilters(tasks: Task[], filters: BoardFilters): Task[] {
     if (filters.assigneeId) {
       if (!task.assigneeId) return false;
       if (!task.assigneeId.toLowerCase().includes(filters.assigneeId.toLowerCase())) {
+        return false;
+      }
+    }
+
+    // Issue type filter — match any of the selected issue types
+    if (filters.issueType && filters.issueType.length > 0) {
+      const taskType = task.issueType || 'task'; // default for legacy tasks
+      if (!filters.issueType.includes(taskType)) {
         return false;
       }
     }

@@ -19,6 +19,46 @@
   }
 
   // --------------------------------------------------
+  // Element: issue type selector
+  // --------------------------------------------------
+  &__issue-types {
+    display: flex;
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+  }
+
+  &__issue-type-btn {
+    @include button-reset;
+    @include focus-ring;
+    @include flex(row, center);
+    gap: 4px;
+    padding: 2px $spacing-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary, $color-text-secondary);
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-sm;
+    transition: all $transition-fast;
+
+    &:hover {
+      border-color: var(--issue-color, $color-primary);
+      color: var(--issue-color, $color-primary);
+    }
+
+    &--active {
+      background-color: color-mix(in srgb, var(--issue-color, $color-primary) 10%, transparent);
+      border-color: var(--issue-color, $color-primary);
+      color: var(--issue-color, $color-primary);
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__issue-type-icon {
+    font-size: $font-size-sm;
+    line-height: 1;
+  }
+
+  // --------------------------------------------------
   // Element: title input
   // --------------------------------------------------
   &__title-input {

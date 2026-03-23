@@ -11,6 +11,23 @@
     <!-- Form body -->
     <form class="task-modal__body" [formGroup]="form" (ngSubmit)="onSave()">
 
+      <!-- Issue Type selector -->
+      <div class="task-modal__field">
+        <label class="task-modal__label">Type</label>
+        <div class="task-modal__issue-types">
+          <button
+            *ngFor="let type of issueTypes; trackBy: trackByIndex"
+            type="button"
+            class="task-modal__issue-type-btn"
+            [class.task-modal__issue-type-btn--active]="form.get('issueType')?.value === type"
+            [style.--issue-color]="issueTypeConfig[type].color"
+            (click)="form.patchValue({ issueType: type })">
+            <span class="task-modal__issue-type-icon">{{ issueTypeConfig[type].icon }}</span>
+            {{ issueTypeConfig[type].label }}
+          </button>
+        </div>
+      </div>
+
       <!-- Title -->
       <div class="task-modal__field">
         <label class="task-modal__label">Title</label>

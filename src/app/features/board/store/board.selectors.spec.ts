@@ -14,22 +14,22 @@ describe('Board Selectors', () => {
   const mockTasks: Task[] = [
     {
       id: 'task-1', title: 'Build login', description: '', projectId: 'proj-1',
-      columnId: 'col-1', assigneeId: 'user-1', priority: 'high', status: 'todo',
+      columnId: 'col-1', assigneeId: 'user-1', priority: 'high', status: 'todo', issueType: 'task',
       createdAt: 1000, updatedAt: 2000, deadline: null, order: 0, labels: [], subtasks: [],
     },
     {
       id: 'task-2', title: 'Build signup', description: '', projectId: 'proj-1',
-      columnId: 'col-1', assigneeId: 'user-2', priority: 'medium', status: 'todo',
+      columnId: 'col-1', assigneeId: 'user-2', priority: 'medium', status: 'todo', issueType: 'task',
       createdAt: 1100, updatedAt: 2100, deadline: null, order: 1, labels: [], subtasks: [],
     },
     {
       id: 'task-3', title: 'API integration', description: '', projectId: 'proj-1',
-      columnId: 'col-2', assigneeId: 'user-1', priority: 'critical', status: 'in-progress',
+      columnId: 'col-2', assigneeId: 'user-1', priority: 'critical', status: 'in-progress', issueType: 'task',
       createdAt: 1200, updatedAt: 2200, deadline: null, order: 0, labels: [], subtasks: [],
     },
     {
       id: 'task-4', title: 'Deploy v1', description: '', projectId: 'proj-1',
-      columnId: 'col-3', assigneeId: null, priority: 'low', status: 'done',
+      columnId: 'col-3', assigneeId: null, priority: 'low', status: 'done', issueType: 'task',
       createdAt: 1300, updatedAt: 2300, deadline: null, order: 0, labels: [], subtasks: [],
     },
   ];
@@ -44,7 +44,7 @@ describe('Board Selectors', () => {
     columns: mockColumns,
     tasks: mockTasksMap,
     activeTaskId: 'task-1',
-    filters: { search: '', priority: [], assigneeId: '' },
+    filters: { search: '', priority: [], assigneeId: '', issueType: [] },
     loading: false,
     error: null,
     previousTasks: null,
@@ -187,7 +187,7 @@ describe('Board Selectors', () => {
   describe('selectBoardFilters', () => {
     it('should return the current filters', () => {
       const result = fromSelectors.selectBoardFilters.projector(mockState);
-      expect(result).toEqual({ search: '', priority: [], assigneeId: '' });
+      expect(result).toEqual({ search: '', priority: [], assigneeId: '', issueType: [] });
     });
   });
 
@@ -197,7 +197,7 @@ describe('Board Selectors', () => {
 
   describe('selectFilteredTasksMap', () => {
     it('should return all tasks when no filters are active', () => {
-      const emptyFilters: BoardFilters = { search: '', priority: [], assigneeId: '' };
+      const emptyFilters: BoardFilters = { search: '', priority: [], assigneeId: '', issueType: [] };
       const result = fromSelectors.selectFilteredTasksMap.projector(mockTasksMap, emptyFilters);
       expect(result['col-1'].length).toBe(2);
       expect(result['col-2'].length).toBe(1);
@@ -205,7 +205,7 @@ describe('Board Selectors', () => {
     });
 
     it('should filter by search term (case-insensitive)', () => {
-      const filters: BoardFilters = { search: 'build', priority: [], assigneeId: '' };
+      const filters: BoardFilters = { search: 'build', priority: [], assigneeId: '', issueType: [] };
       const result = fromSelectors.selectFilteredTasksMap.projector(mockTasksMap, filters);
       expect(result['col-1'].length).toBe(2); // "Build login" and "Build signup"
       expect(result['col-2'].length).toBe(0); // "API integration" filtered out
@@ -213,7 +213,7 @@ describe('Board Selectors', () => {
     });
 
     it('should filter by priority', () => {
-      const filters: BoardFilters = { search: '', priority: ['high', 'critical'], assigneeId: '' };
+      const filters: BoardFilters = { search: '', priority: ['high', 'critical'], assigneeId: '', issueType: [] };
       const result = fromSelectors.selectFilteredTasksMap.projector(mockTasksMap, filters);
       expect(result['col-1'].length).toBe(1); // task-1 is high
       expect(result['col-2'].length).toBe(1); // task-3 is critical
@@ -221,7 +221,7 @@ describe('Board Selectors', () => {
     });
 
     it('should filter by assigneeId (partial match)', () => {
-      const filters: BoardFilters = { search: '', priority: [], assigneeId: 'user-1' };
+      const filters: BoardFilters = { search: '', priority: [], assigneeId: 'user-1', issueType: [] };
       const result = fromSelectors.selectFilteredTasksMap.projector(mockTasksMap, filters);
       expect(result['col-1'].length).toBe(1); // task-1 assigned to user-1
       expect(result['col-2'].length).toBe(1); // task-3 assigned to user-1
@@ -229,7 +229,7 @@ describe('Board Selectors', () => {
     });
 
     it('should combine multiple filters (AND logic)', () => {
-      const filters: BoardFilters = { search: 'build', priority: ['high'], assigneeId: '' };
+      const filters: BoardFilters = { search: 'build', priority: ['high'], assigneeId: '', issueType: [] };
       const result = fromSelectors.selectFilteredTasksMap.projector(mockTasksMap, filters);
       expect(result['col-1'].length).toBe(1); // Only "Build login" is high priority
     });

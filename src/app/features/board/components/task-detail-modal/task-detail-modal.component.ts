@@ -14,7 +14,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Task, Subtask, TaskPriority, TaskStatus, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
+import { Task, Subtask, TaskPriority, TaskStatus, IssueType, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 import { Comment } from '../../../../shared/models/comment.model';
 import { Member } from '../../../../shared/models/member.model';
 import { ProjectsService } from '../../../projects/services/projects.service';
@@ -50,7 +50,9 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
   /** Available priorities for the dropdown */
   readonly priorities: TaskPriority[] = ['low', 'medium', 'high', 'critical'];
   readonly statuses: TaskStatus[] = ['todo', 'in-progress', 'in-review', 'done'];
+  readonly issueTypes: IssueType[] = ['task', 'bug', 'story', 'epic'];
   readonly priorityConfig = PRIORITY_CONFIG;
+  readonly issueTypeConfig = ISSUE_TYPE_CONFIG;
 
   trackByIndex(index: number): number {
     return index;
@@ -120,6 +122,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
       description: [this.task.description],
       priority: [this.task.priority],
       status: [this.task.status],
+      issueType: [this.task.issueType || 'task'],
       assigneeId: [this.task.assigneeId || ''],
       deadline: [this.task.deadline || ''],
       labels: [this.task.labels.join(', ')],
@@ -278,6 +281,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
       description: formValue.description,
       priority: formValue.priority,
       status: formValue.status,
+      issueType: formValue.issueType || 'task',
       assigneeId: formValue.assigneeId || null,
       deadline: formValue.deadline || null,
       labels,

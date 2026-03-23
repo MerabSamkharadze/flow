@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, combineLatest, map } from 'rxjs';
 import { Column } from '../../../../shared/models/column.model';
-import { Task, TaskPriority, TaskStatus, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
+import { Task, TaskPriority, TaskStatus, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 import { BoardFilters } from '../../models/board-filters.model';
 import * as BoardActions from '../../store/board.actions';
 import {
@@ -14,7 +14,7 @@ import {
   selectActiveTask,
 } from '../../store/board.selectors';
 
-type SortField = 'title' | 'status' | 'priority' | 'assigneeId' | 'deadline' | 'columnId';
+type SortField = 'title' | 'issueType' | 'status' | 'priority' | 'assigneeId' | 'deadline' | 'columnId';
 type SortDirection = 'asc' | 'desc';
 
 const PRIORITY_ORDER: Record<TaskPriority, number> = {
@@ -63,6 +63,7 @@ export class ListViewComponent implements OnInit {
   sortDirection: SortDirection = 'asc';
 
   readonly priorityConfig = PRIORITY_CONFIG;
+  readonly issueTypeConfig = ISSUE_TYPE_CONFIG;
 
   constructor(
     private route: ActivatedRoute,
@@ -118,6 +119,8 @@ export class ListViewComponent implements OnInit {
       switch (this.sortField) {
         case 'title':
           return dir * a.title.localeCompare(b.title);
+        case 'issueType':
+          return dir * (a.issueType || 'task').localeCompare(b.issueType || 'task');
         case 'status':
           return dir * (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
         case 'priority':
@@ -172,6 +175,7 @@ export class ListViewComponent implements OnInit {
           description: task.description,
           priority: task.priority,
           status: task.status,
+          issueType: task.issueType || 'task',
           assigneeId: task.assigneeId,
           deadline: task.deadline,
           labels: task.labels,

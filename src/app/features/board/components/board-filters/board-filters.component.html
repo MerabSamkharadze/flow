@@ -28,6 +28,22 @@
     </div>
   </div>
 
+  <!-- Type toggle buttons -->
+  <div class="board-filters__group">
+    <span class="board-filters__label">Type:</span>
+    <div class="board-filters__toggles">
+      <button
+        *ngFor="let t of issueTypes; trackBy: trackByIssueType"
+        class="board-filters__toggle"
+        [class.board-filters__toggle--active]="isIssueTypeSelected(t)"
+        [style.--toggle-active-color]="issueTypeConfig[t].color"
+        (click)="toggleIssueType(t)">
+        <span class="board-filters__toggle-icon">{{ issueTypeConfig[t].icon }}</span>
+        {{ issueTypeConfig[t].label }}
+      </button>
+    </div>
+  </div>
+
   <!-- Assignee filter -->
   <div class="board-filters__group">
     <span class="board-filters__label">Assignee:</span>
