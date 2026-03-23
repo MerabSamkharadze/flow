@@ -214,6 +214,19 @@ export class ProjectSettingsComponent implements OnInit, OnDestroy {
     );
   }
 
+  getMemberColor(member: Member): string {
+    const COLORS = [
+      '#4f46e5', '#0ea5e9', '#10b981', '#f59e0b',
+      '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6',
+    ];
+    const key = member.userId || member.email || '';
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+      hash = ((hash << 5) - hash + key.charCodeAt(i)) | 0;
+    }
+    return COLORS[Math.abs(hash) % COLORS.length];
+  }
+
   getInitials(name: string): string {
     return name
       .split(' ')
