@@ -1,0 +1,406 @@
+// ==========================================================================
+// Calendar Page — BEM
+// Blocks: .calendar-page, .calendar-grid, .calendar-cell,
+//         .calendar-task-chip, .calendar-week
+// ==========================================================================
+
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+// --------------------------------------------------
+// Page layout
+// --------------------------------------------------
+.calendar-page {
+  @include flex-column;
+  height: 100%;
+  gap: $spacing-md;
+
+  &__header {
+    @include flex-between;
+    flex-shrink: 0;
+  }
+
+  &__nav {
+    @include flex(row, center);
+    gap: $spacing-sm;
+  }
+
+  &__nav-btn {
+    @include button-reset;
+    @include focus-ring;
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-base;
+    color: var(--color-text-secondary, $color-text-secondary);
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+      color: var(--color-text-primary, $color-text-primary);
+    }
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: var(--color-text-primary, $color-text-primary);
+    min-width: 200px;
+    text-align: center;
+  }
+
+  &__today-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    border: 1px solid $color-primary;
+    border-radius: $border-radius-sm;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $color-primary-bg;
+    }
+  }
+
+  &__controls {
+    @include flex(row, center);
+    gap: $spacing-xs;
+  }
+
+  &__view-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary, $color-text-secondary);
+    border-radius: $border-radius-sm;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+    }
+
+    &--active {
+      background-color: $color-primary-bg;
+      color: $color-primary;
+    }
+  }
+
+  // --------------------------------------------------
+  // Filters bar
+  // --------------------------------------------------
+  &__filters {
+    @include flex(row, center);
+    gap: $spacing-md;
+    flex-wrap: wrap;
+    padding: $spacing-sm $spacing-md;
+    background-color: var(--color-surface, $color-surface);
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-md;
+    flex-shrink: 0;
+  }
+
+  &__filter-group {
+    @include flex(row, center);
+    gap: $spacing-xs;
+  }
+
+  &__filter-label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary, $color-text-secondary);
+    white-space: nowrap;
+  }
+
+  &__filter-select {
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-sm;
+    padding: 2px $spacing-sm;
+    font-size: $font-size-xs;
+    font-family: $font-family-base;
+    color: var(--color-text-primary, $color-text-primary);
+    background-color: var(--color-surface, $color-surface);
+    cursor: pointer;
+    outline: none;
+
+    &:focus {
+      border-color: $color-primary;
+    }
+  }
+
+  &__filter-toggle {
+    @include flex(row, center);
+    gap: $spacing-xs;
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary, $color-text-secondary);
+    cursor: pointer;
+    margin-left: auto;
+
+    input[type='checkbox'] {
+      cursor: pointer;
+    }
+  }
+}
+
+// --------------------------------------------------
+// Month grid
+// --------------------------------------------------
+.calendar-grid {
+  flex: 1;
+  @include flex-column;
+  border: 1px solid var(--color-border, $color-border);
+  border-radius: $border-radius-md;
+  background-color: var(--color-surface, $color-surface);
+  overflow: hidden;
+
+  &__header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--color-border, $color-border);
+  }
+
+  &__header-cell {
+    padding: $spacing-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-secondary, $color-text-secondary);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    flex: 1;
+  }
+}
+
+// --------------------------------------------------
+// Calendar day cell
+// --------------------------------------------------
+.calendar-cell {
+  @include flex-column;
+  min-height: 90px;
+  padding: $spacing-xs;
+  border-right: 1px solid var(--color-border, $color-border);
+  border-bottom: 1px solid var(--color-border, $color-border);
+  transition: background-color $transition-fast;
+
+  &:nth-child(7n) {
+    border-right: none;
+  }
+
+  &:hover {
+    background-color: var(--color-surface-hover, $color-surface-hover);
+  }
+
+  &--other-month {
+    background-color: var(--color-gray-50, $color-gray-50);
+
+    .calendar-cell__date {
+      color: var(--color-text-disabled, $color-text-disabled);
+    }
+  }
+
+  &--today {
+    background-color: rgba($color-primary, 0.04);
+
+    .calendar-cell__date {
+      @include flex-center;
+      width: 24px;
+      height: 24px;
+      border-radius: $border-radius-full;
+      background-color: $color-primary;
+      color: $color-text-inverse;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  &--past:not(.calendar-cell--today) {
+    .calendar-cell__date {
+      color: var(--color-text-disabled, $color-text-disabled);
+    }
+  }
+
+  &__date {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-primary, $color-text-primary);
+    margin-bottom: 2px;
+  }
+
+  &__tasks {
+    @include flex-column;
+    gap: 2px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &__more {
+    font-size: 10px;
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    padding: 0 2px;
+  }
+}
+
+// --------------------------------------------------
+// Task chip (inside day cell)
+// --------------------------------------------------
+.calendar-task-chip {
+  @include flex(row, center);
+  gap: 4px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+  overflow: hidden;
+
+  &:hover {
+    background-color: var(--color-gray-100, $color-gray-100);
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: 11px;
+    color: var(--color-text-primary, $color-text-primary);
+    @include text-truncate;
+  }
+}
+
+// --------------------------------------------------
+// Week view
+// --------------------------------------------------
+.calendar-week {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: 1px solid var(--color-border, $color-border);
+  border-radius: $border-radius-md;
+  background-color: var(--color-surface, $color-surface);
+  overflow: hidden;
+
+  &__col {
+    @include flex-column;
+    border-right: 1px solid var(--color-border, $color-border);
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  &__header {
+    @include flex-column;
+    align-items: center;
+    padding: $spacing-sm;
+    border-bottom: 1px solid var(--color-border, $color-border);
+    gap: 2px;
+
+    &--today {
+      background-color: rgba($color-primary, 0.06);
+
+      .calendar-week__day-num {
+        @include flex-center;
+        width: 28px;
+        height: 28px;
+        border-radius: $border-radius-full;
+        background-color: $color-primary;
+        color: $color-text-inverse;
+      }
+    }
+  }
+
+  &__day-name {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-secondary, $color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__day-num {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--color-text-primary, $color-text-primary);
+  }
+
+  &__body {
+    @include flex-column;
+    gap: $spacing-xs;
+    padding: $spacing-xs;
+    flex: 1;
+    @include scrollable(y);
+  }
+
+  &__task {
+    @include flex(row, flex-start);
+    gap: $spacing-xs;
+    padding: $spacing-xs;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+    }
+  }
+
+  &__task-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  &__task-info {
+    @include flex-column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__task-title {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-primary, $color-text-primary);
+    @include text-truncate;
+  }
+
+  &__task-priority {
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+  }
+
+  &__task-assignee {
+    @include flex-center;
+    width: 20px;
+    height: 20px;
+    border-radius: $border-radius-full;
+    background-color: $color-primary;
+    color: $color-text-inverse;
+    font-size: 9px;
+    font-weight: $font-weight-semibold;
+    flex-shrink: 0;
+  }
+
+  &__empty {
+    font-size: $font-size-xs;
+    color: var(--color-text-disabled, $color-text-disabled);
+    text-align: center;
+    padding: $spacing-md;
+  }
+}

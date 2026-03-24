@@ -1,0 +1,147 @@
+<!-- Calendar Page — month/week view of task deadlines -->
+<div class="calendar-page">
+
+  <!-- Header -->
+  <div class="calendar-page__header">
+    <div class="calendar-page__nav">
+      <button class="calendar-page__nav-btn" (click)="prevMonth()">
+        &larr;
+      </button>
+      <h1 class="calendar-page__title">{{ monthLabel }}</h1>
+      <button class="calendar-page__nav-btn" (click)="nextMonth()">
+        &rarr;
+      </button>
+      <button class="calendar-page__today-btn" (click)="goToday()">Today</button>
+    </div>
+    <div class="calendar-page__controls">
+      <button
+        class="calendar-page__view-btn"
+        [class.calendar-page__view-btn--active]="viewMode === 'month'"
+        (click)="setView('month')">
+        Month
+      </button>
+      <button
+        class="calendar-page__view-btn"
+        [class.calendar-page__view-btn--active]="viewMode === 'week'"
+        (click)="setView('week')">
+        Week
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters bar -->
+  <div class="calendar-page__filters">
+    <div class="calendar-page__filter-group">
+      <label class="calendar-page__filter-label">Project:</label>
+      <select
+        class="calendar-page__filter-select"
+        [(ngModel)]="selectedProjectId"
+        (ngModelChange)="onFilterChange()">
+        <option value="">All Projects</option>
+        <option *ngFor="let p of projects; trackBy: trackByProjectId" [value]="p.id">
+          {{ p.name }}
+        </option>
+      </select>
+    </div>
+    <div class="calendar-page__filter-group">
+      <label class="calendar-page__filter-label">Priority:</label>
+      <select
+        class="calendar-page__filter-select"
+        [(ngModel)]="selectedPriority"
+        (ngModelChange)="onFilterChange()">
+        <option value="">All</option>
+        <option value="critical">Critical</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+    </div>
+    <label class="calendar-page__filter-toggle">
+      <input
+        type="checkbox"
+        [(ngModel)]="myTasksOnly"
+        (ngModelChange)="onFilterChange()" />
+      My tasks only
+    </label>
+  </div>
+
+  <!-- Loading -->
+  <app-loading-spinner *ngIf="loading" size="lg" message="Loading calendar..."></app-loading-spinner>
+
+  <!-- Month View -->
+  <div class="calendar-grid" *ngIf="!loading && viewMode === 'month'">
+
+    <!-- Day-of-week headers -->
+    <div class="calendar-grid__header">
+      <div class="calendar-grid__header-cell" *ngFor="let label of dayLabels">
+        {{ label }}
+      </div>
+    </div>
+
+    <!-- Day cells -->
+    <div class="calendar-grid__body">
+      <div
+        class="calendar-cell"
+        *ngFor="let day of days; trackBy: trackByDate"
+        [class.calendar-cell--other-month]="!day.isCurrentMonth"
+        [class.calendar-cell--today]="day.isToday"
+        [class.calendar-cell--past]="day.isPast">
+
+        <span class="calendar-cell__date">{{ day.dayOfMonth }}</span>
+
+        <!-- Task chips (max 3) -->
+        <div class="calendar-cell__tasks">
+          <div
+            class="calendar-task-chip"
+            *ngFor="let task of visibleTasks(day); trackBy: trackByTaskId"
+            [title]="task.title">
+            <span
+              class="calendar-task-chip__dot"
+              [style.background-color]="getPriorityColor(task)">
+            </span>
+            <span class="calendar-task-chip__title">{{ task.title }}</span>
+          </div>
+          <span class="calendar-cell__more" *ngIf="extraCount(day) > 0">
+            +{{ extraCount(day) }} more
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Week View -->
+  <div class="calendar-week" *ngIf="!loading && viewMode === 'week'">
+    <div class="calendar-week__col" *ngFor="let day of weekDays; trackBy: trackByDate">
+      <div
+        class="calendar-week__header"
+        [class.calendar-week__header--today]="day.isToday">
+        <span class="calendar-week__day-name">{{ dayLabels[weekDays.indexOf(day)] }}</span>
+        <span class="calendar-week__day-num">{{ day.dayOfMonth }}</span>
+      </div>
+      <div class="calendar-week__body">
+        <div
+          class="calendar-week__task"
+          *ngFor="let task of day.tasks; trackBy: trackByTaskId">
+          <span
+            class="calendar-week__task-dot"
+            [style.background-color]="getPriorityColor(task)">
+          </span>
+          <div class="calendar-week__task-info">
+            <span class="calendar-week__task-title">{{ task.title }}</span>
+            <span class="calendar-week__task-priority"
+                  [style.color]="getPriorityColor(task)">
+              {{ priorityConfig[task.priority].label }}
+            </span>
+          </div>
+          <span class="calendar-week__task-assignee" *ngIf="task.assigneeId">
+            {{ task.assigneeId.charAt(0) | uppercase }}
+          </span>
+        </div>
+        <div class="calendar-week__empty" *ngIf="day.tasks.length === 0">
+          No tasks
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

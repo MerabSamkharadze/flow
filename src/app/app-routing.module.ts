@@ -53,6 +53,11 @@ const routes: Routes = [
           import('./features/tasks/tasks.module').then(m => m.TasksModule),
       },
       {
+        path: 'calendar',
+        loadChildren: () =>
+          import('./features/calendar/calendar.module').then(m => m.CalendarModule),
+      },
+      {
         path: 'team',
         loadChildren: () =>
           import('./features/team/team.module').then(m => m.TeamModule),
