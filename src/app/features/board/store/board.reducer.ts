@@ -115,10 +115,10 @@ export const boardReducer = createReducer(
     error: null,
   })),
 
-  on(BoardActions.updateColumnSuccess, (state, { column }) => ({
+  on(BoardActions.updateColumnSuccess, (state, { column: changes }) => ({
     ...state,
     columns: state.columns
-      .map((c) => (c.id === column.id ? column : c))
+      .map((c) => (c.id === changes.id ? { ...c, ...changes } : c))
       .sort((a, b) => a.order - b.order),
     loading: false,
     error: null,
@@ -194,15 +194,30 @@ export const boardReducer = createReducer(
     error: null,
   })),
 
-  on(BoardActions.updateTaskSuccess, (state, { task }) => {
+  on(BoardActions.updateTaskSuccess, (state, { task: changes }) => {
     const newTasks = { ...state.tasks };
+
+    // Find the existing full task from state
+    let existingTask: Task | undefined;
+    for (const colTasks of Object.values(state.tasks)) {
+      existingTask = colTasks.find((t) => t.id === changes.id);
+      if (existingTask) break;
+    }
+
+    // Merge changes onto the existing task (preserves all fields)
+    const merged: Task = existingTask
+      ? { ...existingTask, ...changes, updatedAt: Date.now() }
+      : changes;
+
     // Remove task from its previous column (in case columnId changed)
     for (const colId of Object.keys(newTasks)) {
-      newTasks[colId] = newTasks[colId].filter((t) => t.id !== task.id);
+      newTasks[colId] = newTasks[colId].filter((t) => t.id !== merged.id);
     }
-    // Add updated task to its (possibly new) column
-    newTasks[task.columnId] = [...(newTasks[task.columnId] || []), task]
+
+    // Add merged task to its (possibly new) column
+    newTasks[merged.columnId] = [...(newTasks[merged.columnId] || []), merged]
       .sort((a, b) => a.order - b.order);
+
     return {
       ...state,
       tasks: newTasks,

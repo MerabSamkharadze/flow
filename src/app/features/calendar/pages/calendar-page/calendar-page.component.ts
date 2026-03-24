@@ -1,16 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, combineLatest, of } from 'rxjs';
+import { switchMap, map, takeUntil, take } from 'rxjs/operators';
 import { Task, TaskPriority, PRIORITY_CONFIG } from '../../../../shared/models/task.model';
 import { Project } from '../../../../shared/models/project.model';
-import * as TasksActions from '../../../tasks/store/tasks.actions';
-import {
-  selectAllMyTasks,
-  selectUserProjects,
-  selectTasksLoading,
-} from '../../../tasks/store/tasks.selectors';
 import { selectUser } from '../../../auth/store';
+import { TasksService } from '../../../tasks/services/tasks.service';
 
 type CalendarView = 'month' | 'week';
 
@@ -38,39 +33,53 @@ export class CalendarPageComponent implements OnInit, OnDestroy {
   readonly dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   readonly priorityConfig = PRIORITY_CONFIG;
 
-  /** Filters */
+  /** All tasks from all user projects */
   allTasks: Task[] = [];
   projects: Project[] = [];
   selectedProjectId = '';
   myTasksOnly = false;
   selectedPriority: TaskPriority | '' = '';
-  loading = false;
+  loading = true;
 
   private userId = '';
+  private tasksLoaded = false;
   private destroy$ = new Subject<void>();
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private tasksService: TasksService
+  ) {}
 
   ngOnInit(): void {
-    this.store.select(selectUser).pipe(takeUntil(this.destroy$)).subscribe((user) => {
-      if (user) {
-        this.userId = user.uid;
-        this.store.dispatch(TasksActions.loadMyTasks({ userId: user.uid }));
-        this.store.dispatch(TasksActions.loadUserProjects({ userId: user.uid }));
-      }
+    // Load ALL tasks from ALL user projects (not just assigned ones)
+    this.store.select(selectUser).pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((user) => {
+      if (!user || this.tasksLoaded) return;
+      this.userId = user.uid;
+      this.tasksLoaded = true;
+      this.loadAllTasks(user.uid);
     });
+  }
 
-    this.store.select(selectAllMyTasks).pipe(takeUntil(this.destroy$)).subscribe((tasks) => {
+  private loadAllTasks(userId: string): void {
+    // Get projects once (take(1)), then keep task streams alive for real-time updates
+    this.tasksService.getUserProjects(userId).pipe(
+      take(1),
+      switchMap((projects) => {
+        this.projects = projects;
+        if (projects.length === 0) return of([] as Task[]);
+
+        const streams = projects.map((p) => this.tasksService.getAllProjectTasks(p.id));
+        return combineLatest(streams).pipe(
+          map((arrays) => ([] as Task[]).concat(...arrays))
+        );
+      }),
+      takeUntil(this.destroy$),
+    ).subscribe((tasks) => {
       this.allTasks = tasks;
+      this.loading = false;
       this.buildCalendar();
-    });
-
-    this.store.select(selectUserProjects).pipe(takeUntil(this.destroy$)).subscribe((projects) => {
-      this.projects = projects;
-    });
-
-    this.store.select(selectTasksLoading).pipe(takeUntil(this.destroy$)).subscribe((loading) => {
-      this.loading = loading;
     });
   }
 
@@ -128,7 +137,7 @@ export class CalendarPageComponent implements OnInit, OnDestroy {
   }
 
   private getFilteredTasks(): Task[] {
-    let tasks = this.allTasks.filter((t) => !!t.deadline);
+    let tasks = this.allTasks.filter((t) => !!this.getDeadlineStr(t));
 
     if (this.selectedProjectId) {
       tasks = tasks.filter((t) => t.projectId === this.selectedProjectId);
@@ -165,25 +174,21 @@ export class CalendarPageComponent implements OnInit, OnDestroy {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
-    // Monday-based week: 0=Mon, 6=Sun
     let startOffset = firstDay.getDay() - 1;
     if (startOffset < 0) startOffset = 6;
 
     const days: CalendarDay[] = [];
 
-    // Previous month padding
     for (let i = startOffset - 1; i >= 0; i--) {
       const d = new Date(year, month, -i);
       days.push(this.makeDay(d, taskMap, todayStr, today, false));
     }
 
-    // Current month
     for (let d = 1; d <= lastDay.getDate(); d++) {
       const date = new Date(year, month, d);
       days.push(this.makeDay(date, taskMap, todayStr, today, true));
     }
 
-    // Next month padding to fill 6 rows
     const totalCells = Math.ceil(days.length / 7) * 7;
     let nextDay = 1;
     while (days.length < totalCells) {
@@ -198,7 +203,7 @@ export class CalendarPageComponent implements OnInit, OnDestroy {
     const d = new Date(this.currentDate);
     let dayOfWeek = d.getDay() - 1;
     if (dayOfWeek < 0) dayOfWeek = 6;
-    d.setDate(d.getDate() - dayOfWeek); // go to Monday
+    d.setDate(d.getDate() - dayOfWeek);
 
     const days: CalendarDay[] = [];
     for (let i = 0; i < 7; i++) {
@@ -228,16 +233,51 @@ export class CalendarPageComponent implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Group tasks by deadline date string (YYYY-MM-DD).
+   * Handles both ISO date strings and Firestore Timestamps.
+   */
   private groupByDate(tasks: Task[]): Map<string, Task[]> {
     const map = new Map<string, Task[]>();
     for (const task of tasks) {
-      if (!task.deadline) continue;
-      const key = task.deadline.substring(0, 10); // 'YYYY-MM-DD'
+      const key = this.getDeadlineStr(task);
+      if (!key) continue;
       const list = map.get(key) || [];
       list.push(task);
       map.set(key, list);
     }
     return map;
+  }
+
+  /**
+   * Safely extract a YYYY-MM-DD string from a task's deadline.
+   * Handles: ISO string, Firestore Timestamp, Date object, or null.
+   */
+  private getDeadlineStr(task: Task): string | null {
+    const dl = task.deadline;
+    if (!dl) return null;
+
+    // Firestore Timestamp object (has toDate method)
+    if (typeof dl === 'object' && 'toDate' in (dl as any)) {
+      return this.toDateStr((dl as any).toDate());
+    }
+    // Already a string like '2026-03-25' or '2026-03-25T00:00:00.000Z'
+    if (typeof dl === 'string') {
+      // Validate it's parseable
+      const parsed = new Date(dl);
+      if (!isNaN(parsed.getTime())) {
+        return this.toDateStr(parsed);
+      }
+      // Try direct substring (already YYYY-MM-DD format)
+      if (/^\d{4}-\d{2}-\d{2}/.test(dl)) {
+        return dl.substring(0, 10);
+      }
+    }
+    // Number (timestamp)
+    if (typeof dl === 'number') {
+      return this.toDateStr(new Date(dl));
+    }
+    return null;
   }
 
   private toDateStr(d: Date): string {

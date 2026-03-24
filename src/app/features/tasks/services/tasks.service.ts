@@ -89,6 +89,28 @@ export class TasksService {
   }
 
   /**
+   * Get ALL tasks for a specific project as a real-time Observable.
+   * Unlike getMyTasks, this is NOT filtered by assigneeId.
+   * Used by the Calendar view to show all project tasks.
+   */
+  getAllProjectTasks(projectId: string): Observable<Task[]> {
+    return this.firestore
+      .collection<Task>(`projects/${projectId}/tasks`, (ref) =>
+        ref.orderBy('order', 'asc')
+      )
+      .snapshotChanges()
+      .pipe(
+        map((actions) =>
+          actions.map((a) => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { ...data, id, projectId };
+          })
+        )
+      );
+  }
+
+  /**
    * Update a task's status in Firestore.
    */
   async updateTaskStatus(
