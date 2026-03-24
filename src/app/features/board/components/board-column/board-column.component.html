@@ -70,8 +70,13 @@
       cdkDrag
       [cdkDragData]="task"
       [task]="task"
+      [columns]="columns"
       [commentCount]="commentCounts[task.id] || 0"
-      (taskClicked)="onTaskClicked($event)">
+      (taskClicked)="onTaskClicked($event)"
+      (editTask)="onEditTask($event)"
+      (copyTask)="onCopyTask($event)"
+      (moveTask)="onMoveTask($event)"
+      (deleteTask)="onDeleteTask($event)">
 
       <!-- Drag placeholder — shown in the list where the item will land -->
       <div class="board-column__drag-placeholder" *cdkDragPlaceholder></div>

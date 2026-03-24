@@ -51,12 +51,16 @@
     <app-board-column
       *ngFor="let column of columns$ | async; trackBy: trackByColumnId"
       [column]="column"
+      [columns]="(columns$ | async) || []"
       [tasks]="(filteredTasksMap$ | async)?.[column.id] || []"
       [commentCounts]="(commentCounts$ | async) || {}"
       [labelSuggestions]="(uniqueLabels$ | async) || []"
       (addTask)="onAddTask($event)"
       (taskDropped)="onTaskDropped($event, column.id)"
       (taskClicked)="onTaskClicked($event)"
+      (copyTaskRequest)="onCopyTask($event)"
+      (moveTaskRequest)="onMoveTaskViaMenu($event)"
+      (deleteTaskRequest)="onDeleteTaskFromCard($event)"
       (renameColumn)="onRenameColumn($event)"
       (deleteColumnRequest)="onDeleteColumn($event)">
     </app-board-column>

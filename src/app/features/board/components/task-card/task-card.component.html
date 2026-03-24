@@ -1,7 +1,7 @@
 <!-- Task Card: individual draggable task within a board column -->
 <div class="task-card" (click)="onCardClick()">
 
-  <!-- Drag handle + issue type + labels row -->
+  <!-- Drag handle + issue type + labels + menu row -->
   <div class="task-card__top-row">
     <!-- Drag handle — only this area initiates drag, click does not propagate -->
     <span class="task-card__drag-handle" cdkDragHandle (click)="$event.stopPropagation()">&#x2807;</span>
@@ -28,6 +28,77 @@
         +{{ extraLabelCount }}
       </span>
     </div>
+
+    <!-- Spacer pushes menu button to the right -->
+    <div class="task-card__top-spacer"></div>
+
+    <!-- Three-dot menu button -->
+    <button
+      class="task-card__menu-btn"
+      type="button"
+      title="Task actions"
+      (click)="toggleMenu($event)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Dropdown menu -->
+  <div class="task-card__menu-dropdown" *ngIf="menuOpen" (click)="$event.stopPropagation()">
+    <button class="task-card__menu-item" type="button" (click)="onEdit($event)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+      Edit Task
+    </button>
+    <button class="task-card__menu-item" type="button" (click)="onCopy($event)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      Copy Task
+    </button>
+
+    <!-- Move to column (with submenu) -->
+    <div class="task-card__menu-item task-card__menu-item--submenu"
+         (click)="onToggleMoveSubmenu($event)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+      </svg>
+      Move to...
+      <span class="task-card__menu-chevron">&#9656;</span>
+
+      <!-- Column submenu -->
+      <div class="task-card__submenu" *ngIf="moveSubmenuOpen">
+        <button
+          class="task-card__menu-item"
+          *ngFor="let col of otherColumns; trackBy: trackByColumnId"
+          type="button"
+          (click)="onMoveToColumn($event, col.id)">
+          <span class="task-card__submenu-dot" [style.background-color]="col.color"></span>
+          {{ col.name }}
+        </button>
+        <span class="task-card__submenu-empty" *ngIf="otherColumns.length === 0">
+          No other columns
+        </span>
+      </div>
+    </div>
+
+    <div class="task-card__menu-divider"></div>
+
+    <button class="task-card__menu-item task-card__menu-item--danger" type="button" (click)="onRequestDelete($event)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+      </svg>
+      Delete Task
+    </button>
   </div>
 
   <!-- Title -->
@@ -35,8 +106,6 @@
 
   <!-- Footer: priority, assignee, deadline, subtasks -->
   <div class="task-card__footer">
-
-    <!-- Priority badge -->
     <span
       class="task-card__priority"
       [style.background-color]="priorityConfig.color + '1a'"
@@ -44,10 +113,8 @@
       {{ priorityConfig.label }}
     </span>
 
-    <!-- Spacer -->
     <div class="task-card__spacer"></div>
 
-    <!-- Comment count -->
     <span class="task-card__comments" *ngIf="commentCount > 0">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -56,7 +123,6 @@
       {{ commentCount }}
     </span>
 
-    <!-- Time logged -->
     <span class="task-card__time" *ngIf="loggedHours > 0">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,12 +131,10 @@
       {{ loggedHours }}h
     </span>
 
-    <!-- Subtask indicator -->
     <span class="task-card__subtasks" *ngIf="totalSubtasks > 0">
       {{ completedSubtasks }}/{{ totalSubtasks }}
     </span>
 
-    <!-- Deadline -->
     <span
       class="task-card__deadline"
       *ngIf="formattedDeadline"
@@ -78,10 +142,19 @@
       {{ formattedDeadline }}
     </span>
 
-    <!-- Assignee avatar -->
     <span class="task-card__assignee" *ngIf="task.assigneeId">
       {{ task.assigneeId.charAt(0) | uppercase }}
     </span>
-
   </div>
 </div>
+
+<!-- Delete confirmation dialog -->
+<app-confirm-dialog
+  *ngIf="showDeleteConfirm"
+  title="Delete Task"
+  message="Are you sure you want to delete this task? This cannot be undone."
+  confirmLabel="Delete"
+  variant="danger"
+  (confirmed)="onConfirmDelete()"
+  (cancelled)="onCancelDelete()">
+</app-confirm-dialog>

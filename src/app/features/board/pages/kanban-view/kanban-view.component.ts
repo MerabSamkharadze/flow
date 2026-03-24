@@ -17,6 +17,7 @@ import {
   selectUniqueLabels,
 } from '../../store/board.selectors';
 import { selectCommentCounts } from '../../../tasks/store/tasks.selectors';
+import { ToastService } from '../../../../core/services/toast.service';
 
 /**
  * KanbanViewComponent — main Kanban board page.
@@ -59,7 +60,8 @@ export class KanbanViewComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -170,6 +172,64 @@ export class KanbanViewComponent implements OnInit, OnDestroy {
         columnId: '', // Will be resolved in the reducer by searching all columns
       })
     );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Card menu actions: Copy, Move via menu, Delete from card
+  // ---------------------------------------------------------------------------
+
+  /** Duplicate a task in the same column */
+  onCopyTask(task: Task): void {
+    this.store.dispatch(
+      BoardActions.addTask({
+        projectId: this.projectId,
+        task: {
+          title: task.title + ' (copy)',
+          description: task.description,
+          projectId: this.projectId,
+          columnId: task.columnId,
+          assigneeId: task.assigneeId,
+          priority: task.priority,
+          status: task.status,
+          issueType: task.issueType || 'task',
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          deadline: task.deadline,
+          startDate: task.startDate,
+          completedAt: null,
+          estimatedHours: task.estimatedHours,
+          order: 0,
+          labels: [...(task.labels || [])],
+          subtasks: [],
+        },
+      })
+    );
+    this.toastService.show('Task duplicated.', 'success');
+  }
+
+  /** Move a task to another column via the card menu */
+  onMoveTaskViaMenu(event: { task: Task; toColumnId: string }): void {
+    this.store.dispatch(
+      BoardActions.moveTask({
+        projectId: this.projectId,
+        taskId: event.task.id,
+        fromColumnId: event.task.columnId,
+        toColumnId: event.toColumnId,
+        newOrder: 0,
+      })
+    );
+  }
+
+  /** Delete a task from the card menu */
+  onDeleteTaskFromCard(task: Task): void {
+    this.store.dispatch(
+      BoardActions.deleteTask({
+        projectId: this.projectId,
+        taskId: task.id,
+        columnId: task.columnId,
+      })
+    );
+    this.toastService.show('Task deleted.', 'success');
   }
 
   // ---------------------------------------------------------------------------

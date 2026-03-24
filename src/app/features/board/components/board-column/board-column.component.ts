@@ -22,12 +22,16 @@ import { Task } from '../../../../shared/models/task.model';
 export class BoardColumnComponent {
   @Input() column!: Column;
   @Input() tasks: Task[] = [];
+  @Input() columns: Column[] = [];
   @Input() commentCounts: { [taskId: string]: number } = {};
   @Input() labelSuggestions: string[] = [];
 
   @Output() addTask = new EventEmitter<{ columnId: string; taskData: Partial<Task> }>();
   @Output() taskDropped = new EventEmitter<CdkDragDrop<Task[]>>();
   @Output() taskClicked = new EventEmitter<Task>();
+  @Output() copyTaskRequest = new EventEmitter<Task>();
+  @Output() moveTaskRequest = new EventEmitter<{ task: Task; toColumnId: string }>();
+  @Output() deleteTaskRequest = new EventEmitter<Task>();
   @Output() renameColumn = new EventEmitter<{ columnId: string; name: string }>();
   @Output() deleteColumnRequest = new EventEmitter<string>(); // columnId
 
@@ -135,6 +139,22 @@ export class BoardColumnComponent {
 
   onTaskClicked(task: Task): void {
     this.taskClicked.emit(task);
+  }
+
+  onEditTask(task: Task): void {
+    this.taskClicked.emit(task); // same as clicking — opens modal
+  }
+
+  onCopyTask(task: Task): void {
+    this.copyTaskRequest.emit(task);
+  }
+
+  onMoveTask(event: { task: Task; toColumnId: string }): void {
+    this.moveTaskRequest.emit(event);
+  }
+
+  onDeleteTask(task: Task): void {
+    this.deleteTaskRequest.emit(task);
   }
 
   onDrop(event: CdkDragDrop<Task[]>): void {
