@@ -1,10 +1,8 @@
 <!-- Task Card: individual draggable task within a board column -->
 <div class="task-card" (click)="onCardClick()">
 
-  <!-- Drag handle + issue type + labels + menu row -->
-  <div class="task-card__top-row">
-    <span class="task-card__drag-handle" cdkDragHandle (click)="$event.stopPropagation()">&#x2807;</span>
-
+  <!-- Issue type + labels + menu row (entire row is drag handle) -->
+  <div class="task-card__top-row" cdkDragHandle>
     <span
       class="task-card__issue-type"
       [style.color]="issueTypeConfig.color"
