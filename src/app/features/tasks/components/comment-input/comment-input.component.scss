@@ -10,7 +10,12 @@
   @include flex-column;
   gap: $spacing-sm;
 
+  &__textarea-wrap {
+    position: relative;
+  }
+
   &__textarea {
+    width: 100%;
     border: 1px solid var(--color-border, $color-border);
     border-radius: $border-radius-md;
     padding: $spacing-sm $spacing-md;
@@ -21,6 +26,7 @@
     min-height: 60px;
     outline: none;
     transition: border-color $transition-fast;
+    box-sizing: border-box;
 
     &:focus {
       border-color: $color-primary;

@@ -11,6 +11,7 @@ import { TasksService } from '../services/tasks.service';
 import { CommentsService } from '../services/comments.service';
 import { NotificationsService } from '../../../core/services/notifications.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ProjectsService } from '../../projects/services/projects.service';
 import { selectAllTasks } from '../../board/store/board.selectors';
 import { Task, TaskStatus } from '../../../shared/models/task.model';
 import { Subtask } from '../../../shared/models/subtask.model';
@@ -66,6 +67,9 @@ describe('TasksEffects', () => {
     mockNotificationsService = jasmine.createSpyObj('NotificationsService', ['createNotification']);
     mockToastService = jasmine.createSpyObj('ToastService', ['show', 'success', 'error', 'info']);
 
+    const mockProjectsService = jasmine.createSpyObj('ProjectsService', ['getMembers']);
+    mockProjectsService.getMembers.and.returnValue(of([]));
+
     TestBed.configureTestingModule({
       providers: [
         TasksEffects,
@@ -79,6 +83,7 @@ describe('TasksEffects', () => {
         { provide: CommentsService, useValue: mockCommentsService },
         { provide: NotificationsService, useValue: mockNotificationsService },
         { provide: ToastService, useValue: mockToastService },
+        { provide: ProjectsService, useValue: mockProjectsService },
       ],
     });
 

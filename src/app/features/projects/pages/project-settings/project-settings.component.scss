@@ -91,10 +91,15 @@
   }
 
   &__tab-icon {
-    font-size: $font-size-base;
+    @include flex-center;
     width: 20px;
-    text-align: center;
+    height: 20px;
     flex-shrink: 0;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 
   // ── Content area ─────────────────────────────────────────────────
@@ -401,11 +406,15 @@
     width: 28px;
     height: 28px;
     @include flex-center;
-    font-size: $font-size-lg;
     color: var(--color-text-disabled, $color-text-disabled);
     border-radius: $border-radius-sm;
     transition: color $transition-fast, background-color $transition-fast;
     flex-shrink: 0;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
 
     &:hover {
       color: $color-error;

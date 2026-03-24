@@ -24,4 +24,5 @@ export type NotificationType =
   | 'task_assigned'
   | 'comment_added'
   | 'task_updated'
-  | 'member_added';
+  | 'member_added'
+  | 'mention';

@@ -1,0 +1,24 @@
+<!-- Mention Dropdown: autocomplete list for @mentions -->
+<div class="mention-dropdown" *ngIf="filtered.length > 0">
+  <div
+    class="mention-dropdown__item"
+    *ngFor="let member of filtered; let i = index; trackBy: trackByUserId"
+    [class.mention-dropdown__item--active]="i === activeIndex"
+    (mousedown)="onSelect(member)">
+    <span
+      class="mention-dropdown__avatar"
+      *ngIf="!member.avatarUrl"
+      [style.background-color]="getColor(member)">
+      {{ getInitials(member) }}
+    </span>
+    <img
+      class="mention-dropdown__avatar mention-dropdown__avatar--img"
+      *ngIf="member.avatarUrl"
+      [src]="member.avatarUrl"
+      [alt]="member.displayName" />
+    <div class="mention-dropdown__info">
+      <span class="mention-dropdown__name">{{ member.displayName }}</span>
+      <span class="mention-dropdown__email">{{ member.email }}</span>
+    </div>
+  </div>
+</div>

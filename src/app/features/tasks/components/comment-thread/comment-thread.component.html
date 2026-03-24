@@ -33,7 +33,7 @@
 
       <!-- Body: either editing or display mode -->
       <ng-container *ngIf="editingId !== comment.id; else editMode">
-        <p class="comment-thread__body">{{ comment.content }}</p>
+        <p class="comment-thread__body" [innerHTML]="comment.content | mention"></p>
       </ng-container>
 
       <ng-template #editMode>

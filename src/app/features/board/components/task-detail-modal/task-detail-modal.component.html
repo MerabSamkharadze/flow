@@ -227,6 +227,7 @@
         </app-comment-thread>
 
         <app-comment-input
+          [members]="members"
           (commentSubmitted)="onCommentSubmitted($event)">
         </app-comment-input>
       </div>

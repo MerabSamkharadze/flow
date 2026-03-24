@@ -41,6 +41,7 @@ export class NotificationItemComponent {
       comment_added: 'New comment',
       task_updated: 'Task updated',
       member_added: 'Member added',
+      mention: 'Mentioned you',
     };
     return labels[this.notification.type] || 'Notification';
   }

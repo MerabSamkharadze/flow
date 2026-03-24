@@ -11,6 +11,8 @@ import { EmptyStateComponent } from './components/empty-state/empty-state.compon
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { TagInputComponent } from './components/tag-input/tag-input.component';
 import { BurndownChartComponent } from './components/burndown-chart/burndown-chart.component';
+import { MentionDropdownComponent } from './components/mention-dropdown/mention-dropdown.component';
+import { MentionPipe } from './pipes/mention.pipe';
 
 /**
  * SharedModule — reusable components, directives, and pipes.
@@ -27,6 +29,8 @@ import { BurndownChartComponent } from './components/burndown-chart/burndown-cha
     ConfirmDialogComponent,
     TagInputComponent,
     BurndownChartComponent,
+    MentionDropdownComponent,
+    MentionPipe,
   ],
   imports: [
     CommonModule,
@@ -48,6 +52,8 @@ import { BurndownChartComponent } from './components/burndown-chart/burndown-cha
     ConfirmDialogComponent,
     TagInputComponent,
     BurndownChartComponent,
+    MentionDropdownComponent,
+    MentionPipe,
   ],
 })
 export class SharedModule {}

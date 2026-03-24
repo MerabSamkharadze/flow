@@ -89,6 +89,15 @@
     white-space: pre-wrap;
     word-break: break-word;
     margin: 0;
+
+    // @mention styling (injected by MentionPipe)
+    ::ng-deep .mention {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+      background-color: rgba($color-primary, 0.1);
+      border-radius: 3px;
+      padding: 0 4px;
+    }
   }
 
   // --------------------------------------------------

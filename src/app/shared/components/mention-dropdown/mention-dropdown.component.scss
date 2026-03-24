@@ -1,0 +1,75 @@
+// ==========================================================================
+// Mention Dropdown — BEM
+// Block: .mention-dropdown
+// ==========================================================================
+
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+.mention-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  margin-bottom: $spacing-xs;
+  padding: $spacing-xs 0;
+  background-color: var(--color-surface, $color-surface);
+  border: 1px solid var(--color-border, $color-border);
+  border-radius: $border-radius-md;
+  box-shadow: var(--shadow-md, $shadow-md);
+  z-index: $z-dropdown;
+  max-height: 220px;
+  @include scrollable(y);
+
+  &__item {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    padding: $spacing-xs $spacing-md;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:hover,
+    &--active {
+      background-color: var(--color-surface-hover, $color-surface-hover);
+    }
+
+    &--active {
+      background-color: $color-primary-bg;
+    }
+  }
+
+  &__avatar {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: $border-radius-full;
+    color: $color-text-inverse;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    &--img {
+      background-color: transparent;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    @include flex-column;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-primary, $color-text-primary);
+    @include text-truncate;
+  }
+
+  &__email {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary, $color-text-secondary);
+    @include text-truncate;
+  }
+}
