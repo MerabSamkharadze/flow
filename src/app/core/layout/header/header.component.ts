@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { Observable, Subject, of } from 'rxjs';
 import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
-import { logout } from '../../../features/auth/store';
 import { selectUser } from '../../../features/auth/store';
 import { AuthUser } from '../../../features/auth/store/auth.actions';
 import { NotificationsService } from '../../services/notifications.service';
@@ -74,10 +73,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onMenuToggle(): void {
     this.toggleSidebar.emit();
-  }
-
-  onLogout(): void {
-    this.store.dispatch(logout());
   }
 
   ngOnDestroy(): void {

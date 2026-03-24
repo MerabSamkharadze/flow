@@ -159,11 +159,6 @@
     max-width: 120px;
   }
 
-  &__user-meta {
-    @include flex(row, center);
-    gap: $spacing-xs;
-  }
-
   &__role-badge {
     display: inline-block;
     font-size: 9px;
@@ -185,26 +180,6 @@
     &--member {
       background-color: var(--color-gray-100, $color-gray-100);
       color: var(--color-text-secondary, $color-text-secondary);
-    }
-  }
-
-  // --------------------------------------------------
-  // Element: logout button
-  // --------------------------------------------------
-  &__logout-btn {
-    @include button-reset;
-    padding: 6px $spacing-md;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: var(--color-text-secondary, $color-text-secondary);
-    border-radius: $border-radius-md;
-    border: 1px solid var(--color-border, $color-border);
-    transition: background-color $transition-fast, color $transition-fast, border-color $transition-fast;
-
-    &:hover {
-      background-color: rgba($color-error, 0.06);
-      color: $color-error;
-      border-color: rgba($color-error, 0.3);
     }
   }
 }

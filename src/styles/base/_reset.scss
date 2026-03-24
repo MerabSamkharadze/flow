@@ -59,12 +59,32 @@ svg {
   max-width: 100%;
 }
 
-// Form elements — inherit font
+// Form elements — inherit font, respect dark mode colors
 input,
 button,
 textarea,
 select {
   font: inherit;
+  color: inherit;
+  background-color: transparent;
+}
+
+// Ensure form inputs use theme surface color (not browser white default)
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+  background-color: var(--color-surface, #fff);
+  color: var(--color-text-primary, #1a1a1a);
+}
+
+// Fix autofill background in dark mode (Chrome/Edge)
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-text-primary, #1a1a1a);
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface, #fff) inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 // Remove animations/transitions for users who prefer reduced motion

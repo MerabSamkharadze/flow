@@ -27,7 +27,8 @@
 
     <div class="header__divider"></div>
 
-    <div class="header__profile" *ngIf="user$ | async as user">
+    <div class="header__profile" *ngIf="user$ | async as user"
+         [title]="(user.displayName || 'User') + ' — ' + (user.email || '') + ' (' + user.role + ')'">
       <div class="header__avatar">
         <img
           *ngIf="user.photoURL"
@@ -42,15 +43,9 @@
       </div>
       <div class="header__user-info">
         <span class="header__user-name">{{ user.displayName || 'User' }}</span>
-        <span class="header__user-meta">
-          <span class="header__role-badge header__role-badge--{{ user.role }}">{{ user.role }}</span>
-        </span>
+        <span class="header__role-badge header__role-badge--{{ user.role }}">{{ user.role }}</span>
       </div>
     </div>
-
-    <button class="header__logout-btn" title="Logout" (click)="onLogout()">
-      Logout
-    </button>
   </div>
 
 </div>

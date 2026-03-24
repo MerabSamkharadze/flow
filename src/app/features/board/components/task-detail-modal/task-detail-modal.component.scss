@@ -113,6 +113,7 @@
     font-size: $font-size-sm;
     font-family: $font-family-base;
     color: var(--color-text-primary, $color-text-primary);
+    background-color: var(--color-surface, $color-surface);
     outline: none;
     transition: border-color $transition-fast;
 
