@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Project } from '@shared/models/project.model';
 import { Member, MemberRole } from '@shared/models/member.model';
 import { Task, PRIORITY_CONFIG, isTaskCompleted } from '@shared/models/task.model';
+import { Column } from '@shared/models/column.model';
 import { InvitePayload } from '../../components/invite-modal/invite-modal.component';
 
 import * as ProjectsActions from '../../store/projects.actions';
@@ -29,6 +30,9 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   currentUserProjectRole: MemberRole = 'member';
   showInviteModal = false;
   projectId = '';
+
+  /** Columns for progress calculation */
+  columns: Column[] = [];
 
   /** Task stats */
   allTasks: Task[] = [];
@@ -93,6 +97,17 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((project) => this.setBurndownEnd(project));
 
+    // Load columns for progress calculation
+    this.boardService
+      .getColumns(this.projectId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((columns) => {
+        this.columns = columns.sort((a, b) => a.order - b.order);
+        if (this.allTasks.length > 0) {
+          this.computeStats(this.allTasks);
+        }
+      });
+
     // Load tasks directly from Firestore (board state is lazy-loaded)
     this.boardService
       .getTasks(this.projectId)
@@ -112,15 +127,39 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   private computeStats(tasks: Task[]): void {
     this.totalTasks = tasks.length;
-    this.completedTasks = tasks.filter((t) => isTaskCompleted(t)).length;
-    this.completedPercent =
-      this.totalTasks > 0
-        ? Math.round((this.completedTasks / this.totalTasks) * 100)
-        : 0;
+
+    // Build column order lookup: columnId → position index (0-based)
+    const colCount = this.columns.length;
+    const colIndex = new Map<string, number>();
+    for (let i = 0; i < colCount; i++) {
+      colIndex.set(this.columns[i].id, i);
+    }
+
+    // A task is "completed" if it's in the last column, or status contains done/complete/finish
+    const lastColumnId = colCount > 0 ? this.columns[colCount - 1].id : null;
+    this.completedTasks = tasks.filter((t) =>
+      (lastColumnId && t.columnId === lastColumnId) || isTaskCompleted(t)
+    ).length;
+
+    // Weighted progress: each task contributes its column position / (totalColumns - 1)
+    // e.g. 4 columns: col0=0%, col1=33%, col2=66%, col3=100%
+    if (this.totalTasks > 0 && colCount > 1) {
+      let totalWeight = 0;
+      for (const task of tasks) {
+        const idx = colIndex.get(task.columnId) ?? 0;
+        totalWeight += idx / (colCount - 1);
+      }
+      this.completedPercent = Math.round((totalWeight / this.totalTasks) * 100);
+    } else if (this.totalTasks > 0) {
+      // Fallback: no columns loaded, use simple completed/total
+      this.completedPercent = Math.round((this.completedTasks / this.totalTasks) * 100);
+    } else {
+      this.completedPercent = 0;
+    }
 
     const now = new Date().toISOString().slice(0, 10);
     this.overdueTasks = tasks.filter(
-      (t) => t.deadline && t.deadline < now && !isTaskCompleted(t)
+      (t) => t.deadline && t.deadline < now && !isTaskCompleted(t) && t.columnId !== lastColumnId
     ).length;
 
     // Recent tasks: sorted by updatedAt desc, take 5

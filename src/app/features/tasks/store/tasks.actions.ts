@@ -183,7 +183,7 @@ export const addComment = createAction(
 
 export const addCommentSuccess = createAction(
   '[Tasks API] Add Comment Success',
-  props<{ taskId: string; comment: Comment }>()
+  props<{ projectId: string; taskId: string; comment: Comment }>()
 );
 
 export const addCommentFailure = createAction(

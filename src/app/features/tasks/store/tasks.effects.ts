@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, exhaustMap, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { TasksService } from '../services/tasks.service';
 import { CommentsService } from '../services/comments.service';
+import { BoardService } from '../../board/services/board.service';
 import { NotificationsService } from '@core/services/notifications.service';
 import { ToastService } from '@core/services/toast.service';
 import { ProjectsService } from '../../projects/services/projects.service';
-import { selectAllTasks } from '../../board/store/board.selectors';
 import * as TasksActions from './tasks.actions';
 
 /**
@@ -25,6 +25,7 @@ export class TasksEffects {
     private actions$: Actions,
     private tasksService: TasksService,
     private commentsService: CommentsService,
+    private boardService: BoardService,
     private notificationsService: NotificationsService,
     private projectsService: ProjectsService,
     private toastService: ToastService,
@@ -190,7 +191,7 @@ export class TasksEffects {
       ofType(TasksActions.addComment),
       exhaustMap(({ projectId, taskId, authorId, authorName, authorAvatar, content }) =>
         this.commentsService.addComment(projectId, taskId, authorId, authorName, authorAvatar, content).then(
-          (comment) => TasksActions.addCommentSuccess({ taskId, comment }),
+          (comment) => TasksActions.addCommentSuccess({ projectId, taskId, comment }),
           (error) => TasksActions.addCommentFailure({ error: error.message })
         )
       )
@@ -212,21 +213,24 @@ export class TasksEffects {
     () =>
       this.actions$.pipe(
         ofType(TasksActions.addCommentSuccess),
-        withLatestFrom(this.store.select(selectAllTasks)),
-        tap(([{ taskId, comment }, allTasks]) => {
-          const task = allTasks.find((t) => t.id === taskId);
-          if (!task?.assigneeId || task.assigneeId === comment.authorId) return;
-          this.notificationsService.createNotification(task.assigneeId, {
-            userId: task.assigneeId,
-            type: 'comment_added',
-            title: 'New comment on your task',
-            body: `${comment.authorName} commented on "${task.title}".`,
-            link: `/projects/${task.projectId}`,
-            read: false,
-            createdAt: Date.now(),
-            actorName: comment.authorName,
-            actorAvatar: comment.authorAvatar,
-          });
+        tap(({ projectId, taskId, comment }) => {
+          // Read task directly from Firestore (reliable — not dependent on store state)
+          this.boardService.getTask(projectId, taskId)
+            .pipe(take(1))
+            .subscribe((task) => {
+              if (!task?.assigneeId || task.assigneeId === comment.authorId) return;
+              this.notificationsService.createNotification(task.assigneeId, {
+                userId: task.assigneeId,
+                type: 'comment_added',
+                title: 'New comment on your task',
+                body: `${comment.authorName} commented on "${task.title}".`,
+                link: `/projects/${projectId}`,
+                read: false,
+                createdAt: Date.now(),
+                actorName: comment.authorName,
+                actorAvatar: comment.authorAvatar,
+              });
+            });
         })
       ),
     { dispatch: false }
@@ -237,43 +241,43 @@ export class TasksEffects {
     () =>
       this.actions$.pipe(
         ofType(TasksActions.addCommentSuccess),
-        withLatestFrom(this.store.select(selectAllTasks)),
-        tap(([{ taskId, comment }, allTasks]) => {
-          // Parse @mentions from comment text
+        tap(({ projectId, taskId, comment }) => {
           const mentions = comment.content.match(/@(\w+(?:\s\w+)?)/g);
           if (!mentions || mentions.length === 0) return;
 
-          const task = allTasks.find((t) => t.id === taskId);
-          if (!task) return;
-
-          // Load project members to resolve names → userIds
-          this.projectsService
-            .getMembers(task.projectId)
+          // Read task from Firestore for title, then load members for name resolution
+          this.boardService.getTask(projectId, taskId)
             .pipe(take(1))
-            .subscribe((members) => {
-              const mentionedNames = mentions.map((m) => m.substring(1).toLowerCase());
+            .subscribe((task) => {
+              if (!task) return;
 
-              for (const member of members) {
-                // Skip the comment author
-                if (member.userId === comment.authorId) continue;
+              this.projectsService
+                .getMembers(projectId)
+                .pipe(take(1))
+                .subscribe((members) => {
+                  const mentionedNames = mentions.map((m) => m.substring(1).toLowerCase());
 
-                const nameMatch = mentionedNames.some(
-                  (name) => member.displayName.toLowerCase().includes(name)
-                );
-                if (!nameMatch) continue;
+                  for (const member of members) {
+                    if (member.userId === comment.authorId) continue;
 
-                this.notificationsService.createNotification(member.userId, {
-                  userId: member.userId,
-                  type: 'mention',
-                  title: 'You were mentioned',
-                  body: `${comment.authorName} mentioned you in a comment on "${task.title}".`,
-                  link: `/projects/${task.projectId}`,
-                  read: false,
-                  createdAt: Date.now(),
-                  actorName: comment.authorName,
-                  actorAvatar: comment.authorAvatar,
+                    const nameMatch = mentionedNames.some(
+                      (name) => member.displayName.toLowerCase().includes(name)
+                    );
+                    if (!nameMatch) continue;
+
+                    this.notificationsService.createNotification(member.userId, {
+                      userId: member.userId,
+                      type: 'mention',
+                      title: 'You were mentioned',
+                      body: `${comment.authorName} mentioned you in a comment on "${task.title}".`,
+                      link: `/projects/${projectId}`,
+                      read: false,
+                      createdAt: Date.now(),
+                      actorName: comment.authorName,
+                      actorAvatar: comment.authorAvatar,
+                    });
+                  }
                 });
-              }
             });
         })
       ),

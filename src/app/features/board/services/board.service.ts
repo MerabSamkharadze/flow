@@ -108,6 +108,16 @@ export class BoardService {
       );
   }
 
+  /** Get a single task by ID from a specific project */
+  getTask(projectId: string, taskId: string): Observable<Task | null> {
+    return this.firestore
+      .doc<Task>(`projects/${projectId}/tasks/${taskId}`)
+      .valueChanges()
+      .pipe(
+        map((data) => (data ? { ...data, id: taskId, projectId } as Task : null))
+      );
+  }
+
   /** Add a new task to the project */
   async addTask(projectId: string, task: Omit<Task, 'id'>): Promise<Task> {
     const docRef = await this.firestore

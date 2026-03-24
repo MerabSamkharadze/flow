@@ -12,7 +12,7 @@ import { CommentsService } from '../services/comments.service';
 import { NotificationsService } from '../../../core/services/notifications.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ProjectsService } from '../../projects/services/projects.service';
-import { selectAllTasks } from '../../board/store/board.selectors';
+import { BoardService } from '../../board/services/board.service';
 import { Task, TaskStatus } from '../../../shared/models/task.model';
 import { Subtask } from '../../../shared/models/subtask.model';
 import { Comment } from '../../../shared/models/comment.model';
@@ -27,6 +27,7 @@ describe('TasksEffects', () => {
   let mockCommentsService: jasmine.SpyObj<CommentsService>;
   let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
   let mockToastService: jasmine.SpyObj<ToastService>;
+  let mockBoardService: jasmine.SpyObj<BoardService>;
 
   const mockTasks: Task[] = [
     {
@@ -70,17 +71,17 @@ describe('TasksEffects', () => {
     const mockProjectsService = jasmine.createSpyObj('ProjectsService', ['getMembers']);
     mockProjectsService.getMembers.and.returnValue(of([]));
 
+    mockBoardService = jasmine.createSpyObj('BoardService', ['getTask']);
+    mockBoardService.getTask.and.returnValue(of(null));
+
     TestBed.configureTestingModule({
       providers: [
         TasksEffects,
         provideMockActions(() => actions$),
-        provideMockStore({
-          selectors: [
-            { selector: selectAllTasks, value: mockTasks },
-          ],
-        }),
+        provideMockStore(),
         { provide: TasksService, useValue: mockTasksService },
         { provide: CommentsService, useValue: mockCommentsService },
+        { provide: BoardService, useValue: mockBoardService },
         { provide: NotificationsService, useValue: mockNotificationsService },
         { provide: ToastService, useValue: mockToastService },
         { provide: ProjectsService, useValue: mockProjectsService },
@@ -271,7 +272,7 @@ describe('TasksEffects', () => {
 
   describe('toastCommentAdded$', () => {
     it('should show success toast when comment is added', () => {
-      actions$.next(TasksActions.addCommentSuccess({ taskId: 'task-1', comment: mockComment }));
+      actions$.next(TasksActions.addCommentSuccess({ projectId: 'proj-1', taskId: 'task-1', comment: mockComment }));
 
       effects.toastCommentAdded$.subscribe();
       expect(mockToastService.show).toHaveBeenCalledWith('Comment added.', 'success');
@@ -456,17 +457,20 @@ describe('TasksEffects', () => {
 
   describe('notifyCommentAdded$', () => {
     it('should notify the task assignee when a different user comments', () => {
+      // Mock getTask to return task-1 with assigneeId 'user-1'
+      mockBoardService.getTask.and.returnValue(of(mockTasks[0]));
+
       const comment: Comment = {
         id: 'c-1', taskId: 'task-1', authorId: 'user-other',
         authorName: 'Other User', authorAvatar: null, content: 'Hi',
         createdAt: 7000, updatedAt: null,
       };
 
-      actions$.next(TasksActions.addCommentSuccess({ taskId: 'task-1', comment }));
+      actions$.next(TasksActions.addCommentSuccess({ projectId: 'proj-1', taskId: 'task-1', comment }));
 
       effects.notifyCommentAdded$.subscribe();
       expect(mockNotificationsService.createNotification).toHaveBeenCalledWith(
-        'user-1', // task-1 assigneeId
+        'user-1',
         jasmine.objectContaining({
           userId: 'user-1',
           type: 'comment_added',
@@ -476,13 +480,15 @@ describe('TasksEffects', () => {
     });
 
     it('should NOT notify when author is the assignee', () => {
+      mockBoardService.getTask.and.returnValue(of(mockTasks[0]));
+
       const comment: Comment = {
         id: 'c-2', taskId: 'task-1', authorId: 'user-1',
         authorName: 'Self', authorAvatar: null, content: 'My own comment',
         createdAt: 7000, updatedAt: null,
       };
 
-      actions$.next(TasksActions.addCommentSuccess({ taskId: 'task-1', comment }));
+      actions$.next(TasksActions.addCommentSuccess({ projectId: 'proj-1', taskId: 'task-1', comment }));
 
       effects.notifyCommentAdded$.subscribe();
       expect(mockNotificationsService.createNotification).not.toHaveBeenCalled();

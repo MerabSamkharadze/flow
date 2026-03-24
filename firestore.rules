@@ -93,9 +93,11 @@ service cloud.firestore {
       allow write: if isOwner(userId);
     }
 
-    // User notifications — private to the owner
+    // User notifications — owner can read/update/delete, any signed-in user can create
     match /users/{userId}/notifications/{notifId} {
-      allow read, write: if isOwner(userId);
+      allow read: if isOwner(userId);
+      allow create: if isSignedIn();
+      allow update, delete: if isOwner(userId);
     }
 
     // User preferences — private to the owner
