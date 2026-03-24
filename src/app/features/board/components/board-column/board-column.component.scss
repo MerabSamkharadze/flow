@@ -149,6 +149,12 @@
     text-align: left;
     transition: background-color $transition-fast;
 
+    svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
     &:hover {
       background-color: var(--color-surface-hover, $color-surface-hover);
     }
