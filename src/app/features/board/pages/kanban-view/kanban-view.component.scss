@@ -119,3 +119,44 @@
     -webkit-overflow-scrolling: touch;
   }
 }
+
+// --------------------------------------------------
+// Responsive
+// --------------------------------------------------
+@include respond-below('md') {
+  .kanban-view {
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+      margin-bottom: $spacing-md;
+    }
+
+    &__title {
+      font-size: $font-size-lg;
+    }
+
+    &__header-right {
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    &__add-col-btn {
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-size-xs;
+    }
+
+    &__view-btn {
+      padding: 2px $spacing-xs;
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+@include respond-below('sm') {
+  .kanban-view {
+    &__header-right {
+      gap: $spacing-xs;
+    }
+  }
+}

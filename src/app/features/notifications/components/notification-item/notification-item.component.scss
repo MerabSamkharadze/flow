@@ -113,3 +113,19 @@
     margin-top: 2px;
   }
 }
+
+@include respond-below('sm') {
+  .notification-item {
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+
+    &__avatar {
+      width: 30px;
+      height: 30px;
+    }
+
+    &__type {
+      display: none;
+    }
+  }
+}

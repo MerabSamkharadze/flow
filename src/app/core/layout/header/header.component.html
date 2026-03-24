@@ -42,7 +42,9 @@
       </div>
       <div class="header__user-info">
         <span class="header__user-name">{{ user.displayName || 'User' }}</span>
-        <span class="header__user-email">{{ user.email }}</span>
+        <span class="header__user-meta">
+          <span class="header__role-badge header__role-badge--{{ user.role }}">{{ user.role }}</span>
+        </span>
       </div>
     </div>
 

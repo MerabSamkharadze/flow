@@ -234,3 +234,46 @@
     }
   }
 }
+
+// --------------------------------------------------
+// Responsive
+// --------------------------------------------------
+@include respond-below('md') {
+  .board-filters {
+    gap: $spacing-sm;
+    padding: $spacing-xs $spacing-sm;
+
+    &__search {
+      min-width: 140px;
+      max-width: 100%;
+      flex: 1 1 100%;
+    }
+
+    &__group {
+      flex-wrap: wrap;
+    }
+
+    &__toggles {
+      flex-wrap: wrap;
+    }
+
+    &__input {
+      width: 100px;
+    }
+  }
+}
+
+@include respond-below('sm') {
+  .board-filters {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__search {
+      max-width: none;
+    }
+
+    &__group {
+      width: 100%;
+    }
+  }
+}

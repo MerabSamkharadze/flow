@@ -256,6 +256,35 @@ $card-padding: $spacing-lg;
     gap: $spacing-lg;
   }
 
+  // ── Section header with role badge ──────────────────────────────
+  &__section-header-row {
+    @include flex-between;
+    align-items: center;
+  }
+
+  &__my-role {
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    padding: 2px 8px;
+    border-radius: $border-radius-full;
+    text-transform: capitalize;
+
+    &--admin {
+      background-color: rgba(#7c3aed, 0.1);
+      color: #7c3aed;
+    }
+
+    &--manager {
+      background-color: rgba(#2563eb, 0.1);
+      color: #2563eb;
+    }
+
+    &--member {
+      background-color: var(--color-gray-100, $color-gray-100);
+      color: var(--color-text-secondary, $color-text-secondary);
+    }
+  }
+
   // ── Card ─────────────────────────────────────────────────────────
   &__card {
     background-color: var(--color-surface, $color-surface);

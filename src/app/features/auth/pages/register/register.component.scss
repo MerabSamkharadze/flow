@@ -343,6 +343,26 @@
   }
 }
 
+// --------------------------------------------------
+// Responsive
+// --------------------------------------------------
+@include respond-below('sm') {
+  .register-page {
+    &__form-panel {
+      padding: $spacing-md;
+    }
+
+    &__title {
+      font-size: $font-size-xl;
+    }
+
+    &__name-row {
+      flex-direction: column;
+      gap: $spacing-md;
+    }
+  }
+}
+
 @keyframes register-gradient {
   0% {
     background-position: 0% 50%;

@@ -8,8 +8,8 @@
 
 .board-column {
   @include flex-column;
-  width: 300px;
-  min-width: 300px;
+  width: 280px;
+  min-width: 280px;
   max-height: 100%;
   background-color: var(--color-gray-100, $color-gray-100);
   border-radius: $border-radius-lg;

@@ -266,14 +266,19 @@
 
         <!-- Members card -->
         <section class="project-detail__card">
-          <h3 class="project-detail__section-title">Members</h3>
+          <div class="project-detail__section-header-row">
+            <h3 class="project-detail__section-title">Members</h3>
+            <span class="project-detail__my-role project-detail__my-role--{{ currentUserProjectRole }}">
+              {{ currentUserProjectRole }}
+            </span>
+          </div>
 
           <div class="project-detail__avatars" *ngIf="members.length > 0; else noMembers">
             <span
               *ngFor="let m of visibleMembers; trackBy: trackMember"
               class="project-detail__avatar"
               [style.background-color]="m.avatarUrl ? 'transparent' : getMemberColor(m)"
-              [title]="m.displayName || m.email">
+              [title]="(m.displayName || m.email) + ' · ' + m.role">
               <img
                 *ngIf="m.avatarUrl"
                 class="project-detail__avatar-img"

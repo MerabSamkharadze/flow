@@ -127,9 +127,12 @@
         </span>
       </span>
 
-      <!-- Name + email (expanded only) -->
+      <!-- Name + email + role (expanded only) -->
       <div class="sidebar__profile-info" *ngIf="!isCollapsed">
-        <span class="sidebar__profile-name">{{ user.displayName || 'User' }}</span>
+        <span class="sidebar__profile-name">
+          {{ user.displayName || 'User' }}
+          <span class="sidebar__profile-role sidebar__profile-role--{{ user.role }}">{{ user.role }}</span>
+        </span>
         <span class="sidebar__profile-email">{{ user.email }}</span>
       </div>
 

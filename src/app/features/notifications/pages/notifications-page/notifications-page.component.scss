@@ -115,3 +115,36 @@
     line-height: $line-height-relaxed;
   }
 }
+
+// --------------------------------------------------
+// Responsive
+// --------------------------------------------------
+@include respond-below('md') {
+  .notifications-page {
+    padding: $spacing-md;
+
+    &__title {
+      font-size: $font-size-lg;
+    }
+
+    &__mark-all-btn {
+      font-size: $font-size-xs;
+      padding: $spacing-xs $spacing-sm;
+    }
+  }
+}
+
+@include respond-below('sm') {
+  .notifications-page {
+    padding: $spacing-sm;
+
+    &__empty {
+      padding: $spacing-xl $spacing-md;
+    }
+
+    &__empty-icon {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}

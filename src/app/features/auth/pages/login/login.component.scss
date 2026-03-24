@@ -321,6 +321,25 @@
 // --------------------------------------------------
 // Animated gradient background keyframes
 // --------------------------------------------------
+// --------------------------------------------------
+// Responsive: mobile-friendly form
+// --------------------------------------------------
+@include respond-below('sm') {
+  .login-page {
+    &__form-panel {
+      padding: $spacing-md;
+    }
+
+    &__title {
+      font-size: $font-size-xl;
+    }
+
+    &__input {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
 @keyframes gradient-shift {
   0% {
     background-position: 0% 50%;

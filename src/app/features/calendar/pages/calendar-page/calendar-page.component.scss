@@ -404,3 +404,83 @@
     padding: $spacing-md;
   }
 }
+
+// ==========================================================================
+// Responsive
+// ==========================================================================
+
+@include respond-below('md') {
+  .calendar-page {
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+    }
+
+    &__title {
+      font-size: $font-size-lg;
+      min-width: auto;
+    }
+
+    &__nav {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    &__filters {
+      gap: $spacing-sm;
+    }
+
+    &__filter-select {
+      max-width: 120px;
+    }
+  }
+
+  .calendar-cell {
+    min-height: 60px;
+    padding: 2px;
+
+    &__date {
+      font-size: 10px;
+    }
+  }
+
+  .calendar-task-chip {
+    &__title {
+      font-size: 9px;
+    }
+  }
+}
+
+@include respond-below('sm') {
+  .calendar-page {
+    &__filters {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .calendar-cell {
+    min-height: 44px;
+
+    &__tasks {
+      display: none;
+    }
+
+    // On very small screens, show only task count
+    &__date {
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  .calendar-grid__header-cell {
+    font-size: 10px;
+    padding: $spacing-xs;
+  }
+}
