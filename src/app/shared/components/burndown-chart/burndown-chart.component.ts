@@ -5,7 +5,7 @@ import {
   SimpleChanges,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { Task } from '../../models/task.model';
+import { Task, isTaskCompleted } from '../../models/task.model';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -93,7 +93,7 @@ export class BurndownChartComponent implements OnChanges {
     const chartH = this.height - this.padTop - this.padBottom;
 
     // Check if we have any completedAt data
-    const completedTasks = this.tasks.filter((t) => t.status === 'done' && t.completedAt);
+    const completedTasks = this.tasks.filter((t) => isTaskCompleted(t) && t.completedAt);
     this.hasData = completedTasks.length > 0;
 
     // --- Ideal line: straight from (start, total) to (end, 0) ---
@@ -177,7 +177,7 @@ export class BurndownChartComponent implements OnChanges {
     }
 
     // --- Compute stats ---
-    const completed = this.tasks.filter((t) => t.status === 'done').length;
+    const completed = this.tasks.filter((t) => isTaskCompleted(t)).length;
     const remainingNow = total - completed;
     const elapsedDays = Math.max(1, Math.ceil((now - start) / DAY_MS));
     const avgPerDay = completed / elapsedDays;

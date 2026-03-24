@@ -34,11 +34,9 @@
           </td>
           <td class="recent-tasks__td">
             <span class="recent-tasks__status"
-                  [class.recent-tasks__status--todo]="task.status === 'todo'"
-                  [class.recent-tasks__status--in-progress]="task.status === 'in-progress'"
-                  [class.recent-tasks__status--in-review]="task.status === 'in-review'"
-                  [class.recent-tasks__status--done]="task.status === 'done'">
-              {{ formatStatus(task.status) }}
+                  [style.background-color]="(task.status | statusColor) + '1a'"
+                  [style.color]="task.status | statusColor">
+              {{ task.status }}
             </span>
           </td>
           <td class="recent-tasks__td">

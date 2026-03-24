@@ -20,6 +20,7 @@ import {
   selectTasksError,
   selectUserProjects,
   selectProjectMap,
+  selectUniqueStatuses,
 } from '../../store/tasks.selectors';
 
 /**
@@ -58,6 +59,9 @@ export class MyTasksComponent implements OnInit, OnDestroy {
   /** Projects for filter dropdown */
   projects$!: Observable<Project[]>;
 
+  /** Unique statuses from user's tasks — for dynamic filter dropdown */
+  uniqueStatuses$!: Observable<string[]>;
+
   /** Project lookup map for task-list component */
   projectMap$!: Observable<{ [id: string]: Project }>;
 
@@ -84,6 +88,7 @@ export class MyTasksComponent implements OnInit, OnDestroy {
     this.error$ = this.store.select(selectTasksError);
     this.projects$ = this.store.select(selectUserProjects);
     this.projectMap$ = this.store.select(selectProjectMap);
+    this.uniqueStatuses$ = this.store.select(selectUniqueStatuses);
 
     // Keep a local snapshot of projectMap for the task-list component
     this.projectMap$

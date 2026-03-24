@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, combineLatest, map } from 'rxjs';
+import { Observable, combineLatest, map, tap } from 'rxjs';
 import { Column } from '../../../../shared/models/column.model';
+import { isTaskCompleted } from '../../../../shared/models/task.model';
 import { Task, TaskPriority, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 import { BoardFilters } from '../../models/board-filters.model';
 import * as BoardActions from '../../store/board.actions';
@@ -56,6 +57,9 @@ export class BacklogViewComponent implements OnInit {
   /** Backlog sections — columns with their sorted tasks */
   sections$!: Observable<BacklogSection[]>;
 
+  /** Local sections snapshot for status lookups */
+  sections: BacklogSection[] = [];
+
   /** Inline task form state */
   addingInSection: string | null = null;
 
@@ -86,9 +90,10 @@ export class BacklogViewComponent implements OnInit {
         columns.map((column, index) => ({
           column,
           tasks: this.sortByPriority(tasksMap[column.id] || []),
-          expanded: index === 0,
+          expanded: this.sections.find((s) => s.column.id === column.id)?.expanded ?? index === 0,
         }))
-      )
+      ),
+      tap((sections) => { this.sections = sections; })
     );
   }
 
@@ -170,6 +175,8 @@ export class BacklogViewComponent implements OnInit {
   }
 
   onTaskCreated(columnId: string, taskData: Partial<Task>): void {
+    const section = this.sections.find((s) => s.column.id === columnId);
+    const status = section ? section.column.name : 'To Do';
     this.store.dispatch(
       BoardActions.addTask({
         projectId: this.projectId,
@@ -180,7 +187,7 @@ export class BacklogViewComponent implements OnInit {
           columnId,
           assigneeId: taskData.assigneeId || null,
           priority: taskData.priority || 'medium',
-          status: 'todo',
+          status,
           issueType: taskData.issueType || 'task',
           createdAt: Date.now(),
           updatedAt: Date.now(),
@@ -215,7 +222,7 @@ export class BacklogViewComponent implements OnInit {
 
   isOverdue(task: Task): boolean {
     if (!task.deadline) return false;
-    return new Date(task.deadline).getTime() < Date.now() && task.status !== 'done';
+    return new Date(task.deadline).getTime() < Date.now() && !isTaskCompleted(task);
   }
 
   // ---------------------------------------------------------------------------

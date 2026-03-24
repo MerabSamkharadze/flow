@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { Project } from '@shared/models/project.model';
 import { Member, MemberRole } from '@shared/models/member.model';
-import { Task, PRIORITY_CONFIG } from '@shared/models/task.model';
+import { Task, PRIORITY_CONFIG, isTaskCompleted } from '@shared/models/task.model';
 import { InvitePayload } from '../../components/invite-modal/invite-modal.component';
 
 import * as ProjectsActions from '../../store/projects.actions';
@@ -112,7 +112,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   private computeStats(tasks: Task[]): void {
     this.totalTasks = tasks.length;
-    this.completedTasks = tasks.filter((t) => t.status === 'done').length;
+    this.completedTasks = tasks.filter((t) => isTaskCompleted(t)).length;
     this.completedPercent =
       this.totalTasks > 0
         ? Math.round((this.completedTasks / this.totalTasks) * 100)
@@ -120,7 +120,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
     const now = new Date().toISOString().slice(0, 10);
     this.overdueTasks = tasks.filter(
-      (t) => t.deadline && t.deadline < now && t.status !== 'done'
+      (t) => t.deadline && t.deadline < now && !isTaskCompleted(t)
     ).length;
 
     // Recent tasks: sorted by updatedAt desc, take 5

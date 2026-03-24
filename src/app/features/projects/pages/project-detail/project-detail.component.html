@@ -209,8 +209,10 @@
               <span class="project-detail__task-title">{{ task.title }}</span>
               <!-- Status badge -->
               <span
-                class="project-detail__task-status project-detail__task-status--{{ task.status }}">
-                {{ getStatusLabel(task.status) }}
+                class="project-detail__task-status"
+                [style.background-color]="(task.status | statusColor) + '1a'"
+                [style.color]="task.status | statusColor">
+                {{ task.status }}
               </span>
               <!-- Deadline -->
               <span

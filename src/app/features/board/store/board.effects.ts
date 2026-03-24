@@ -7,10 +7,10 @@ import { catchError, exhaustMap, map, switchMap, take, tap, withLatestFrom } fro
 import { BoardService } from '../services/board.service';
 import { NotificationsService } from '../../../core/services/notifications.service';
 import { Column } from '../../../shared/models/column.model';
-import { Task } from '../../../shared/models/task.model';
+import { Task, isTaskCompleted } from '../../../shared/models/task.model';
 import { selectUser } from '../../auth/store';
 import * as BoardActions from './board.actions';
-import { selectTasksMap } from './board.selectors';
+import { selectTasksMap, selectColumns } from './board.selectors';
 
 /**
  * BoardEffects — side effects for board actions.
@@ -69,16 +69,21 @@ export class BoardEffects {
     )
   );
 
-  /** Updates an existing column in Firestore */
+  /** Updates an existing column in Firestore. If name changed, cascades to task statuses. */
   updateColumn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BoardActions.updateColumn),
       exhaustMap(({ projectId, columnId, changes }) =>
         this.boardService.updateColumn(projectId, columnId, changes).then(
-          () =>
-            BoardActions.updateColumnSuccess({
+          async () => {
+            // If column name changed, update all tasks in this column with new status
+            if (changes.name) {
+              await this.boardService.updateTasksStatus(projectId, columnId, changes.name);
+            }
+            return BoardActions.updateColumnSuccess({
               column: { id: columnId, projectId, ...changes } as Column,
-            }),
+            });
+          },
           (error) => BoardActions.updateColumnFailure({ error: error.message })
         )
       )
@@ -144,11 +149,11 @@ export class BoardEffects {
     this.actions$.pipe(
       ofType(BoardActions.updateTask),
       exhaustMap(({ projectId, taskId, changes }) => {
-        // Auto-set completedAt when task is marked done
+        // Auto-set completedAt when task is marked as completed
         const enriched = { ...changes };
-        if (enriched.status === 'done' && !enriched.completedAt) {
+        if (enriched.status && isTaskCompleted({ status: enriched.status }) && !enriched.completedAt) {
           enriched.completedAt = Date.now();
-        } else if (enriched.status && enriched.status !== 'done') {
+        } else if (enriched.status && !isTaskCompleted({ status: enriched.status })) {
           enriched.completedAt = null;
         }
 
@@ -188,8 +193,12 @@ export class BoardEffects {
   moveTask$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BoardActions.moveTask),
-      withLatestFrom(this.store.select(selectTasksMap)),
-      exhaustMap(([{ projectId, taskId, fromColumnId, toColumnId, newOrder }, tasksMap]) => {
+      withLatestFrom(this.store.select(selectTasksMap), this.store.select(selectColumns)),
+      exhaustMap(([{ projectId, taskId, fromColumnId, toColumnId, newOrder }, tasksMap, columns]) => {
+        // Resolve destination column name for status update
+        const destColumn = columns.find((c) => c.id === toColumnId);
+        const newStatus = destColumn ? destColumn.name : undefined;
+
         // Collect all tasks in both affected columns (after optimistic update)
         const affectedTasks: { id: string; order: number; columnId: string }[] = [];
 
@@ -208,7 +217,7 @@ export class BoardEffects {
         }
 
         return this.boardService
-          .moveTask(projectId, taskId, toColumnId, newOrder, affectedTasks)
+          .moveTask(projectId, taskId, toColumnId, newOrder, affectedTasks, newStatus)
           .then(
             () =>
               BoardActions.moveTaskSuccess({

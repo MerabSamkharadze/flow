@@ -28,8 +28,37 @@ export interface Task {
 /** Priority levels — determines visual badge color */
 export type TaskPriority = 'low' | 'medium' | 'high' | 'critical';
 
-/** Task lifecycle statuses */
-export type TaskStatus = 'todo' | 'in-progress' | 'in-review' | 'done';
+/**
+ * TaskStatus — now a dynamic string (column name).
+ * Kept as a type alias for backward compatibility.
+ * Old values ('todo', 'in-progress', 'in-review', 'done') still work.
+ */
+export type TaskStatus = string;
+
+/**
+ * Check if a task is considered "completed" based on its status string.
+ * Works with both legacy fixed statuses and dynamic column names.
+ */
+export function isTaskCompleted(task: { status: string }): boolean {
+  if (!task.status) return false;
+  const s = task.status.toLowerCase();
+  return s.includes('done') || s.includes('complete') || s.includes('finish');
+}
+
+/**
+ * Get a display-friendly color for any status string.
+ * Maps common keywords to colors, falls back to purple.
+ */
+export function getStatusColor(status: string): string {
+  if (!status) return '#6B778C';
+  const s = status.toLowerCase();
+  if (s.includes('done') || s.includes('complete') || s.includes('finish')) return '#36B37E';
+  if (s.includes('progress') || s.includes('doing') || s.includes('active')) return '#0052CC';
+  if (s.includes('review') || s.includes('testing') || s.includes('qa')) return '#FF8B00';
+  if (s.includes('hold') || s.includes('block') || s.includes('wait')) return '#FF5630';
+  if (s.includes('todo') || s.includes('backlog') || s.includes('new')) return '#6B778C';
+  return '#6554C0';
+}
 
 /** Issue type — categorizes the kind of work item */
 export type IssueType = 'task' | 'bug' | 'story' | 'epic';

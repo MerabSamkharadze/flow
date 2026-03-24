@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TasksState, tasksAdapter } from './tasks.reducer';
-import { Task, TaskPriority } from '../../../shared/models/task.model';
+import { Task, TaskPriority, isTaskCompleted } from '../../../shared/models/task.model';
 
 /**
  * Tasks Selectors — memoized selectors for reading tasks state.
@@ -151,7 +151,7 @@ function getTodayBounds(): { todayStart: number; todayEnd: number; weekEnd: numb
 export const selectOverdueTasks = createSelector(selectFilteredTasks, (tasks) => {
   const { todayStart } = getTodayBounds();
   return tasks.filter(
-    (t) => t.deadline && t.status !== 'done' && new Date(t.deadline).getTime() < todayStart
+    (t) => t.deadline && !isTaskCompleted(t) && new Date(t.deadline).getTime() < todayStart
   );
 });
 
@@ -189,9 +189,18 @@ export const selectNoDueDateTasks = createSelector(selectFilteredTasks, (tasks) 
   tasks.filter((t) => !t.deadline)
 );
 
+/** Unique status values from all tasks — for dynamic filter dropdowns */
+export const selectUniqueStatuses = createSelector(selectAllMyTasks, (tasks): string[] => {
+  const set = new Set<string>();
+  for (const t of tasks) {
+    if (t.status) set.add(t.status);
+  }
+  return Array.from(set).sort();
+});
+
 /** Count of active (non-done) tasks */
 export const selectActiveTasksCount = createSelector(selectAllMyTasks, (tasks) =>
-  tasks.filter((t) => t.status !== 'done').length
+  tasks.filter((t) => !isTaskCompleted(t)).length
 );
 
 // ---------------------------------------------------------------------------

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Column } from '../../../../shared/models/column.model';
 import { Task } from '../../../../shared/models/task.model';
@@ -35,7 +36,8 @@ import { selectCommentCounts } from '../../../tasks/store/tasks.selectors';
   styleUrls: ['./kanban-view.component.scss'],
   standalone: false
 })
-export class KanbanViewComponent implements OnInit {
+export class KanbanViewComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   projectId = '';
 
   /** Observable streams from NgRx store */
@@ -50,6 +52,9 @@ export class KanbanViewComponent implements OnInit {
 
   /** Unique labels from all tasks — passed to board-filters and task-form */
   uniqueLabels$!: Observable<string[]>;
+
+  /** Local column snapshot for status lookups */
+  private columnsSnapshot: Column[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -69,6 +74,11 @@ export class KanbanViewComponent implements OnInit {
     this.activeTask$ = this.store.select(selectActiveTask);
     this.commentCounts$ = this.store.select(selectCommentCounts);
     this.uniqueLabels$ = this.store.select(selectUniqueLabels);
+
+    // Keep local columns snapshot for status lookups
+    this.columns$.pipe(takeUntil(this.destroy$)).subscribe((cols) => {
+      this.columnsSnapshot = cols;
+    });
 
     // Dispatch loadBoard to fetch columns + tasks from Firestore
     this.store.dispatch(BoardActions.loadBoard({ projectId: this.projectId }));
@@ -180,7 +190,7 @@ export class KanbanViewComponent implements OnInit {
           columnId,
           assigneeId: taskData.assigneeId || null,
           priority: taskData.priority || 'medium',
-          status: 'todo',
+          status: this.getColumnName(columnId),
           issueType: taskData.issueType || 'task',
           createdAt: Date.now(),
           updatedAt: Date.now(),
@@ -267,5 +277,16 @@ export class KanbanViewComponent implements OnInit {
   /** TrackBy for column list */
   trackByColumnId(_index: number, column: Column): string {
     return column.id;
+  }
+
+  /** Get column name by ID — used to set task.status on creation */
+  private getColumnName(columnId: string): string {
+    const col = this.columnsSnapshot.find((c) => c.id === columnId);
+    return col ? col.name : 'To Do';
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

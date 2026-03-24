@@ -163,26 +163,55 @@ export class BoardService {
     taskId: string,
     toColumnId: string,
     newOrder: number,
-    affectedTasks: { id: string; order: number; columnId: string }[]
+    affectedTasks: { id: string; order: number; columnId: string }[],
+    newStatus?: string
   ): Promise<void> {
     const batch = this.firestore.firestore.batch();
     const tasksPath = `projects/${projectId}/tasks`;
 
-    // Update the moved task's columnId and order
+    // Update the moved task's columnId, order, and status
     const taskRef = this.firestore.firestore.doc(`${tasksPath}/${taskId}`);
-    batch.update(taskRef, {
+    const taskUpdate: any = {
       columnId: toColumnId,
       order: newOrder,
       updatedAt: Date.now(),
-    });
+    };
+    if (newStatus) {
+      taskUpdate.status = newStatus;
+    }
+    batch.update(taskRef, taskUpdate);
 
     // Update order for all other affected tasks in both columns
     for (const affected of affectedTasks) {
-      if (affected.id === taskId) continue; // already handled above
+      if (affected.id === taskId) continue;
       const ref = this.firestore.firestore.doc(`${tasksPath}/${affected.id}`);
       batch.update(ref, { order: affected.order });
     }
 
+    await batch.commit();
+  }
+
+  /**
+   * Batch update status for all tasks in a specific column.
+   * Used when a column is renamed — cascades the new name as status.
+   */
+  async updateTasksStatus(
+    projectId: string,
+    columnId: string,
+    newStatus: string
+  ): Promise<void> {
+    const tasksPath = `projects/${projectId}/tasks`;
+    const snapshot = await this.firestore.firestore
+      .collection(tasksPath)
+      .where('columnId', '==', columnId)
+      .get();
+
+    if (snapshot.empty) return;
+
+    const batch = this.firestore.firestore.batch();
+    for (const doc of snapshot.docs) {
+      batch.update(doc.ref, { status: newStatus });
+    }
     await batch.commit();
   }
 }

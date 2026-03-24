@@ -8,6 +8,7 @@ import { catchError, exhaustMap, map, switchMap, tap, withLatestFrom, take, merg
 import { ProjectsService } from '../services/projects.service';
 import { Project } from '../../../shared/models/project.model';
 import { BoardService } from '../../board/services/board.service';
+import { isTaskCompleted } from '../../../shared/models/task.model';
 import { NotificationsService } from '../../../core/services/notifications.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { selectUser } from '../../auth/store';
@@ -268,7 +269,7 @@ export class ProjectsEffects {
                 ProjectsActions.setProjectProgress({
                   projectId: project.id,
                   total: tasks.length,
-                  completed: tasks.filter((t) => t.status === 'done').length,
+                  completed: tasks.filter((t) => isTaskCompleted(t)).length,
                 })
               )
             )
@@ -291,7 +292,7 @@ export class ProjectsEffects {
                 ProjectsActions.setProjectProgress({
                   projectId,
                   total: tasks.length,
-                  completed: tasks.filter((t) => t.status === 'done').length,
+                  completed: tasks.filter((t) => isTaskCompleted(t)).length,
                 })
               )
             )

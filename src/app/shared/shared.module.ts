@@ -13,6 +13,7 @@ import { TagInputComponent } from './components/tag-input/tag-input.component';
 import { BurndownChartComponent } from './components/burndown-chart/burndown-chart.component';
 import { MentionDropdownComponent } from './components/mention-dropdown/mention-dropdown.component';
 import { MentionPipe } from './pipes/mention.pipe';
+import { StatusColorPipe } from './pipes/status-color.pipe';
 
 /**
  * SharedModule — reusable components, directives, and pipes.
@@ -31,6 +32,7 @@ import { MentionPipe } from './pipes/mention.pipe';
     BurndownChartComponent,
     MentionDropdownComponent,
     MentionPipe,
+    StatusColorPipe,
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,7 @@ import { MentionPipe } from './pipes/mention.pipe';
     BurndownChartComponent,
     MentionDropdownComponent,
     MentionPipe,
+    StatusColorPipe,
   ],
 })
 export class SharedModule {}

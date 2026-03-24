@@ -14,9 +14,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Task, Subtask, TaskPriority, TaskStatus, IssueType, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
+import { Task, Subtask, TaskPriority, IssueType, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
 import { TimeEntry } from '../../../../shared/models/time-entry.model';
-import { selectAllTasks } from '../../store/board.selectors';
+import { Column } from '../../../../shared/models/column.model';
+import { selectAllTasks, selectColumns } from '../../store/board.selectors';
 import { Comment } from '../../../../shared/models/comment.model';
 import { Member } from '../../../../shared/models/member.model';
 import { ProjectsService } from '../../../projects/services/projects.service';
@@ -51,8 +52,10 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
 
   /** Available priorities for the dropdown */
   readonly priorities: TaskPriority[] = ['low', 'medium', 'high', 'critical'];
-  readonly statuses: TaskStatus[] = ['todo', 'in-progress', 'in-review', 'done'];
   readonly issueTypes: IssueType[] = ['task', 'bug', 'story', 'epic'];
+
+  /** Dynamic statuses from project columns */
+  columns: Column[] = [];
   readonly priorityConfig = PRIORITY_CONFIG;
   readonly issueTypeConfig = ISSUE_TYPE_CONFIG;
 
@@ -106,6 +109,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
     this.loadComments();
     this.loadTimeEntries();
     this.loadMembers();
+    this.loadColumns();
 
     this.store
       .select(selectUser)
@@ -274,6 +278,16 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
     return entry.id;
   }
 
+  trackByColumnId(_index: number, col: Column): string {
+    return col.id;
+  }
+
+  /** Resolve columnId from a status string (column name) */
+  private getColumnIdForStatus(status: string): string {
+    const col = this.columns.find((c) => c.name === status);
+    return col ? col.id : this.task.columnId;
+  }
+
   /** Subtask completion progress (e.g., "2 / 5") */
   get subtaskProgress(): string {
     const done = this.subtasks.filter((s) => s.completed).length;
@@ -295,6 +309,16 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
     if (!target.closest('.assignee-autocomplete')) {
       this.showAssigneeDropdown = false;
     }
+  }
+
+  /** Load project columns for dynamic status dropdown */
+  private loadColumns(): void {
+    this.store
+      .select(selectColumns)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((columns) => {
+        this.columns = columns;
+      });
   }
 
   /** Load project members from Firestore */
@@ -380,6 +404,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
       description: formValue.description,
       priority: formValue.priority,
       status: formValue.status,
+      columnId: this.getColumnIdForStatus(formValue.status),
       issueType: formValue.issueType || 'task',
       assigneeId: formValue.assigneeId || null,
       startDate: formValue.startDate || null,

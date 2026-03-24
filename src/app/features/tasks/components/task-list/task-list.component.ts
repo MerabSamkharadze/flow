@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Task, PRIORITY_CONFIG, TaskPriority } from '../../../../shared/models/task.model';
+import { Task, PRIORITY_CONFIG, TaskPriority, isTaskCompleted } from '../../../../shared/models/task.model';
 import { Project } from '../../../../shared/models/project.model';
 
 /**
@@ -60,7 +60,7 @@ export class TaskListComponent {
 
   /** Whether a task's deadline is overdue */
   isOverdue(task: Task): boolean {
-    if (!task.deadline || task.status === 'done') return false;
+    if (!task.deadline || isTaskCompleted(task)) return false;
     return new Date(task.deadline).getTime() < Date.now();
   }
 

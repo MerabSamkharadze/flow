@@ -58,8 +58,9 @@ describe('BoardEffects', () => {
       'getColumns', 'getTasks',
       'addColumn', 'updateColumn', 'deleteColumn',
       'addTask', 'updateTask', 'deleteTask',
-      'moveTask',
+      'moveTask', 'updateTasksStatus',
     ]);
+    mockBoardService.updateTasksStatus.and.returnValue(Promise.resolve());
 
     mockNotificationsService = jasmine.createSpyObj('NotificationsService', ['createNotification']);
 

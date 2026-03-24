@@ -14,6 +14,7 @@ import { TaskFilters } from '../../models/task-filters.model';
 })
 export class TaskFiltersComponent implements OnInit, OnDestroy {
   @Input() projects: Project[] = [];
+  @Input() availableStatuses: string[] = [];
   @Output() filtersChanged = new EventEmitter<TaskFilters>();
 
   searchControl = new FormControl('');
@@ -24,7 +25,12 @@ export class TaskFiltersComponent implements OnInit, OnDestroy {
   sortBy = 'deadline';
   sortDir: 'asc' | 'desc' = 'asc';
 
-  statuses = ['todo', 'in-progress', 'in-review', 'done'];
+  /** Dynamic statuses — populated from input or fallback defaults */
+  get statuses(): string[] {
+    return this.availableStatuses.length > 0
+      ? this.availableStatuses
+      : ['todo', 'in-progress', 'in-review', 'done'];
+  }
   priorities: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
   sortOptions = [
     { value: 'deadline', label: 'Deadline' },

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, combineLatest, map } from 'rxjs';
 import { Column } from '../../../../shared/models/column.model';
-import { Task, TaskPriority, TaskStatus, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
+import { Task, TaskPriority, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG, isTaskCompleted } from '../../../../shared/models/task.model';
 import { hashLabelColor } from '../../../../shared/components/tag-input/tag-input.component';
 import { BoardFilters } from '../../models/board-filters.model';
 import * as BoardActions from '../../store/board.actions';
@@ -26,12 +26,7 @@ const PRIORITY_ORDER: Record<TaskPriority, number> = {
   low: 3,
 };
 
-const STATUS_ORDER: Record<TaskStatus, number> = {
-  'todo': 0,
-  'in-progress': 1,
-  'in-review': 2,
-  'done': 3,
-};
+// Status sort: no fixed order — use alphabetical
 
 /**
  * ListViewComponent — table-based view of board tasks.
@@ -128,7 +123,7 @@ export class ListViewComponent implements OnInit {
         case 'issueType':
           return dir * (a.issueType || 'task').localeCompare(b.issueType || 'task');
         case 'status':
-          return dir * (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+          return dir * (a.status || '').localeCompare(b.status || '');
         case 'priority':
           return dir * (PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
         case 'assigneeId':
@@ -208,13 +203,8 @@ export class ListViewComponent implements OnInit {
   // Display helpers
   // ---------------------------------------------------------------------------
 
-  getStatusLabel(status: TaskStatus): string {
-    switch (status) {
-      case 'todo': return 'To Do';
-      case 'in-progress': return 'In Progress';
-      case 'in-review': return 'In Review';
-      case 'done': return 'Done';
-    }
+  getStatusLabel(status: string): string {
+    return status || 'Unknown';
   }
 
   formatDeadline(deadline: string | null): string {
@@ -227,7 +217,7 @@ export class ListViewComponent implements OnInit {
 
   isOverdue(task: Task): boolean {
     if (!task.deadline) return false;
-    return new Date(task.deadline).getTime() < Date.now() && task.status !== 'done';
+    return new Date(task.deadline).getTime() < Date.now() && !isTaskCompleted(task);
   }
 
   getInitials(assigneeId: string | null): string {

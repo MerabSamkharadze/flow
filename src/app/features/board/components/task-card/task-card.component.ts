@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { Task, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
+import { Task, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG, isTaskCompleted } from '../../../../shared/models/task.model';
 import { hashLabelColor } from '../../../../shared/components/tag-input/tag-input.component';
 
 /**
@@ -48,7 +48,7 @@ export class TaskCardComponent {
   /** Whether the deadline is overdue */
   get isOverdue(): boolean {
     if (!this.task.deadline) return false;
-    return new Date(this.task.deadline).getTime() < Date.now() && this.task.status !== 'done';
+    return new Date(this.task.deadline).getTime() < Date.now() && !isTaskCompleted(this.task);
   }
 
   /** Subtask completion count */

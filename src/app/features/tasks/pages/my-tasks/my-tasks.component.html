@@ -31,6 +31,7 @@
   <!-- Filters bar -->
   <app-task-filters
     [projects]="(projects$ | async) || []"
+    [availableStatuses]="(uniqueStatuses$ | async) || []"
     (filtersChanged)="onFiltersChanged($event)">
   </app-task-filters>
 

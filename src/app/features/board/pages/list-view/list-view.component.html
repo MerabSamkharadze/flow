@@ -114,8 +114,10 @@
 
                 <!-- Status badge -->
                 <td class="board-list-view__cell">
-                  <span class="board-list-view__badge board-list-view__badge--status-{{ task.status }}">
-                    {{ getStatusLabel(task.status) }}
+                  <span class="board-list-view__badge"
+                        [style.background-color]="(task.status | statusColor) + '1a'"
+                        [style.color]="task.status | statusColor">
+                    {{ task.status }}
                   </span>
                 </td>
 

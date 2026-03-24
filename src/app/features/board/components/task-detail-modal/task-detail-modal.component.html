@@ -61,8 +61,8 @@
         <div class="task-modal__field task-modal__field--half">
           <label class="task-modal__label">Status</label>
           <select class="task-modal__select" formControlName="status">
-            <option *ngFor="let s of statuses; trackBy: trackByIndex" [value]="s">
-              {{ s }}
+            <option *ngFor="let col of columns; trackBy: trackByColumnId" [value]="col.name">
+              {{ col.name }}
             </option>
           </select>
         </div>

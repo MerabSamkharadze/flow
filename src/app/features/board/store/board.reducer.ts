@@ -260,7 +260,10 @@ export const boardReducer = createReducer(
     const task = (state.tasks[fromColumnId] || []).find((t) => t.id === taskId);
     if (!task) return { ...state, previousTasks };
 
-    const movedTask: Task = { ...task, columnId: toColumnId, order: newOrder, updatedAt: Date.now() };
+    // Set status to destination column name
+    const destColumn = state.columns.find((c) => c.id === toColumnId);
+    const newStatus = destColumn ? destColumn.name : task.status;
+    const movedTask: Task = { ...task, columnId: toColumnId, order: newOrder, status: newStatus, updatedAt: Date.now() };
 
     // Remove from source column
     const fromTasks = (state.tasks[fromColumnId] || []).filter((t) => t.id !== taskId);

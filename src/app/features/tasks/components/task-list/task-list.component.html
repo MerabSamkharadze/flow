@@ -22,7 +22,7 @@
       <tr
         *ngFor="let task of tasks; trackBy: trackByTaskId"
         class="task-list__row"
-        [class.task-list__row--done]="task.status === 'done'"
+        [class.task-list__row--done]="task.status?.toLowerCase()?.includes('done')"
         [class.task-list__row--overdue]="isOverdue(task)"
         (click)="onRowClick(task)">
 
@@ -58,7 +58,9 @@
 
         <!-- Status -->
         <td class="task-list__td task-list__td--status">
-          <span class="task-list__status-badge task-list__status-badge--{{ task.status }}">
+          <span class="task-list__status-badge"
+                [style.background-color]="(task.status | statusColor) + '1a'"
+                [style.color]="task.status | statusColor">
             {{ task.status }}
           </span>
         </td>
@@ -66,7 +68,7 @@
         <!-- Actions -->
         <td class="task-list__td task-list__td--actions">
           <button
-            *ngIf="task.status !== 'done'"
+            *ngIf="!task.status?.toLowerCase()?.includes('done')"
             class="task-list__done-btn"
             title="Mark as Done"
             (click)="onMarkDone($event, task)">
@@ -75,7 +77,7 @@
               <polyline points="20 6 9 17 4 12"/>
             </svg>
           </button>
-          <span *ngIf="task.status === 'done'" class="task-list__done-label">Done</span>
+          <span *ngIf="task.status?.toLowerCase()?.includes('done')" class="task-list__done-label">Done</span>
         </td>
 
       </tr>
