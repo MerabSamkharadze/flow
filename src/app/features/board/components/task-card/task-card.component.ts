@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, HostListener, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { Task, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG, isTaskCompleted } from '../../../../shared/models/task.model';
 import { Column } from '../../../../shared/models/column.model';
 import { hashLabelColor } from '../../../../shared/components/tag-input/tag-input.component';
@@ -31,6 +31,12 @@ export class TaskCardComponent {
   menuOpen = false;
   moveSubmenuOpen = false;
   showDeleteConfirm = false;
+
+  /** Fixed-position dropdown coordinates */
+  dropdownTop = 0;
+  dropdownLeft = 0;
+
+  @ViewChild('menuBtn') menuBtnRef!: ElementRef<HTMLButtonElement>;
 
   constructor(private elRef: ElementRef) {}
 
@@ -104,8 +110,30 @@ export class TaskCardComponent {
 
   toggleMenu(event: Event): void {
     event.stopPropagation();
+    if (!this.menuOpen) {
+      this.computeDropdownPosition();
+    }
     this.menuOpen = !this.menuOpen;
     this.moveSubmenuOpen = false;
+  }
+
+  private computeDropdownPosition(): void {
+    const btn = this.menuBtnRef?.nativeElement;
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const dropdownHeight = 200; // approximate max height
+    const spaceBelow = window.innerHeight - rect.bottom;
+
+    // Open downward from button, or upward if not enough space
+    if (spaceBelow >= dropdownHeight) {
+      this.dropdownTop = rect.bottom + 4;
+    } else {
+      this.dropdownTop = rect.top - dropdownHeight;
+    }
+    // Align right edge with button right edge
+    this.dropdownLeft = rect.right - 180; // 180 ~ dropdown min-width + padding
+    // Clamp to viewport
+    if (this.dropdownLeft < 8) this.dropdownLeft = 8;
   }
 
   @HostListener('document:click', ['$event'])
