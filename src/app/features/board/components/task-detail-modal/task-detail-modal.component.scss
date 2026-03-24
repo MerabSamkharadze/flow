@@ -304,6 +304,246 @@
   }
 
   // --------------------------------------------------
+  // Element: time tracking
+  // --------------------------------------------------
+  &__time-summary {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-primary, $color-text-primary);
+  }
+
+  &__time-progress {
+    margin-bottom: $spacing-xs;
+  }
+
+  &__time-bar {
+    width: 100%;
+    height: 6px;
+    background-color: var(--color-gray-200, $color-gray-200);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &__time-fill {
+    height: 100%;
+    background-color: $color-success;
+    border-radius: 3px;
+    max-width: 100%;
+    transition: width 0.3s ease;
+
+    &--over {
+      background-color: $color-error;
+    }
+  }
+
+  &__time-estimate {
+    @include flex(row, center);
+    gap: $spacing-xs;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__time-est-label {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary, $color-text-secondary);
+  }
+
+  &__time-est-value {
+    @include button-reset;
+    @include flex(row, center);
+    gap: $spacing-xs;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    cursor: pointer;
+
+    svg {
+      opacity: 0.5;
+    }
+
+    &:hover svg {
+      opacity: 1;
+    }
+  }
+
+  &__time-est-input {
+    width: 60px;
+    border: 1px solid $color-primary;
+    border-radius: $border-radius-sm;
+    padding: 2px $spacing-xs;
+    font-size: $font-size-xs;
+    font-family: $font-family-base;
+    color: var(--color-text-primary, $color-text-primary);
+    outline: none;
+    text-align: center;
+  }
+
+  &__time-est-unit {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary, $color-text-secondary);
+  }
+
+  &__time-form {
+    @include flex(row, center);
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+  }
+
+  &__time-input {
+    width: 48px;
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-sm;
+    padding: $spacing-xs;
+    font-size: $font-size-xs;
+    font-family: $font-family-base;
+    color: var(--color-text-primary, $color-text-primary);
+    outline: none;
+    text-align: center;
+
+    &:focus {
+      border-color: $color-primary;
+    }
+  }
+
+  &__time-unit {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary, $color-text-secondary);
+    font-weight: $font-weight-medium;
+  }
+
+  &__time-select {
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-sm;
+    padding: $spacing-xs;
+    font-size: $font-size-xs;
+    font-family: $font-family-base;
+    color: var(--color-text-primary, $color-text-primary);
+    background-color: var(--color-surface, $color-surface);
+    cursor: pointer;
+    outline: none;
+
+    &:focus {
+      border-color: $color-primary;
+    }
+  }
+
+  &__time-desc {
+    flex: 1;
+    min-width: 100px;
+    border: 1px solid var(--color-border, $color-border);
+    border-radius: $border-radius-sm;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+    font-family: $font-family-base;
+    color: var(--color-text-primary, $color-text-primary);
+    outline: none;
+
+    &:focus {
+      border-color: $color-primary;
+    }
+
+    &::placeholder {
+      color: var(--color-text-disabled, $color-text-disabled);
+    }
+  }
+
+  &__time-log-btn {
+    @include button-reset;
+    @include focus-ring;
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-inverse;
+    background-color: $color-primary;
+    border-radius: $border-radius-sm;
+    white-space: nowrap;
+    transition: background-color $transition-fast;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__time-entries {
+    @include flex-column;
+    gap: 0;
+    margin-top: $spacing-sm;
+  }
+
+  &__time-entry {
+    @include flex(row, center);
+    gap: $spacing-sm;
+    padding: $spacing-xs 0;
+    border-bottom: 1px solid var(--color-gray-100, $color-gray-100);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__time-entry-avatar {
+    @include flex-center;
+    width: 24px;
+    height: 24px;
+    border-radius: $border-radius-full;
+    background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+    color: $color-text-inverse;
+    font-size: 10px;
+    font-weight: $font-weight-bold;
+    flex-shrink: 0;
+  }
+
+  &__time-entry-info {
+    flex: 1;
+    min-width: 0;
+    font-size: $font-size-xs;
+    color: var(--color-text-primary, $color-text-primary);
+  }
+
+  &__time-entry-name {
+    font-weight: $font-weight-semibold;
+  }
+
+  &__time-entry-time {
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    margin-left: $spacing-xs;
+  }
+
+  &__time-entry-desc {
+    color: var(--color-text-secondary, $color-text-secondary);
+    margin-left: $spacing-xs;
+  }
+
+  &__time-entry-date {
+    font-size: $font-size-xs;
+    color: var(--color-text-disabled, $color-text-disabled);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__time-entry-delete {
+    @include button-reset;
+    @include flex-center;
+    width: 20px;
+    height: 20px;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-sm;
+    color: var(--color-text-disabled, $color-text-disabled);
+    flex-shrink: 0;
+    transition: color $transition-fast, background-color $transition-fast;
+
+    &:hover {
+      color: $color-error;
+      background-color: rgba($color-error, 0.08);
+    }
+  }
+
+  // --------------------------------------------------
   // Element: footer
   // --------------------------------------------------
   &__footer {

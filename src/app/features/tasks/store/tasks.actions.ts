@@ -3,6 +3,7 @@ import { Task, TaskStatus } from '../../../shared/models/task.model';
 import { Subtask } from '../../../shared/models/subtask.model';
 import { Project } from '../../../shared/models/project.model';
 import { Comment } from '../../../shared/models/comment.model';
+import { TimeEntry } from '../../../shared/models/time-entry.model';
 import { TaskFilters } from '../models/task-filters.model';
 
 /**
@@ -225,5 +226,62 @@ export const deleteCommentSuccess = createAction(
 
 export const deleteCommentFailure = createAction(
   '[Tasks API] Delete Comment Failure',
+  props<{ error: string }>()
+);
+
+// ---------------------------------------------------------------------------
+// Load time entries for a specific task
+// ---------------------------------------------------------------------------
+
+export const loadTimeEntries = createAction(
+  '[Task Detail] Load Time Entries',
+  props<{ projectId: string; taskId: string }>()
+);
+
+export const loadTimeEntriesSuccess = createAction(
+  '[Tasks API] Load Time Entries Success',
+  props<{ taskId: string; entries: TimeEntry[] }>()
+);
+
+export const loadTimeEntriesFailure = createAction(
+  '[Tasks API] Load Time Entries Failure',
+  props<{ error: string }>()
+);
+
+// ---------------------------------------------------------------------------
+// Log time
+// ---------------------------------------------------------------------------
+
+export const logTime = createAction(
+  '[Task Detail] Log Time',
+  props<{ projectId: string; taskId: string; entry: Omit<TimeEntry, 'id'> }>()
+);
+
+export const logTimeSuccess = createAction(
+  '[Tasks API] Log Time Success',
+  props<{ taskId: string; entry: TimeEntry }>()
+);
+
+export const logTimeFailure = createAction(
+  '[Tasks API] Log Time Failure',
+  props<{ error: string }>()
+);
+
+// ---------------------------------------------------------------------------
+// Delete time entry
+// ---------------------------------------------------------------------------
+
+export const deleteTimeEntry = createAction(
+  '[Task Detail] Delete Time Entry',
+  props<{ projectId: string; taskId: string; entryId: string }>()
+);
+
+export const deleteTimeEntrySuccess = createAction(
+  '[Tasks API] Delete Time Entry Success',
+  props<{ taskId: string; entryId: string }>()
+);
+
+export const deleteTimeEntryFailure = createAction(
+  '[Tasks API] Delete Time Entry Failure',
   props<{ error: string }>()
 );

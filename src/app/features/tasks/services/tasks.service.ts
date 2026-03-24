@@ -4,6 +4,7 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Task, TaskStatus } from '../../../shared/models/task.model';
 import { Subtask } from '../../../shared/models/subtask.model';
+import { TimeEntry } from '../../../shared/models/time-entry.model';
 import { Project } from '../../../shared/models/project.model';
 
 /**
@@ -174,6 +175,58 @@ export class TasksService {
   ): Promise<void> {
     await this.firestore
       .doc(`projects/${projectId}/tasks/${taskId}/subtasks/${subtaskId}`)
+      .delete();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Time Entries
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Get time entries for a task as a real-time observable.
+   */
+  getTimeEntries(projectId: string, taskId: string): Observable<TimeEntry[]> {
+    return this.firestore
+      .collection<TimeEntry>(
+        `projects/${projectId}/tasks/${taskId}/timeEntries`,
+        (ref) => ref.orderBy('loggedAt', 'desc')
+      )
+      .snapshotChanges()
+      .pipe(
+        map((actions) =>
+          actions.map((a) => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { ...data, id };
+          })
+        )
+      );
+  }
+
+  /**
+   * Log time for a task. Returns the created entry with Firestore ID.
+   */
+  async logTime(
+    projectId: string,
+    taskId: string,
+    entry: Omit<TimeEntry, 'id'>
+  ): Promise<TimeEntry> {
+    const docRef = await this.firestore
+      .collection(`projects/${projectId}/tasks/${taskId}/timeEntries`)
+      .add(entry);
+    return { ...entry, id: docRef.id } as TimeEntry;
+  }
+
+  /**
+   * Delete a time entry.
+   */
+  async deleteTimeEntry(
+    projectId: string,
+    taskId: string,
+    entryId: string
+  ): Promise<void> {
+    await this.firestore
+      .doc(`projects/${projectId}/tasks/${taskId}/timeEntries/${entryId}`)
       .delete();
   }
 }

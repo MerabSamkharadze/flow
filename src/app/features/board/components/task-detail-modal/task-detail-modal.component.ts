@@ -15,12 +15,13 @@ import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Task, Subtask, TaskPriority, TaskStatus, IssueType, PRIORITY_CONFIG, ISSUE_TYPE_CONFIG } from '../../../../shared/models/task.model';
+import { TimeEntry } from '../../../../shared/models/time-entry.model';
 import { selectAllTasks } from '../../store/board.selectors';
 import { Comment } from '../../../../shared/models/comment.model';
 import { Member } from '../../../../shared/models/member.model';
 import { ProjectsService } from '../../../projects/services/projects.service';
 import * as TasksActions from '../../../tasks/store/tasks.actions';
-import { selectCommentsByTask } from '../../../tasks/store/tasks.selectors';
+import { selectCommentsByTask, selectTimeEntriesByTask, selectTotalLoggedByTask } from '../../../tasks/store/tasks.selectors';
 import { selectUser } from '../../../auth/store';
 
 /**
@@ -76,6 +77,15 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
   taskLabels: string[] = [];
   labelSuggestions: string[] = [];
 
+  /** Time tracking */
+  timeEntries$!: Observable<TimeEntry[]>;
+  totalLogged$!: Observable<{ hours: number; minutes: number }>;
+  logHours = 0;
+  logMinutes = 0;
+  logDescription = '';
+  editingEstimate = false;
+  estimatedHoursInput = 0;
+
   /** Assignee autocomplete */
   members: Member[] = [];
   filteredMembers: Member[] = [];
@@ -94,6 +104,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.initForm();
     this.loadComments();
+    this.loadTimeEntries();
     this.loadMembers();
 
     this.store
@@ -112,6 +123,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['task'] && !changes['task'].firstChange) {
       this.initForm();
       this.loadComments();
+      this.loadTimeEntries();
     }
   }
 
@@ -190,6 +202,76 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
         taskId: this.task.id,
       })
     );
+  }
+
+  /** Load time entries from the store */
+  private loadTimeEntries(): void {
+    this.timeEntries$ = this.store.select(selectTimeEntriesByTask(this.task.id));
+    this.totalLogged$ = this.store.select(selectTotalLoggedByTask(this.task.id));
+    this.estimatedHoursInput = this.task.estimatedHours || 0;
+    this.store.dispatch(
+      TasksActions.loadTimeEntries({
+        projectId: this.task.projectId,
+        taskId: this.task.id,
+      })
+    );
+  }
+
+  /** Log time entry */
+  onLogTime(): void {
+    if (this.logHours === 0 && this.logMinutes === 0) return;
+    this.store.dispatch(
+      TasksActions.logTime({
+        projectId: this.task.projectId,
+        taskId: this.task.id,
+        entry: {
+          userId: this.currentUserId,
+          userName: this.currentUserName,
+          hours: this.logHours,
+          minutes: this.logMinutes,
+          description: this.logDescription.trim(),
+          loggedAt: Date.now(),
+        },
+      })
+    );
+    this.logHours = 0;
+    this.logMinutes = 0;
+    this.logDescription = '';
+  }
+
+  /** Delete a time entry */
+  onDeleteTimeEntry(entryId: string): void {
+    this.store.dispatch(
+      TasksActions.deleteTimeEntry({
+        projectId: this.task.projectId,
+        taskId: this.task.id,
+        entryId,
+      })
+    );
+  }
+
+  /** Start editing estimated hours */
+  startEditEstimate(): void {
+    this.editingEstimate = true;
+    this.estimatedHoursInput = this.task.estimatedHours || 0;
+  }
+
+  /** Save estimated hours */
+  saveEstimate(): void {
+    this.editingEstimate = false;
+    // This will be included in the next onSave()
+  }
+
+  /** Format a time entry's total for display */
+  formatEntryTime(entry: TimeEntry): string {
+    const parts: string[] = [];
+    if (entry.hours > 0) parts.push(`${entry.hours}h`);
+    if (entry.minutes > 0) parts.push(`${entry.minutes}m`);
+    return parts.length > 0 ? parts.join(' ') : '0m';
+  }
+
+  trackByEntryId(_index: number, entry: TimeEntry): string {
+    return entry.id;
   }
 
   /** Subtask completion progress (e.g., "2 / 5") */
@@ -302,6 +384,7 @@ export class TaskDetailModalComponent implements OnInit, OnChanges, OnDestroy {
       assigneeId: formValue.assigneeId || null,
       startDate: formValue.startDate || null,
       deadline: formValue.deadline || null,
+      estimatedHours: this.estimatedHoursInput || null,
       labels: [...this.taskLabels],
       subtasks: this.subtasks,
       updatedAt: Date.now(),

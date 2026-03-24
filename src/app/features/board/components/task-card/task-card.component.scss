@@ -132,6 +132,18 @@
     }
   }
 
+  &__time {
+    @include flex(row, center);
+    gap: 2px;
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary, $color-text-secondary);
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
   &__subtasks {
     font-size: $font-size-xs;
     color: var(--color-text-secondary, $color-text-secondary);

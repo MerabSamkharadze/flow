@@ -3,6 +3,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Task } from '../../../shared/models/task.model';
 import { Subtask } from '../../../shared/models/subtask.model';
 import { Comment } from '../../../shared/models/comment.model';
+import { TimeEntry } from '../../../shared/models/time-entry.model';
 import { Project } from '../../../shared/models/project.model';
 import { TaskFilters, EMPTY_TASK_FILTERS } from '../models/task-filters.model';
 import * as TasksActions from './tasks.actions';
@@ -17,6 +18,7 @@ import * as TasksActions from './tasks.actions';
 export interface TasksState extends EntityState<Task> {
   subtasks: { [taskId: string]: Subtask[] };
   comments: { [taskId: string]: Comment[] };
+  timeEntries: { [taskId: string]: TimeEntry[] };
   projects: Project[];
   filters: TaskFilters;
   loading: boolean;
@@ -35,6 +37,7 @@ export const tasksAdapter: EntityAdapter<Task> = createEntityAdapter<Task>({
 export const initialTasksState: TasksState = tasksAdapter.getInitialState({
   subtasks: {},
   comments: {},
+  timeEntries: {},
   projects: [],
   filters: { ...EMPTY_TASK_FILTERS },
   loading: false,
@@ -227,6 +230,54 @@ export const tasksReducer = createReducer(
   })),
 
   on(TasksActions.deleteCommentFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Load time entries
+  // ---------------------------------------------------------------------------
+
+  on(TasksActions.loadTimeEntriesSuccess, (state, { taskId, entries }) => ({
+    ...state,
+    timeEntries: { ...state.timeEntries, [taskId]: entries },
+  })),
+
+  on(TasksActions.loadTimeEntriesFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Log time
+  // ---------------------------------------------------------------------------
+
+  on(TasksActions.logTimeSuccess, (state, { taskId, entry }) => ({
+    ...state,
+    timeEntries: {
+      ...state.timeEntries,
+      [taskId]: [...(state.timeEntries[taskId] || []), entry],
+    },
+  })),
+
+  on(TasksActions.logTimeFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  // ---------------------------------------------------------------------------
+  // Delete time entry
+  // ---------------------------------------------------------------------------
+
+  on(TasksActions.deleteTimeEntrySuccess, (state, { taskId, entryId }) => ({
+    ...state,
+    timeEntries: {
+      ...state.timeEntries,
+      [taskId]: (state.timeEntries[taskId] || []).filter((e) => e.id !== entryId),
+    },
+  })),
+
+  on(TasksActions.deleteTimeEntryFailure, (state, { error }) => ({
     ...state,
     error,
   }))

@@ -20,6 +20,7 @@ export interface Task {
   startDate: string | null;  // ISO date string for timeline start (optional)
   completedAt: number | null; // timestamp when task was marked 'done'
   order: number;             // sort position within the column
+  estimatedHours: number | null; // estimated time in hours (for time tracking)
   labels: string[];        // e.g. ['bug', 'frontend']
   subtasks: Subtask[];
 }

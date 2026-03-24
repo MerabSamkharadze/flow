@@ -234,6 +234,30 @@ export const selectCommentsByTask = (taskId: string) =>
 export const selectCommentCountByTask = (taskId: string) =>
   createSelector(selectCommentsByTask(taskId), (comments) => comments.length);
 
+// ---------------------------------------------------------------------------
+// Time entry selectors
+// ---------------------------------------------------------------------------
+
+/** All time entries dictionary */
+export const selectAllTimeEntries = createSelector(
+  selectTasksState,
+  (state) => state.timeEntries
+);
+
+/** Factory selector: time entries for a specific task */
+export const selectTimeEntriesByTask = (taskId: string) =>
+  createSelector(selectAllTimeEntries, (entries) => entries[taskId] || []);
+
+/** Factory selector: total logged hours for a specific task */
+export const selectTotalLoggedByTask = (taskId: string) =>
+  createSelector(selectTimeEntriesByTask(taskId), (entries) => {
+    let totalMinutes = 0;
+    for (const e of entries) {
+      totalMinutes += e.hours * 60 + e.minutes;
+    }
+    return { hours: Math.floor(totalMinutes / 60), minutes: totalMinutes % 60 };
+  });
+
 /** All comment counts as a dictionary keyed by task ID */
 export const selectCommentCounts = createSelector(
   selectAllComments,

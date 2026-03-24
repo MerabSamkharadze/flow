@@ -6,8 +6,8 @@ import { catchError, exhaustMap, map, switchMap, take, tap, withLatestFrom } fro
 
 import { TasksService } from '../services/tasks.service';
 import { CommentsService } from '../services/comments.service';
-import { NotificationsService } from '../../../core/services/notifications.service';
-import { ToastService } from '../../../core/services/toast.service';
+import { NotificationsService } from '@core/services/notifications.service';
+import { ToastService } from '@core/services/toast.service';
 import { ProjectsService } from '../../projects/services/projects.service';
 import { selectAllTasks } from '../../board/store/board.selectors';
 import * as TasksActions from './tasks.actions';
@@ -278,6 +278,56 @@ export class TasksEffects {
         })
       ),
     { dispatch: false }
+  );
+
+  // ---------------------------------------------------------------------------
+  // Load time entries — real-time stream for a specific task
+  // ---------------------------------------------------------------------------
+
+  loadTimeEntries$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.loadTimeEntries),
+      switchMap(({ projectId, taskId }) =>
+        this.tasksService.getTimeEntries(projectId, taskId).pipe(
+          map((entries) => TasksActions.loadTimeEntriesSuccess({ taskId, entries })),
+          catchError((error) =>
+            of(TasksActions.loadTimeEntriesFailure({ error: error.message }))
+          )
+        )
+      )
+    )
+  );
+
+  // ---------------------------------------------------------------------------
+  // Log time
+  // ---------------------------------------------------------------------------
+
+  logTime$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.logTime),
+      exhaustMap(({ projectId, taskId, entry }) =>
+        this.tasksService.logTime(projectId, taskId, entry).then(
+          (created) => TasksActions.logTimeSuccess({ taskId, entry: created }),
+          (error) => TasksActions.logTimeFailure({ error: error.message })
+        )
+      )
+    )
+  );
+
+  // ---------------------------------------------------------------------------
+  // Delete time entry
+  // ---------------------------------------------------------------------------
+
+  deleteTimeEntry$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.deleteTimeEntry),
+      exhaustMap(({ projectId, taskId, entryId }) =>
+        this.tasksService.deleteTimeEntry(projectId, taskId, entryId).then(
+          () => TasksActions.deleteTimeEntrySuccess({ taskId, entryId }),
+          (error) => TasksActions.deleteTimeEntryFailure({ error: error.message })
+        )
+      )
+    )
   );
 
   // ---------------------------------------------------------------------------

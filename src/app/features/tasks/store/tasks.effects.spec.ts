@@ -32,12 +32,12 @@ describe('TasksEffects', () => {
     {
       id: 'task-1', title: 'My Task', description: '', projectId: 'proj-1',
       columnId: 'col-1', assigneeId: 'user-1', priority: 'high', status: 'todo', issueType: 'task',
-      createdAt: 1000, updatedAt: 2000, deadline: null, startDate: null, completedAt: null, order: 0, labels: [], subtasks: [],
+      createdAt: 1000, updatedAt: 2000, deadline: null, startDate: null, completedAt: null, estimatedHours: null, order: 0, labels: [], subtasks: [],
     },
     {
       id: 'task-2', title: 'Other Task', description: '', projectId: 'proj-1',
       columnId: 'col-2', assigneeId: 'user-2', priority: 'low', status: 'in-progress', issueType: 'task',
-      createdAt: 1100, updatedAt: 2100, deadline: null, startDate: null, completedAt: null, order: 0, labels: [], subtasks: [],
+      createdAt: 1100, updatedAt: 2100, deadline: null, startDate: null, completedAt: null, estimatedHours: null, order: 0, labels: [], subtasks: [],
     },
   ];
 

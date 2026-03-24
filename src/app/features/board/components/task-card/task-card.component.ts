@@ -21,6 +21,7 @@ import { hashLabelColor } from '../../../../shared/components/tag-input/tag-inpu
 export class TaskCardComponent {
   @Input() task!: Task;
   @Input() commentCount: number = 0;
+  @Input() loggedHours: number = 0;
 
   /** Emits the task when the card is clicked (opens detail modal) */
   @Output() taskClicked = new EventEmitter<Task>();
