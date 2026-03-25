@@ -7,6 +7,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { AppNotification } from '../../../../shared/models/notification.model';
 import { AuthUser } from '../../../auth/store/auth.actions';
 import { selectUser } from '../../../auth/store';
+import { NotificationsService } from '../../../../core/services/notifications.service';
 import {
   loadNotifications,
   markAsRead,
@@ -14,6 +15,7 @@ import {
   selectAllNotifications,
   selectUnreadCount,
   selectNotificationsLoading,
+  selectNotificationsError,
 } from '../../store';
 
 /**
@@ -32,13 +34,16 @@ export class NotificationsPageComponent implements OnInit, OnDestroy {
   notifications$!: Observable<AppNotification[]>;
   unreadCount$!: Observable<number>;
   loading$!: Observable<boolean>;
+  error$!: Observable<string | null>;
 
   private userId = '';
+  private userName = '';
   private destroy$ = new Subject<void>();
 
   constructor(
     private store: Store,
-    private router: Router
+    private router: Router,
+    private notificationsService: NotificationsService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +51,7 @@ export class NotificationsPageComponent implements OnInit, OnDestroy {
     this.notifications$ = this.store.select(selectAllNotifications);
     this.unreadCount$ = this.store.select(selectUnreadCount);
     this.loading$ = this.store.select(selectNotificationsLoading);
+    this.error$ = this.store.select(selectNotificationsError);
 
     // Subscribe to auth user to get userId, then load notifications
     this.store
@@ -56,6 +62,7 @@ export class NotificationsPageComponent implements OnInit, OnDestroy {
       )
       .subscribe((user) => {
         this.userId = user.uid;
+        this.userName = user.displayName || user.email || 'User';
         this.store.dispatch(loadNotifications({ userId: user.uid }));
       });
   }
@@ -81,6 +88,26 @@ export class NotificationsPageComponent implements OnInit, OnDestroy {
     }
     if (notification.link) {
       this.router.navigateByUrl(notification.link);
+    }
+  }
+
+  /** Send a test notification to yourself (for debugging) */
+  async onSendTest(): Promise<void> {
+    if (!this.userId) return;
+    try {
+      await this.notificationsService.createNotification(this.userId, {
+        userId: this.userId,
+        type: 'task_updated',
+        title: 'Test Notification',
+        body: 'This is a test notification to verify the system works.',
+        link: '/notifications',
+        read: false,
+        createdAt: Date.now(),
+        actorName: this.userName,
+        actorAvatar: null,
+      });
+    } catch (err: any) {
+      alert('Failed to create notification: ' + (err?.message || err));
     }
   }
 

@@ -9,6 +9,7 @@ import { Action } from '@ngrx/store';
 import { AuthEffects } from './auth.effects';
 import * as AuthActions from './auth.actions';
 import { AuthUser } from './auth.actions';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirebaseService } from '../../../core/services/firebase.service';
 import { ToastService } from '../../../core/services/toast.service';
 
@@ -55,6 +56,7 @@ describe('AuthEffects', () => {
         provideMockActions(() => actions$),
         provideMockStore(),
         { provide: FirebaseService, useValue: mockFirebaseService },
+        { provide: AngularFirestore, useValue: { doc: () => ({ set: () => Promise.resolve() }) } },
         { provide: ToastService, useValue: mockToastService },
         { provide: Router, useValue: mockRouter },
       ],

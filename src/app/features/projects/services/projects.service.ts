@@ -24,14 +24,20 @@ export class ProjectsService {
   constructor(private firestore: AngularFirestore) {}
 
   /**
-   * Get all projects as a real-time Observable.
-   * Firestore snapshots are mapped to Project[] with document IDs.
+   * Get projects the user is a member of as a real-time Observable.
+   * Filters by memberIds array to satisfy Firestore security rules.
+   * Falls back to unfiltered query if no userId provided.
    */
-  getProjects(): Observable<Project[]> {
+  getProjects(userId?: string): Observable<Project[]> {
     return this.firestore
-      .collection<Project>(this.collectionPath, (ref) =>
-        ref.orderBy('updatedAt', 'desc')
-      )
+      .collection<Project>(this.collectionPath, (ref) => {
+        let query: firebase.firestore.Query = ref;
+        if (userId) {
+          query = query.where('memberIds', 'array-contains', userId);
+        }
+        query = query.orderBy('updatedAt', 'desc');
+        return query;
+      })
       .snapshotChanges()
       .pipe(
         map((actions) =>
@@ -96,6 +102,29 @@ export class ProjectsService {
   // ---------------------------------------------------------------------------
   // Members — stored as a subcollection: projects/{projectId}/members/{userId}
   // ---------------------------------------------------------------------------
+
+  /**
+   * Find a user by email in the Firestore users collection.
+   * Returns the user document data with uid, or null if not found.
+   */
+  async findUserByEmail(email: string): Promise<{ uid: string; email: string; displayName: string; photoURL: string | null } | null> {
+    const snapshot = await this.firestore.firestore
+      .collection('users')
+      .where('email', '==', email)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) return null;
+
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+    return {
+      uid: doc.id,
+      email: data['email'] || email,
+      displayName: data['displayName'] || email.split('@')[0],
+      photoURL: data['photoURL'] || null,
+    };
+  }
 
   /**
    * Get all members of a project as a real-time Observable.

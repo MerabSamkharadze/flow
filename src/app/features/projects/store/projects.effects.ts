@@ -39,12 +39,13 @@ export class ProjectsEffects {
   // Load all projects
   // ---------------------------------------------------------------------------
 
-  /** Subscribes to the Firestore projects collection (real-time updates) */
+  /** Subscribes to Firestore projects filtered by current user membership */
   loadProjects$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ProjectsActions.loadProjects),
-      switchMap(() =>
-        this.projectsService.getProjects().pipe(
+      withLatestFrom(this.store.select(selectUser)),
+      switchMap(([_, user]) =>
+        this.projectsService.getProjects(user?.uid).pipe(
           map((projects) => ProjectsActions.loadProjectsSuccess({ projects })),
           catchError((error) =>
             of(ProjectsActions.loadProjectsFailure({ error: error.message }))

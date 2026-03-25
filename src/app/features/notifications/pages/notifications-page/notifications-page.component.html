@@ -10,12 +10,24 @@
           {{ count }}
         </span>
       </div>
-      <button
-        class="notifications-page__mark-all-btn"
-        *ngIf="(unreadCount$ | async) as count"
-        (click)="onMarkAllRead()">
-        Mark all as read
-      </button>
+      <div class="notifications-page__header-actions">
+        <button
+          class="notifications-page__test-btn"
+          (click)="onSendTest()">
+          Send Test
+        </button>
+        <button
+          class="notifications-page__mark-all-btn"
+          *ngIf="(unreadCount$ | async) as count"
+          (click)="onMarkAllRead()">
+          Mark all as read
+        </button>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div class="notifications-page__error" *ngIf="error$ | async as error">
+      {{ error }}
     </div>
 
     <!-- Loading spinner -->
@@ -48,7 +60,10 @@
               </svg>
             </div>
             <p class="notifications-page__empty-text">You're all caught up!</p>
-            <p class="notifications-page__empty-hint">No new notifications. We'll let you know when something happens.</p>
+            <p class="notifications-page__empty-hint">
+              No notifications yet. Click "Send Test" to verify the system works,
+              or try assigning a task to another user.
+            </p>
           </div>
         </ng-template>
 

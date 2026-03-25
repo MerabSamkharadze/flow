@@ -2,10 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // -----------------------------------------------------------------------
-    // Helper functions
-    // -----------------------------------------------------------------------
-
     function isSignedIn() {
       return request.auth != null;
     }
@@ -15,26 +11,17 @@ service cloud.firestore {
     }
 
     function isProjectMember(projectId) {
-      return isSignedIn() &&
-        request.auth.uid in get(/databases/$(database)/documents/
-          projects/$(projectId)).data.memberIds;
+      return isSignedIn() && request.auth.uid in get(/databases/$(database)/documents/projects/$(projectId)).data.memberIds;
     }
 
     function isProjectAdmin(projectId) {
-      return isSignedIn() &&
-        get(/databases/$(database)/documents/
-          projects/$(projectId)/members/$(request.auth.uid)).data.role == 'admin';
+      return isSignedIn() && get(/databases/$(database)/documents/projects/$(projectId)/members/$(request.auth.uid)).data.role == 'admin';
     }
 
     function isProjectManagerOrAdmin(projectId) {
-      let role = get(/databases/$(database)/documents/
-        projects/$(projectId)/members/$(request.auth.uid)).data.role;
+      let role = get(/databases/$(database)/documents/projects/$(projectId)/members/$(request.auth.uid)).data.role;
       return isSignedIn() && (role == 'admin' || role == 'manager');
     }
-
-    // -----------------------------------------------------------------------
-    // Projects
-    // -----------------------------------------------------------------------
 
     match /projects/{projectId} {
       allow read: if isProjectMember(projectId);
@@ -42,40 +29,39 @@ service cloud.firestore {
       allow update: if isProjectManagerOrAdmin(projectId);
       allow delete: if isProjectAdmin(projectId);
 
-      // Members subcollection
       match /members/{memberId} {
         allow read: if isProjectMember(projectId);
         allow write: if isProjectManagerOrAdmin(projectId);
       }
 
-      // Tasks subcollection
       match /tasks/{taskId} {
         allow read: if isProjectMember(projectId);
         allow create: if isProjectManagerOrAdmin(projectId);
         allow update: if isProjectMember(projectId);
         allow delete: if isProjectManagerOrAdmin(projectId);
 
-        // Subtasks
         match /subtasks/{subtaskId} {
           allow read, write: if isProjectMember(projectId);
         }
 
-        // Comments — only the author can edit/delete their own
         match /comments/{commentId} {
           allow read: if isProjectMember(projectId);
           allow create: if isProjectMember(projectId);
-          allow update, delete: if isSignedIn() &&
-            request.auth.uid == resource.data.authorId;
+          allow update, delete: if isSignedIn() && request.auth.uid == resource.data.authorId;
+        }
+
+        match /timeEntries/{entryId} {
+          allow read: if isProjectMember(projectId);
+          allow create: if isProjectMember(projectId);
+          allow delete: if isSignedIn() && request.auth.uid == resource.data.userId;
         }
       }
 
-      // Columns subcollection (Kanban board)
       match /columns/{columnId} {
         allow read: if isProjectMember(projectId);
         allow write: if isProjectManagerOrAdmin(projectId);
       }
 
-      // Activity log — append-only
       match /activity/{activityId} {
         allow read: if isProjectMember(projectId);
         allow create: if isProjectMember(projectId);
@@ -83,24 +69,17 @@ service cloud.firestore {
       }
     }
 
-    // -----------------------------------------------------------------------
-    // User data
-    // -----------------------------------------------------------------------
-
-    // User profile — anyone signed in can read, only owner can write
     match /users/{userId} {
       allow read: if isSignedIn();
       allow write: if isOwner(userId);
     }
 
-    // User notifications — owner can read/update/delete, any signed-in user can create
     match /users/{userId}/notifications/{notifId} {
       allow read: if isOwner(userId);
       allow create: if isSignedIn();
       allow update, delete: if isOwner(userId);
     }
 
-    // User preferences — private to the owner
     match /users/{userId}/preferences/{prefDoc} {
       allow read, write: if isOwner(userId);
     }

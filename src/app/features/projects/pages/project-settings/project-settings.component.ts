@@ -159,27 +159,40 @@ export class ProjectSettingsComponent implements OnInit, OnDestroy {
 
   // ── Members tab ─────────────────────────────────────────────────────
 
-  onInviteMember(): void {
+  async onInviteMember(): Promise<void> {
     const email = this.inviteEmail.trim();
     if (!email) return;
 
     this.inviteLoading = true;
     this.inviteError = '';
 
-    const member: Member = {
-      userId: email.split('@')[0] + '-' + Date.now(),
-      email,
-      displayName: email.split('@')[0],
-      role: 'member',
-      joinedAt: Date.now(),
-      avatarUrl: null,
-    };
+    try {
+      // Look up the user by email in Firestore
+      const foundUser = await this.projectsService.findUserByEmail(email);
 
-    this.store.dispatch(
-      ProjectsActions.addMember({ projectId: this.projectId, member })
-    );
+      if (!foundUser) {
+        this.inviteError = 'User not found. They must register first.';
+        this.inviteLoading = false;
+        return;
+      }
 
-    this.inviteEmail = '';
+      const member: Member = {
+        userId: foundUser.uid,
+        email: foundUser.email,
+        displayName: foundUser.displayName,
+        role: 'member',
+        joinedAt: Date.now(),
+        avatarUrl: foundUser.photoURL,
+      };
+
+      this.store.dispatch(
+        ProjectsActions.addMember({ projectId: this.projectId, member })
+      );
+
+      this.inviteEmail = '';
+    } catch (err: any) {
+      this.inviteError = err?.message || 'Failed to invite member.';
+    }
     this.inviteLoading = false;
   }
 

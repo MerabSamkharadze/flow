@@ -4,6 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, exhaustMap, map, take, tap } from 'rxjs/operators';
 
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirebaseService } from '../../../core/services/firebase.service';
 import { ToastService } from '../../../core/services/toast.service';
 import * as AuthActions from './auth.actions';
@@ -23,9 +24,25 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private firebaseService: FirebaseService,
+    private firestore: AngularFirestore,
     private toastService: ToastService,
     private router: Router
   ) {}
+
+  /** Ensure a users/{uid} document exists in Firestore for user lookups */
+  private async ensureUserDocument(user: AuthUser): Promise<void> {
+    if (!user.uid) return;
+    await this.firestore.doc(`users/${user.uid}`).set(
+      {
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        role: user.role,
+        updatedAt: Date.now(),
+      },
+      { merge: true }
+    );
+  }
 
   /**
    * Helper — converts a Firebase User object to our serializable AuthUser.
@@ -51,8 +68,9 @@ export class AuthEffects {
       ofType(AuthActions.login),
       exhaustMap(({ email, password }) =>
         this.firebaseService.signIn(email, password).then(
-          (credential) => {
+          async (credential) => {
             const user = this.toAuthUser(credential.user!);
+            await this.ensureUserDocument(user);
             return AuthActions.loginSuccess({ user });
           },
           (error) => AuthActions.loginFailure({ error: error.message })
@@ -114,6 +132,7 @@ export class AuthEffects {
               photoURL: null,
               role: 'member',
             };
+            await this.ensureUserDocument(user);
             return AuthActions.registerSuccess({ user });
           })
           .catch((error) =>

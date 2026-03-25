@@ -275,14 +275,22 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     this.showInviteModal = false;
   }
 
-  onInviteMember(payload: InvitePayload): void {
+  async onInviteMember(payload: InvitePayload): Promise<void> {
+    const foundUser = await this.projectsService.findUserByEmail(payload.email);
+
+    if (!foundUser) {
+      // TODO: show error toast — user not registered
+      this.showInviteModal = false;
+      return;
+    }
+
     const member: Member = {
-      userId: '',
-      email: payload.email,
-      displayName: payload.email.split('@')[0],
+      userId: foundUser.uid,
+      email: foundUser.email,
+      displayName: foundUser.displayName,
       role: payload.role,
       joinedAt: Date.now(),
-      avatarUrl: null,
+      avatarUrl: foundUser.photoURL,
     };
 
     this.store.dispatch(
