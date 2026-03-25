@@ -62,7 +62,7 @@
     transition: background-color $transition-fast;
 
     &:hover {
-      background-color: $color-primary-bg;
+      background-color: var(--color-primary-bg, #eef2ff);
     }
   }
 
@@ -86,7 +86,7 @@
     }
 
     &--active {
-      background-color: $color-primary-bg;
+      background-color: var(--color-primary-bg, #eef2ff);
       color: $color-primary;
     }
   }

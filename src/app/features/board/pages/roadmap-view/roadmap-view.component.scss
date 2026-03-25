@@ -87,7 +87,7 @@ $bar-height: 24px;
     }
 
     &--active {
-      background-color: $color-primary-bg;
+      background-color: var(--color-primary-bg, #eef2ff);
       color: $color-primary;
     }
   }
@@ -139,7 +139,7 @@ $bar-height: 24px;
     }
 
     &--active {
-      background-color: $color-primary-bg;
+      background-color: var(--color-primary-bg, #eef2ff);
       border-color: $color-primary;
       color: $color-primary;
       font-weight: $font-weight-semibold;

@@ -54,7 +54,7 @@
     width: 44px;
     height: 44px;
     border-radius: $border-radius-md;
-    background-color: $color-primary-bg;
+    background-color: var(--color-primary-bg, #eef2ff);
     color: $color-primary;
     flex-shrink: 0;
   }

@@ -163,7 +163,7 @@
     transition: background-color $transition-fast, border-color $transition-fast;
 
     &:hover {
-      background-color: $color-primary-bg;
+      background-color: var(--color-primary-bg, #eef2ff);
       border-color: $color-primary;
     }
   }

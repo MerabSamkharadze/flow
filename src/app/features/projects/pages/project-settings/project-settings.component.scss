@@ -72,7 +72,7 @@
       border-left-color: $color-primary;
       color: var(--color-text-primary, $color-text-primary);
       font-weight: $font-weight-semibold;
-      background-color: $color-primary-bg;
+      background-color: var(--color-primary-bg, #eef2ff);
     }
 
     &--danger {
@@ -357,7 +357,7 @@
     font-size: 10px;
     font-weight: $font-weight-semibold;
     color: $color-primary;
-    background-color: $color-primary-bg;
+    background-color: var(--color-primary-bg, #eef2ff);
     padding: 1px 6px;
     border-radius: $border-radius-full;
     margin-left: $spacing-xs;

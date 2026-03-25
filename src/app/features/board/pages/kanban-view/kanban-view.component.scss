@@ -64,7 +64,7 @@
 
     // Modifier: active view
     &--active {
-      background-color: $color-primary-bg;
+      background-color: var(--color-primary-bg, #eef2ff);
       color: $color-primary;
     }
   }

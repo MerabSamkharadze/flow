@@ -34,7 +34,7 @@
     }
 
     &--active {
-      background-color: $color-primary-bg;
+      background-color: rgba($color-primary, 0.12);
     }
   }
 

@@ -32,7 +32,7 @@
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
     color: $color-primary;
-    background-color: $color-primary-bg;
+    background-color: var(--color-primary-bg, #eef2ff);
     border-radius: $border-radius-sm;
     transition: background-color $transition-fast;
 

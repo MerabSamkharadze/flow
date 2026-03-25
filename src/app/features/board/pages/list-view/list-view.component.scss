@@ -62,7 +62,7 @@
     }
 
     &--active {
-      background-color: $color-primary-bg;
+      background-color: var(--color-primary-bg, #eef2ff);
       color: $color-primary;
     }
   }
@@ -248,7 +248,7 @@
     width: 26px;
     height: 26px;
     border-radius: $border-radius-full;
-    background-color: $color-primary-bg;
+    background-color: var(--color-primary-bg, #eef2ff);
     color: $color-primary;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
