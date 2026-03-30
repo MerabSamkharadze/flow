@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LayoutComponent } from './core/layout/layout.component';
-import { AuthGuard } from './core/auth/guards/auth.guard';
-import { NotFoundComponent } from './features/not-found/not-found.component';
+import { LayoutComponent } from '@core/layout/layout.component';
+import { AuthGuard } from '@core/auth/guards/auth.guard';
+import { NotFoundComponent } from '@features/not-found/not-found.component';
 
 /**
  * AppRoutingModule — top-level routing configuration.
