@@ -131,7 +131,7 @@ export class FirebaseService {
     if (file.size > MAX_FILE_SIZE) {
       throw new Error('File size exceeds 2MB limit.');
     }
-    // Validate file type
+    // Validate a file type
     if (!ALLOWED_TYPES.includes(file.type)) {
       throw new Error('Invalid file type. Allowed: JPEG, PNG, WebP.');
     }

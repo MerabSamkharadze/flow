@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { Project } from '../../../shared/models/project.model';
-import { Member, MemberRole } from '../../../shared/models/member.model';
+import { Project } from '@shared/models/project.model';
+import { Member, MemberRole } from '@shared/models/member.model';
 
 /**
  * Projects Actions — all actions for the projects state slice.

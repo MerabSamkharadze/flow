@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { Task, TaskStatus } from '../../../shared/models/task.model';
-import { Subtask } from '../../../shared/models/subtask.model';
-import { Project } from '../../../shared/models/project.model';
-import { Comment } from '../../../shared/models/comment.model';
-import { TimeEntry } from '../../../shared/models/time-entry.model';
+import { Task, TaskStatus } from '@shared/models/task.model';
+import { Subtask } from '@shared/models/subtask.model';
+import { Project } from '@shared/models/project.model';
+import { Comment } from '@shared/models/comment.model';
+import { TimeEntry } from '@shared/models/time-entry.model';
 import { TaskFilters } from '../models/task-filters.model';
 
 /**

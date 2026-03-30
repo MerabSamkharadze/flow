@@ -4,9 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { selectUserRole, selectUser } from '../../../features/auth/store';
-import { selectSelectedProject } from '../../../features/projects/store';
-import { Member } from '../../../shared/models/member.model';
+import { selectUserRole, selectUser } from '@features/auth/store';
+import { selectSelectedProject } from '@features/projects/store';
 
 /**
  * RoleGuard — restricts route access based on user roles.

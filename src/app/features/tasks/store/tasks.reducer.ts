@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Task } from '../../../shared/models/task.model';
-import { Subtask } from '../../../shared/models/subtask.model';
-import { Comment } from '../../../shared/models/comment.model';
-import { TimeEntry } from '../../../shared/models/time-entry.model';
-import { Project } from '../../../shared/models/project.model';
+import { Task } from '@shared/models/task.model';
+import { Subtask } from '@shared/models/subtask.model';
+import { Comment } from '@shared/models/comment.model';
+import { TimeEntry } from '@shared/models/time-entry.model';
+import { Project } from '@shared/models/project.model';
 import { TaskFilters, EMPTY_TASK_FILTERS } from '../models/task-filters.model';
 import * as TasksActions from './tasks.actions';
 

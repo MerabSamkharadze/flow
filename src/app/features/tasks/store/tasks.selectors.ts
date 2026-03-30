@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TasksState, tasksAdapter } from './tasks.reducer';
-import { Task, TaskPriority, isTaskCompleted } from '../../../shared/models/task.model';
+import { Task, TaskPriority, isTaskCompleted } from '@shared/models/task.model';
 
 /**
  * Tasks Selectors — memoized selectors for reading tasks state.

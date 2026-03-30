@@ -8,9 +8,9 @@
  * all feature state slices for type-safe store access.
  */
 
-import { AuthState } from '../features/auth/store';
-import { ProjectsState } from '../features/projects/store';
-import { BoardState } from '../features/board/store/board.reducer';
+import { AuthState } from '@features/auth/store';
+import { ProjectsState } from '@features/projects/store';
+import { BoardState } from '@features/board/store/board.reducer';
 
 /**
  * AppState — the complete shape of the NgRx store.

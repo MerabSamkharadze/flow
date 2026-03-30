@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Task } from '../../../../shared/models/task.model';
-import { Project } from '../../../../shared/models/project.model';
+import { Task } from '@shared/models/task.model';
+import { Project } from '@shared/models/project.model';
 import { selectUser } from '../../../auth/store';
 import { TaskFilters } from '../../models/task-filters.model';
 import * as TasksActions from '../../store/tasks.actions';
@@ -21,7 +21,7 @@ import {
   selectUserProjects,
   selectProjectMap,
   selectUniqueStatuses,
-} from '../../store/tasks.selectors';
+} from '@features/tasks/store';
 
 /**
  * MyTasksComponent — shows all tasks assigned to the current user

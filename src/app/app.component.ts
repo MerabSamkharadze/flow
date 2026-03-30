@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { loadUser } from './features/auth/store/auth.actions';
-import { KeyboardShortcutsService } from './core/services/keyboard-shortcuts.service';
+import { loadUser } from '@features/auth/store';
+import { KeyboardShortcutsService } from '@core/services/keyboard-shortcuts.service';
 
 @Component({
   standalone: false,
